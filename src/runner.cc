@@ -1,5 +1,6 @@
 #include "runner.hh"
 
+#include "isr_base.hh"
 #include "hal/gpio.hh"
 #include "hal/rcc.hh"
 #include "hal/core.hh"
@@ -11,11 +12,10 @@ namespace {
     const uint32_t all_leds = value_of(ld3_green, ld4_blue);
 }
 
-namespace isr {
-    extern "C" void sys_tick_timer() {
-        hal::gpio_b->odr ^= all_leds;
-    }
+extern "C" void isr::sys_tick_timer() {
+    hal::gpio_b->odr ^= all_leds;
 }
+
 
 void runner::run() {
     // enable led port

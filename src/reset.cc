@@ -1,4 +1,6 @@
 #include <stdint.h>
+
+#include "isr_base.hh"
 #include "runner.hh"
 
 namespace {
@@ -51,15 +53,13 @@ namespace {
     }
 }
 
-namespace isr {
-    extern "C" void reset() {
-        setup_env();
+extern "C" void isr::reset() {
+    setup_env();
 
-        // Run main project code
-        runner::run();
-        // After run inifinity loop with wait for interrupt code
-        while (true) {
-            __asm__ volatile ("wfi");
-        }
+    // Run main project code
+    runner::run();
+    // After run inifinity loop with wait for interrupt code
+    while (true) {
+        __asm__ volatile ("wfi");
     }
 }

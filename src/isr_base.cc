@@ -1,4 +1,5 @@
 #include "isr_base.hh"
+#include "isr_base_impl.hh"
 
 __attribute__((naked, noreturn)) void isr::default_handler() {
     // nothing in prototype

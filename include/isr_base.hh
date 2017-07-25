@@ -4,10 +4,8 @@
 #include <stdint.h>
 extern uint32_t _estack; // linker defined variable - is a stack size
 
-extern "C"
-{
-    namespace isr
-    {
+extern "C" {
+    namespace isr {
         struct vectors // table of pointer to interrupt vectors - arm cortex-m3 core interrupts
         {
             uint32_t *estack; /*! stack begin */
@@ -24,19 +22,17 @@ extern "C"
             void (*pend_SV)      (); /*!#13 cortex-m3 penable request for system service interrupt */
             void (*sys_tick_timer)(); /*!#14 cortex-m3 system tick timer interrupt */
         };
-        
-        void default_handler(); // default handler for undefined handlers
-        
-        void reset() __attribute__ ((weak, alias ("default_handler")));
-        void NMI() __attribute__ ((weak, alias ("default_handler")));
-        void hard_fault() __attribute__ ((weak, alias ("default_handler")));
-        void mem_manage() __attribute__ ((weak, alias ("default_handler")));
-        void bus_fault() __attribute__ ((weak, alias ("default_handler")));
-        void usage_fault() __attribute__ ((weak, alias ("default_handler")));
-        void SVC() __attribute__ ((weak, alias ("default_handler")));
-        void debug_mon() __attribute__ ((weak, alias ("default_handler")));
-        void pend_SV() __attribute__ ((weak, alias ("default_handler")));
-        void sys_tick_timer() __attribute__ ((weak, alias ("default_handler")));
+
+        void reset();
+        void NMI();
+        void hard_fault();
+        void mem_manage();
+        void bus_fault();
+        void usage_fault();
+        void SVC();
+        void debug_mon();
+        void pend_SV();
+        void sys_tick_timer();
     }
 }
 

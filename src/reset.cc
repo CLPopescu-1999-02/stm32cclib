@@ -1,15 +1,31 @@
 #include <stdint.h>
 #include "runner.hh"
 
-/* data and bss section starts and ends */
-extern uint32_t __text_end;
-extern uint32_t __data_start;
-extern uint32_t __data_end;
-extern uint32_t __bss_start;
-extern uint32_t __bss_end;
+namespace {
+    /* data and bss section starts and ends */
+    extern "C" uint32_t __text_end;
+    extern "C" uint32_t __data_start;
+    extern "C" uint32_t __data_end;
+    extern "C" uint32_t __bss_start;
+    extern "C" uint32_t __bss_end;
+    /* constructors */
+    using ctor = void();
 
-namespace isr {
-    extern "C" void reset() {
+    extern "C" ctor *__ctors_begin[];
+    extern "C" ctor *__ctors_end[];
+    extern "C" ctor *__preinit_array_start[];
+    extern "C" ctor *__preinit_array_end[];
+    extern "C" ctor *__init_array_start[];
+    extern "C" ctor *__init_array_end[];
+
+    static void call_ctors(ctor **start, ctor **end) {
+        for (; start < end; ++start) {
+            if (*start)
+                (*start)();
+        }
+    }
+
+    static inline void __attribute__((always_inline)) setup_env() {
         uint32_t *src;
         uint32_t *dest;
 
@@ -27,6 +43,17 @@ namespace isr {
         while (dest < &__bss_end) {
             *(dest++) = 0;
         }
+
+        // Setup static objects
+        call_ctors(__preinit_array_start, __preinit_array_end);
+        call_ctors(__ctors_begin, __ctors_end);
+        call_ctors(__init_array_start, __init_array_end);
+    }
+}
+
+namespace isr {
+    extern "C" void reset() {
+        setup_env();
 
         // Run main project code
         runner::run();

@@ -12,7 +12,7 @@ SECTIONS {
     {
         *(.vectors) /* Vector table */
         *(.vectors.*) /* Any extra device vectors */
-        *(.text) /* Program code */
+        *(.text .text.*) /* Program code */
         *(.rodata) /* Read only data */
         *(.rodata*)
         __text_end = .;
@@ -30,6 +30,19 @@ SECTIONS {
         PROVIDE (__data_start = .);
         *(.data)
         *(.data.*)
+        . = ALIGN(8);
+        PROVIDE (__ctors_begin = .);
+        KEEP (*(SORT(.ctors.*)))
+        KEEP (*(.ctors))
+        PROVIDE (__ctors_end = .);
+        PROVIDE (__preinit_array_start = .);
+        KEEP (*(SORT(.preinit_array.*)))
+        KEEP (*(.preinit_array))
+        PROVIDE (__preinit_array_end = .);
+        PROVIDE (__init_array_start = .);
+        KEEP (*(SORT(.init_array.*)))
+        KEEP (*(.init_array))
+        PROVIDE (__init_array_end = .);
         . = ALIGN(4);
         /* This is used by the startup in order to initialize the .data secion */
         PROVIDE (__data_end = .);

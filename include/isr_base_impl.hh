@@ -1,5 +1,5 @@
-#ifndef ISR_BASE_IMP_HH
-#define ISR_BASE_IMP_HH
+#ifndef ISR_BASE_IMPL_HH
+#define ISR_BASE_IMPL_HH
 
 #include <stdint.h>
 
@@ -20,4 +20,4 @@ extern "C" {
     }
 }
 
-#endif // ISR_BASE_IMP_HH
+#endif // ISR_BASE_IMPL_HH

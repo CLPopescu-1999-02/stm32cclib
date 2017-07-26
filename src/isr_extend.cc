@@ -51,5 +51,14 @@ __attribute__((section(".vectors.device"))) extern const isr::device_vectors dev
     isr::RTC_Alarm,
     isr::USB_WKUP,
     isr::TIM6,
-    isr::TIM7
+    isr::TIM7,
+    isr::TIM5,
+    isr::SPI3,
+    isr::DMA2_channel1,
+    isr::DMA2_channel2,
+    isr::DMA2_channel3,
+    isr::DMA2_channel4,
+    isr::DMA2_channel5,
+    isr::AES,
+    isr::COMP_ACQ
 };

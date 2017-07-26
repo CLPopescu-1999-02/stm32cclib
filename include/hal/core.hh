@@ -58,7 +58,16 @@ namespace hal {
         RTC_Alarm = 41,
         USB_WKUP = 42,
         TIM6 = 43,
-        TIM7 = 44
+        TIM7 = 44,
+        TIM5 = 45,
+        SPI3 = 46,
+        DMA2_channel1 = 47,
+        DMA2_channel2 = 48,
+        DMA2_channel3 = 49,
+        DMA2_channel4 = 50,
+        DMA2_channel5 = 51,
+        AES = 52,
+        COMP_ACQ = 53
     };
 
     struct nvic_t {

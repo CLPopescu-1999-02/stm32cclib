@@ -52,6 +52,15 @@ extern "C" {
         void USB_WKUP() __attribute__ ((weak, alias ("default_handler_extend")));
         void TIM6() __attribute__ ((weak, alias ("default_handler_extend")));
         void TIM7() __attribute__ ((weak, alias ("default_handler_extend")));
+        void TIM5() __attribute__ ((weak, alias ("default_handler_extend")));
+        void SPI3() __attribute__ ((weak, alias ("default_handler_extend")));
+        void DMA2_channel1() __attribute__ ((weak, alias ("default_handler_extend")));
+        void DMA2_channel2() __attribute__ ((weak, alias ("default_handler_extend")));
+        void DMA2_channel3() __attribute__ ((weak, alias ("default_handler_extend")));
+        void DMA2_channel4() __attribute__ ((weak, alias ("default_handler_extend")));
+        void DMA2_channel5() __attribute__ ((weak, alias ("default_handler_extend")));
+        void AES() __attribute__ ((weak, alias ("default_handler_extend")));
+        void COMP_ACQ() __attribute__ ((weak, alias ("default_handler_extend")));
     }
 }
 #endif // ISR_EXTEND_IMPL_HH

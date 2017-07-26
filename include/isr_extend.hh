@@ -28,7 +28,7 @@ extern "C" {
             void (*USB_HP)          (); /*!%19 USB HP */
             void (*USB_LP)          (); /*!%20 USB LP */
             void (*DAC)             (); /*!%21 DAC */
-            void (*COMP_TSC)        (); /*!%22 Comparator wakeup, Touch sensor */
+            void (*COMP_CC)         (); /*!%22 Comparator wakeup, Channel acquisition */
             void (*EXTI9_5_IRQ)     (); /*!%23 External Line[9:5]s */
             void (*LCD)             (); /*!%24 LCD */
             void (*TIM9)            (); /*!%25 TIM9 */
@@ -51,6 +51,15 @@ extern "C" {
             void (*USB_WKUP)        (); /*!%42 USB OTG FS Wakeup through EXTI line */
             void (*TIM6)            (); /*!%43 TIM6 */
             void (*TIM7)            (); /*!%44 TIM7 */
+            void (*TIM5)            (); /*!%45 TIM5 */
+            void (*SPI3)            (); /*!%46 SPI3 */
+            void (*DMA2_channel1)   (); /*!%47 DMA2 channel 1 */
+            void (*DMA2_channel2)   (); /*!%48 DMA2 channel 2 */
+            void (*DMA2_channel3)   (); /*!%49 DMA2 channel 3 */
+            void (*DMA2_channel4)   (); /*!%50 DMA2 channel 4 */
+            void (*DMA2_channel5)   (); /*!%51 DMA2 channel 5 */
+            void (*AES)             (); /*!%52 AES */
+            void (*COMP_ACQ)        (); /*!%53 Comparator Channel acquisition */
         };
 
         void WWDG();
@@ -98,6 +107,15 @@ extern "C" {
         void USB_WKUP();
         void TIM6();
         void TIM7();
+        void TIM5();
+        void SPI3();
+        void DMA2_channel1();
+        void DMA2_channel2();
+        void DMA2_channel3();
+        void DMA2_channel4();
+        void DMA2_channel5();
+        void AES();
+        void COMP_ACQ();
     }
 }
 #endif // ISR_EXTEND_HH

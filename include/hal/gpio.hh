@@ -1,6 +1,7 @@
 #ifndef GPIO_HH
 #define GPIO_HH
 #include <stdint.h>
+#include <initializer_list>
 
 namespace hal {
     enum struct pin_mode_t : uint32_t {
@@ -10,26 +11,21 @@ namespace hal {
         analog = 0b11
     };
 
-    struct pin_t {
-        const uint32_t number;
-        const pin_mode_t mode;
-    };
-
-    constexpr uint32_t mode_of(const pin_t pin) {
-        return (static_cast<uint32_t>(pin.mode) << (pin.number * 2));
+    constexpr uint32_t mode_of(const pin_mode_t mode, const uint32_t pin) {
+        return (static_cast<uint32_t>(mode) << (pin * 2));
     }
 
-    template <typename Pin, typename ...Pins>
-    constexpr uint32_t mode_of(Pin pin, Pins ...pins) {
-        return mode_of(pin) | mode_of(pins...);
+    template <typename ...Pins>
+    constexpr uint32_t mode_of(const pin_mode_t mode, const uint32_t pin, Pins ...pins) {
+        return mode_of(mode, pin) | mode_of(mode, pins...);
     }
 
-    constexpr uint32_t value_of(const pin_t pin) {
-        return (1 << pin.number);
+    constexpr uint32_t value_of(const uint32_t pin) {
+        return (1 << pin);
     }
 
-    template <typename Pin, typename ...Pins>
-    constexpr uint32_t value_of(Pin pin, Pins ...pins) {
+    template <typename ...Pins>
+    constexpr uint32_t value_of(const uint32_t pin, Pins ...pins) {
         return value_of(pin) | value_of(pins...);
     }
 
@@ -46,8 +42,15 @@ namespace hal {
         uint32_t brr;
 
         template <typename ...Pins>
-        void set_mode(Pins ...pins) volatile {
-            mode |= mode_of(pins...);
+        void set_mode(const pin_mode_t _mode, Pins ...pins) volatile {
+            mode |= mode_of(_mode, pins...);
+        }
+
+        template <typename ...Pins>
+        void set_alt_func(const uint32_t alt_func, Pins ...pins) volatile {
+            for (auto pin : {pins...}) {
+                afr[pin/4] = alt_func << (pin % 4 * 4);
+            }
         }
 
         template <typename ...Pins>
@@ -61,6 +64,8 @@ namespace hal {
         }
     };
 
+    volatile gpio_t * const gpio_a = reinterpret_cast<gpio_t *>(0x40020000);
     volatile gpio_t * const gpio_b = reinterpret_cast<gpio_t *>(0x40020400);
+    volatile gpio_t * const gpio_c = reinterpret_cast<gpio_t *>(0x40020800);
 } // namespace Hal
 #endif // GPIO_HH

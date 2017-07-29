@@ -1,7 +1,6 @@
 #ifndef GPIO_HH
 #define GPIO_HH
 #include <stdint.h>
-#include <initializer_list>
 
 namespace hal {
     enum struct pin_mode_t : uint32_t {

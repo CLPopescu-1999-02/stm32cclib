@@ -14,7 +14,7 @@ namespace hal {
         uint32_t gpiog:1;
         uint32_t _unused0:24;
     };
-    
+
     struct apb1_device_t {
         uint32_t tim2:1;
         uint32_t tim3:1;
@@ -43,7 +43,7 @@ namespace hal {
         uint32_t _unused5:1;
         uint32_t comp:1;
     };
-    
+
     struct rcc_control_status_t {
         uint32_t lsion:1;
         uint32_t lsirdy:1;

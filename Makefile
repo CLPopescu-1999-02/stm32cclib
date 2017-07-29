@@ -64,7 +64,7 @@ all: firmware.bin
 firmware.bin: firmware.elf
 	$(OBJCOPY) -O binary $^ $@
 	$(SIZE) $^
-	$(OBJDUMP) -D $^ > $^.dis
+	$(OBJDUMP) -DS $^ > $^.dis
 
 # Making elf
 firmware.elf: $(OBJS)
@@ -76,7 +76,7 @@ firmware.elf: $(OBJS)
 
 # Cleaning project
 clean:
-	rm -f *.elf *.bin $(OBJS)
+	rm -f firmware.elf firmware.bin $(OBJS)
 
 # Write project to target device with st-utils
 write:

@@ -20,6 +20,15 @@ namespace hal {
         return mode_of(mode, pin) | mode_of(mode, pins...);
     }
 
+    constexpr uint64_t alt_func_of(const uint32_t alt_func, const uint32_t pin) {
+        return ((uint64_t)alt_func << (pin * 4));
+    }
+
+    template <typename ...Pins>
+    constexpr uint64_t alt_func_of(const uint32_t alt_func, const uint32_t pin, Pins ...pins) {
+        return alt_func_of(alt_func, pin) | alt_func_of(alt_func, pins...);
+    }
+
     constexpr uint32_t value_of(const uint32_t pin) {
         return (1 << pin);
     }
@@ -30,7 +39,7 @@ namespace hal {
     }
 
     struct gpio_t {
-        uint32_t mode;
+        uint32_t moder;
         uint32_t otyper;
         uint32_t ospeedr;
         uint32_t pupdr;
@@ -38,19 +47,17 @@ namespace hal {
         uint32_t odr; 
         uint32_t bsrr;
         uint32_t lckr;
-        uint32_t afr[2];
+        uint64_t afr;
         uint32_t brr;
 
         template <typename ...Pins>
         void set_mode(const pin_mode_t _mode, Pins ...pins) volatile {
-            mode |= mode_of(_mode, pins...);
+            moder |= mode_of(_mode, pins...);
         }
 
         template <typename ...Pins>
         void set_alt_func(const uint32_t alt_func, Pins ...pins) volatile {
-            for (auto pin : {pins...}) {
-                afr[pin/4] = alt_func << (pin % 4 * 4);
-            }
+            afr |= alt_func_of(alt_func, pins...);
         }
 
         template <typename ...Pins>
@@ -64,8 +71,8 @@ namespace hal {
         }
     };
 
-    volatile gpio_t * const gpio_a = reinterpret_cast<gpio_t *>(0x40020000);
-    volatile gpio_t * const gpio_b = reinterpret_cast<gpio_t *>(0x40020400);
-    volatile gpio_t * const gpio_c = reinterpret_cast<gpio_t *>(0x40020800);
+    volatile gpio_t * const gpioa = reinterpret_cast<gpio_t *>(0x40020000);
+    volatile gpio_t * const gpiob = reinterpret_cast<gpio_t *>(0x40020400);
+    volatile gpio_t * const gpioc = reinterpret_cast<gpio_t *>(0x40020800);
 } // namespace Hal
 #endif // GPIO_HH

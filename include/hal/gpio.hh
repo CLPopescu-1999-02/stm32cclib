@@ -10,13 +10,28 @@ namespace hal {
         analog = 0b11
     };
 
-    constexpr uint32_t mode_of(const pin_mode_t mode, const uint32_t pin) {
-        return (static_cast<uint32_t>(mode) << (pin * 2));
+    enum struct pin_speed_t : uint32_t {
+        very_low = 0b00,
+        low = 0b01,
+        medium = 0b10,
+        high = 0b11
+    };
+
+    enum struct pin_pull_t : uint32_t {
+        none = 0b00,
+        up = 0b01,
+        dow = 0b10,
+        _reserved = 0b11
+    };
+
+    template <typename Type>
+    constexpr uint32_t mode_of(const Type type, const uint32_t pin) {
+        return (static_cast<uint32_t>(type) << (pin * 2));
     }
 
-    template <typename ...Pins>
-    constexpr uint32_t mode_of(const pin_mode_t mode, const uint32_t pin, Pins ...pins) {
-        return mode_of(mode, pin) | mode_of(mode, pins...);
+    template <typename Type, typename ...Pins>
+    constexpr uint32_t mode_of(const Type type, const uint32_t pin, Pins ...pins) {
+        return mode_of(type, pin) | mode_of(type, pins...);
     }
 
     constexpr uint64_t alt_func_of(const uint32_t alt_func, const uint32_t pin) {
@@ -50,13 +65,28 @@ namespace hal {
         uint32_t brr;
 
         template <typename ...Pins>
-        void set_mode(const pin_mode_t _mode, Pins ...pins) volatile {
-            moder |= mode_of(_mode, pins...);
+        void set_mode(const pin_mode_t mode, Pins ...pins) volatile {
+            moder |= mode_of(mode, pins...);
         }
 
         template <typename ...Pins>
-        void set_alt_func(const uint32_t alt_func, Pins ...pins) volatile {
-            afr |= alt_func_of(alt_func, pins...);
+        void set_open_drain(Pins ...pins) volatile {
+            otyper |= value_of(pins...);
+        }
+
+        template <typename ...Pins>
+        void set_push_pull(Pins ...pins) volatile {
+            otyper &= ~value_of(pins...);
+        }
+
+        template <typename ...Pins>
+        void set_speed(const pin_speed_t speed, Pins ...pins) volatile {
+            ospeedr |= mode_of(speed, pins...);
+        }
+
+        template <typename ...Pins>
+        void set_pull(const pin_pull_t pull, Pins ...pins) volatile {
+            pupdr |= mode_of(pull, pins...);
         }
 
         template <typename ...Pins>
@@ -67,6 +97,26 @@ namespace hal {
         template <typename ...Pins>
         void reset_value(Pins ...pins) volatile {
             bsrr = value_of(pins...) << 16;
+        }
+
+        template <typename ...Pins>
+        void lock(Pins ...pins) volatile {
+            lckr |= value_of(pins...);
+        }
+
+        template <typename ...Pins>
+        void unlock(Pins ...pins) volatile {
+            lckr &= ~value_of(pins...);
+        }
+
+        template <typename ...Pins>
+        void set_alt_func(const uint32_t alt_func, Pins ...pins) volatile {
+            afr |= alt_func_of(alt_func, pins...);
+        }
+
+        template <typename ...Pins>
+        void reset(Pins ...pins) volatile {
+            brr |= value_of(pins...);
         }
     };
 

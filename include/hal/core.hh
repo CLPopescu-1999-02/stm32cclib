@@ -2,75 +2,10 @@
 #define CORE_HH
 #include <stdint.h>
 
+#include "core_irq.hh"
+#include "device_irq.hh"
+
 namespace hal {
-    enum struct irq_n_t : int32_t {
-        NMI = -14,
-        mem_manage = -12,
-        bus_fault = -11,
-        usage_fault = -10,
-        SVC = -5,
-        debug_mon = -4,
-        pend_SV = -2,
-        sys_tick_timer = -1,
-    };
-
-    enum struct irq_dev_n_t : int32_t {
-        WWDG = 0,
-        PVD = 1,
-        tamp_stamp = 2,
-        rtc_wkup = 3,
-        flash = 4,
-        RCC = 5,
-        EXTI0 = 6,
-        EXTI1 = 7,
-        EXTI2 = 8,
-        EXTI3 = 9,
-        EXTI4 = 10,
-        DMA1_channel1 = 11,
-        DMA1_channel2 = 12,
-        DMA1_channel3 = 13,
-        DMA1_channel4 = 14,
-        DMA1_channel5 = 15,
-        DMA1_channel6 = 16,
-        DMA1_channel7 = 17,
-        ADC1 = 18,
-        USB_HP = 19,
-        USB_LP = 20,
-        DAC = 21,
-        COMP_TSC = 22,
-        EXTI9_5_IRQ = 23,
-        LCD = 24,
-        TIM9 = 25,
-        TIM10 = 26,
-        TIM11 = 27,
-        TIM2 = 28,
-        TIM3 = 29,
-        TIM4 = 30,
-        I2C1_EV = 31,
-        I2C1_ER = 32,
-        I2C2_EV = 33,
-        I2C2_ER = 34,
-        SPI1 = 35,
-        SPI2 = 36,
-        USART1 = 37,
-        USART2 = 38,
-        USART3 = 39,
-        EXTI15_10 = 40,
-        RTC_Alarm = 41,
-        USB_WKUP = 42,
-        TIM6 = 43,
-        TIM7 = 44,
-        TIM5 = 45,
-        SPI3 = 46,
-        DMA2_channel1 = 47,
-        DMA2_channel2 = 48,
-        DMA2_channel3 = 49,
-        DMA2_channel4 = 50,
-        DMA2_channel5 = 51,
-        AES = 52,
-        COMP_ACQ = 53
-    };
-
     struct nvic_t {
         uint32_t iser[8];
         uint32_t __reserved0[24];
@@ -95,13 +30,19 @@ namespace hal {
 
     namespace sys_tick_int {
         const uint32_t load_reload_msk = 0xffffff;
-        const uint32_t clock_src_msc = 1 << 2;
-        const uint32_t tick_int = 1 << 1;
-        const uint32_t enable = 1;
     }
 
+    struct sys_tick_control_t {
+        uint32_t enable:1;
+        uint32_t tickint:1;
+        uint32_t clksource:1;
+        uint32_t _unused0:13;
+        uint32_t countf:1;
+        uint32_t _unused1:15;
+    };
+
     struct sys_tick_t {
-        uint32_t control;
+        sys_tick_control_t control;
         uint32_t load;
         uint32_t value;
         uint32_t calib;
@@ -109,11 +50,14 @@ namespace hal {
         bool config(uint32_t ticks) volatile {
             if (ticks > sys_tick_int::load_reload_msk)
                 return false;
+
             load = (ticks & sys_tick_int::load_reload_msk) - 1;
+
             value = 0;
-            control = sys_tick_int::clock_src_msc |
-                sys_tick_int::tick_int |
-                sys_tick_int::enable;
+
+            control.clksource = 1;
+            control.tickint = 1;
+            control.enable = 1;
 
             return true;
         }
@@ -124,4 +68,3 @@ namespace hal {
 } // namespace Hal
 
 #endif // CORE_HH
-

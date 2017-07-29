@@ -12,7 +12,18 @@ namespace hal {
         uint32_t gpioh:1;
         uint32_t gpiof:1;
         uint32_t gpiog:1;
-        uint32_t _unused0:24;
+        uint32_t _unused0:4;
+        uint32_t crc:1;
+        uint32_t _unused1:2;
+        uint32_t flitf:1;
+        uint32_t _unused2:8;
+        uint32_t dma1:1;
+        uint32_t dma2:1;
+        uint32_t _unused3:1;
+        uint32_t aes:1;
+        uint32_t _unused4:2;
+        uint32_t fsmc:1;
+        uint32_t _unused5:1;
     };
 
     struct apb1_device_t {

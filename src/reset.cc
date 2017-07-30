@@ -20,6 +20,17 @@ namespace {
     extern "C" ctor *__init_array_start[];
     extern "C" ctor *__init_array_end[];
 
+    extern "C" void * memcpy(void *dest, const void *src, uint32_t num) {
+        uint8_t *pdst = static_cast<uint8_t *>(dest);
+        const uint8_t *psrc = static_cast<const uint8_t *>(src);
+
+        while (num--) {
+            *pdst++ = *psrc++;
+        }
+
+        return pdst;
+    }
+
     static void call_ctors(ctor **start, ctor **end) {
         for (; start < end; ++start) {
             if (*start)

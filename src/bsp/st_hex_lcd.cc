@@ -1,0 +1,143 @@
+#include "bsp/st_hex_lcd.hh"
+
+namespace bsp {
+    digit::digit(const uint32_t pos, volatile uint32_t * const ram) :
+        _pos{pos}, _ram{ram} {
+    }
+
+    void digit::write(const uint16_t mask) const {
+        switch (_pos) {
+            case 0:
+                _ram[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
+                _ram[2] |= (mask & 0x3000) << 16 | (mask & 0x000c) >> 2;
+                _ram[4] |= (mask & 0x0c00) << 18 | (mask & 0x0030) >> 4;
+                _ram[6] |= (mask & 0x0300) << 20 | (mask & 0x00c0) >> 6;
+                break;
+            case 1:
+                _ram[0] |= (mask & 0xc000) << 12 | ((mask & 0x0002) >> 1) << 7 | (mask & 0x0001) << 2;
+                _ram[2] |= (mask & 0x3000) << 14 | ((mask & 0x0008) >> 3) << 7 | ((mask & 0x0004) >> 2) << 2;
+                _ram[4] |= (mask & 0x0c00) << 16 | ((mask & 0x0020) >> 5) << 7 | ((mask & 0x0010) >> 4) << 2;
+                _ram[6] |= (mask & 0x0300) << 18 | ((mask & 0x0080) >> 7) << 7 | ((mask & 0x0040) >> 6) << 2;
+                break;
+            case 2:
+                _ram[0] |= (mask & 0xc000) << 10 | (mask & 0x0003) << 8;
+                _ram[2] |= (mask & 0x3000) << 12 | ((mask & 0x000c) >> 2) << 8;
+                _ram[4] |= (mask & 0x0c00) << 14 | ((mask & 0x0030) >> 4) << 8;
+                _ram[6] |= (mask & 0x0300) << 16 | ((mask & 0x00c0) >> 6) << 8;
+                break;
+            case 3:
+                _ram[0] |= (mask & 0xc000) << 6 | (mask & 0x0003) << (10);
+                _ram[2] |= (mask & 0x3000) << 8 | ((mask & 0x000c) >> 2) << (10);
+                _ram[4] |= (mask & 0x0c00) << 10 | ((mask & 0x0030) >> 4) << (10);
+                _ram[6] |= (mask & 0x0300) << 12 | ((mask & 0x00c0) >> 6) << (10);
+                break;
+            case 4:
+                _ram[0] |= (mask & 0xc000) << 4 | (mask & 0x0003) << (12);
+                _ram[2] |= (mask & 0x3000) << 6 | ((mask & 0x000c) >> 2) << (12);
+                _ram[4] |= (mask & 0x0c00) << 8 | ((mask & 0x0030) >> 4) << (12);
+                _ram[6] |= (mask & 0x0300) << 10 | ((mask & 0x00c0) >> 6) << (12);
+                break;
+            case 5:
+            default:
+                _ram[0] |= (mask & 0x8000) << 1 | (mask & 0x4000) << 3 | (mask & 0x0003) << (14);
+                _ram[2] |= (mask & 0x2000) << 3 | (mask & 0x1000) << 5 | ((mask & 0x000c) >> 2) << (14);
+                _ram[4] |= (mask & 0x0800) << 5 | (mask & 0x0400) << 7 | ((mask & 0x0030) >> 4) << (14);
+                _ram[6] |= (mask & 0x0200) << 7 | (mask & 0x0100) << 9 | ((mask & 0x00c0) >> 6) << (14);
+                break;
+        }
+    }
+
+    void digit::clear() const {
+        switch (_pos) {
+            case 0:
+                _ram[0] &= 0xcffffffc;
+                _ram[2] &= 0xcffffffc;
+                _ram[4] &= 0xcffffffc;
+                _ram[6] &= 0xcffffffc;
+                break;
+            case 1:
+                _ram[0] &= 0xf3ffff03;
+                _ram[2] &= 0xf3ffff03;
+                _ram[4] &= 0xf3ffff03;
+                _ram[6] &= 0xf3ffff03;
+                break;
+            case 2:
+                _ram[0] &= 0xfcfffcff;
+                _ram[2] &= 0xfcfffcff;
+                _ram[4] &= 0xfcfffcff;
+                _ram[6] &= 0xfcfffcff;
+                break;
+            case 3:
+                _ram[0] &= 0xffcff3ff;
+                _ram[2] &= 0xffcff3ff;
+                _ram[4] &= 0xffcff3ff;
+                _ram[6] &= 0xffcff3ff;
+                break;
+            case 4:
+                _ram[0] &= 0xfff3cfff;
+                _ram[2] &= 0xfff3cfff;
+                _ram[4] &= 0xfff3cfff;
+                _ram[6] &= 0xfff3cfff;
+                break;
+            case 5:
+            default:
+                _ram[0] &= 0xfffc3fff;
+                _ram[2] &= 0xfffc3fff;
+                _ram[4] &= 0xfffc3fff;
+                _ram[6] &= 0xfffc3fff;
+                break;
+        }
+    }
+
+    screen::screen (volatile uint32_t * const ram) : 
+        digits{{0, ram}, {1, ram}, {2, ram},
+            {3, ram}, {4, ram}, {5, ram}} { }
+
+    const digit & screen::operator [] (const uint32_t pos) const {
+        if (pos > 6 - 1)
+            return digits[6 - 1];
+        return digits[pos];
+    }
+
+    st_hex_lcd::st_hex_lcd() :
+        lcd{hal::lcd}, scr{lcd->ram} {
+
+        // set BIAS to 1/3
+        lcd->control.bias = 0b10;
+        // set DUTY to 1/4
+        lcd->control.duty = 0b011;
+        // enable lcd remaping
+        lcd->control.mux_seg = 1;
+
+        // setup lcd clock
+        lcd->frame_control.ps = 0b0100;
+        lcd->frame_control.div = 0b0001;
+        // setup lcd contrast
+        lcd->frame_control.cc = 0b010;
+        // wait for synchro lcd frame control
+        while (lcd->status.fcrsf == 0);
+
+        // internal step-up converter
+        lcd->control.vsel = 0;
+        // enable lcd controller
+        lcd->control.lcden = 1;
+
+        // wait for ready step-up converter
+        while (lcd->status.rdy != 1);
+        // wait for ready lcd controller
+        while (lcd->status.ens != 1);
+
+        // wait for final update display
+        while (lcd->status.udr == 1);
+        // write 123456 to buffer
+        scr[5].write(0xb00f);
+        scr[4].write(0xb00e);
+        scr[3].write(0xe00a);
+        scr[2].write(0xd00e);
+        scr[1].write(0xd007);
+        scr[0].write(0x4008);
+        // update lcd from buffer
+        lcd->status.udr = 1;
+    }
+
+}

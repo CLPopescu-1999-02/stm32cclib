@@ -18,6 +18,7 @@ ST_FLASH = $(ST_UTILS_PATH)st-flash
 
 # user defined sources
 CXXSRCS = \
+	src/bsp/st_hex_lcd.cc \
 	src/isr_base.cc \
 	src/isr_extend.cc \
 	src/reset.cc \

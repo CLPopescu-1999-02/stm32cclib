@@ -33,6 +33,12 @@ namespace bsp {
     public:
         st_hex_lcd();
 
+        void write_char(const char ch, const unsigned int pos, const bool clear = false);
+
+        void wait_update();
+
+        void update();
+
     private:
         volatile hal::lcd_t * lcd;
         const screen scr;

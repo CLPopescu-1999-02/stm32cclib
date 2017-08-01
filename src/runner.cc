@@ -123,6 +123,14 @@ void runner::run() {
     setup_lcd_pwr();
 
     bsp::st_hex_lcd lcd;
+    lcd.wait_update();
+    lcd.write_char('1', 0);
+    lcd.write_char('2', 1);
+    lcd.write_char('3', 2);
+    lcd.write_char('4', 3);
+    lcd.write_char('5', 4);
+    lcd.write_char('6', 5);
+    lcd.update();
 
     // setup irq for sys_tick and enable it irq
     hal::nvic->enable_irq(hal::irq_n_t::sys_tick_timer);

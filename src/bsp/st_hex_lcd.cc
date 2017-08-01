@@ -1,6 +1,22 @@
 #include "bsp/st_hex_lcd.hh"
 
 namespace bsp {
+    // constant upper letters
+    const uint16_t cap_letter_masks[26] = {
+        // A      B      C      D      E      F      G      H      I
+        0xf00b,0x511e,0x3005,0x511c,0xb005,0xb001,0x300f,0xe00b,0x0110,
+        // J      K      L      M      N      O      P      Q      R
+        0x400d,0xa441,0x2005,0x6609,0x6249,0x700d,0xf003,0x704d,0xf043,
+        // S      T      U      V      W      X      Y      Z
+        0xb00e,0x1110,0x600d,0x2c01,0x6849,0x0e40,0x0610,0x1c04
+    };
+
+    // constant numbers
+    const uint16_t number_masks[10] = {
+        // 0      1      2      3      4      5      6      7      8      9
+        0x700d,0x4008,0xd007,0x500e,0xe00a,0xb00e,0xb00f,0x5008,0xf00f,0xf00e
+    };
+
     digit::digit(const uint32_t pos, volatile uint32_t * const ram) :
         _pos{pos}, _ram{ram} {
     }
@@ -126,18 +142,27 @@ namespace bsp {
         while (lcd->status.rdy != 1);
         // wait for ready lcd controller
         while (lcd->status.ens != 1);
-
-        // wait for final update display
-        while (lcd->status.udr == 1);
-        // write 123456 to buffer
-        scr[5].write(0xb00f);
-        scr[4].write(0xb00e);
-        scr[3].write(0xe00a);
-        scr[2].write(0xd00e);
-        scr[1].write(0xd007);
-        scr[0].write(0x4008);
-        // update lcd from buffer
-        lcd->status.udr = 1;
     }
 
+    void st_hex_lcd::write_char(const char ch, const unsigned int pos, const bool clear) {
+        if (clear) {
+            scr[pos].clear();
+        }
+
+        if (ch >= 'A' && ch <= 'Z') {
+            scr[pos].write(cap_letter_masks[static_cast<const uint8_t>(ch-'A')]);
+        } else if (ch >= '0' && ch <= '9') {
+            scr[pos].write(number_masks[static_cast<const uint8_t>(ch-'0')]);
+        } else {
+            scr[pos].write(0x0000);
+        }
+    }
+
+    void st_hex_lcd::wait_update() {
+        while (lcd->status.udr == 1);
+    }
+
+    void st_hex_lcd::update() {
+        lcd->status.udr = 1;
+    }
 }

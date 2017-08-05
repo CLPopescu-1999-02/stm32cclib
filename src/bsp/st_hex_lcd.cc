@@ -144,11 +144,7 @@ namespace bsp {
         while (lcd->status.ens != 1);
     }
 
-    void st_hex_lcd::write_char(const char ch, const unsigned int pos, const bool clear) {
-        if (clear) {
-            scr[pos].clear();
-        }
-
+    void st_hex_lcd::write_char(const unsigned int pos, const char ch) {
         if (ch >= 'A' && ch <= 'Z') {
             scr[pos].write(cap_letter_masks[static_cast<const uint8_t>(ch-'A')]);
         } else if (ch >= '0' && ch <= '9') {
@@ -156,6 +152,18 @@ namespace bsp {
         } else {
             scr[pos].write(0x0000);
         }
+    }
+
+    void st_hex_lcd::write_col(const unsigned int pos) {
+        scr[pos].write(0x0020);
+    }
+
+    void st_hex_lcd::write_dp(const unsigned int pos) {
+        scr[pos].write(0x0080);
+    }
+
+    void st_hex_lcd::clear(const unsigned int pos) {
+        scr[pos].clear();
     }
 
     void st_hex_lcd::wait_update() {

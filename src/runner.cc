@@ -124,12 +124,16 @@ void runner::run() {
 
     bsp::st_hex_lcd lcd;
     lcd.wait_update();
-    lcd.write_char('1', 0);
-    lcd.write_char('2', 1);
-    lcd.write_char('3', 2);
-    lcd.write_char('4', 3);
-    lcd.write_char('5', 4);
-    lcd.write_char('6', 5);
+    lcd.write_char(0, '1');
+    lcd.write_char(1, '2');
+    lcd.write_col(1);
+    lcd.write_char(2, '3');
+    lcd.write_char(3, '4');
+    lcd.write_col(3);
+    lcd.write_char(4, '5');
+    lcd.write_dp(4);
+    lcd.write_char(5, '6');
+    lcd.write_col(5);
     lcd.update();
 
     // setup irq for sys_tick and enable it irq

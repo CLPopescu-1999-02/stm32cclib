@@ -33,6 +33,8 @@ namespace bsp {
     public:
         st_hex_lcd();
 
+        void setup();
+
         void write_char(const unsigned int pos, const char ch);
 
         void write_col(const unsigned int pos);

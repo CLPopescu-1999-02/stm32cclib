@@ -117,7 +117,9 @@ namespace bsp {
 
     st_hex_lcd::st_hex_lcd() :
         lcd{hal::lcd}, scr{lcd->ram} {
+    }
 
+    void st_hex_lcd::setup() {
         // set BIAS to 1/3
         lcd->control.bias = 0b10;
         // set DUTY to 1/4

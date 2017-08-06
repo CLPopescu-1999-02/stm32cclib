@@ -6,6 +6,7 @@
 #include "hal/gpio.hh"
 #include "hal/pwr.hh"
 #include "hal/rcc.hh"
+#include "hal/rtc.hh"
 #include "hal/tim.hh"
 
 #include "bsp/st_hex_lcd.hh"
@@ -40,6 +41,14 @@ extern "C" void isr::TIM4() {
             }
         }
         hal::tim4->status.uif = 0;
+    }
+}
+
+extern "C" void isr::TIM3() {
+    if (hal::tim3->status.uif) {
+        runner::view_rtc_time();
+
+        hal::tim3->status.uif = 0;
     }
 }
 
@@ -90,7 +99,19 @@ static void setup_lcd_pwr() {
     hal::rcc->control_status.rtcsel = 0b01;
 }
 
-static void setup_timer() {
+static void setup_timer3() {
+    // setup tim3
+    hal::rcc->apb1_enable.tim3 = 1;
+    // setup tim3 counter block
+    hal::tim3->psc = 1000 - 1;
+    hal::tim3->arr = 1000;
+    // enable tim3 interrupt for update
+    hal::tim3->dma_interrupt_enable.uie = 1;
+    // enable tim3
+    hal::tim3->control1.cen = 1;
+}
+
+static void setup_timer4() {
     // setup tim4
     hal::rcc->apb1_enable.tim4 = 1;
     // setup tim4 counter block
@@ -116,13 +137,69 @@ static void setup_timer() {
     hal::tim4->control1.cen = 1;
 }
 
-void runner::run() {
-    setup_gpio();
-    setup_timer();
+void setup_rtc() {
+    // enable rtc clock
+    hal::rcc->control_status.rtcen = 1;
 
-    setup_lcd_pwr();
+    // disable protection
+    hal::rtc->write_protect.key = 0xca;
+    hal::rtc->write_protect.key = 0x53;
 
+    if (hal::rtc->init_status.initf == 0) {
+        // enter initialization mode
+        hal::rtc->init_status.init = 1;
+        // wait to enter init
+        while (hal::rtc->init_status.initf == 0);
+    }
+    // setup prescaler value
+    hal::rtc->prescaler.prediv_s = 255; // 32768
+    hal::rtc->prescaler.prediv_a = 127;
+    // setup 24h hour/day format
+    hal::rtc->control.fmt = 0;
+    // enable direction take value from registers
+    hal::rtc->control.bypshad = 1;
+    // setup time & date
+    hal::rtc->time.ht = 1;
+    hal::rtc->time.hu = 2;
+    hal::rtc->date.wdu = 0b001; // Sunday
+    // exit initialization mode
+    hal::rtc->init_status.init = 0;
+
+    // enable protection
+    hal::rtc->write_protect.key = 0xff;
+}
+
+void runner::view_rtc_time() {
     bsp::st_hex_lcd lcd;
+
+    lcd.wait_update();
+    lcd.clear(0);
+    lcd.write_char(0, '0' + hal::rtc->time.ht);
+    lcd.clear(1);
+    lcd.write_char(1, '0' + hal::rtc->time.hu);
+    lcd.write_col(1);
+    lcd.clear(2);
+    lcd.write_char(2, '0' + hal::rtc->time.mnt);
+    lcd.clear(3);
+    lcd.write_char(3, '0' + hal::rtc->time.mnu);
+    lcd.write_col(3);
+    lcd.clear(4);
+    lcd.write_char(4, '0' + hal::rtc->time.st);
+    lcd.clear(5);
+    lcd.write_char(5, '0' + hal::rtc->time.su);
+    lcd.update();
+}
+
+void runner::run() {
+    bsp::st_hex_lcd lcd;
+
+    setup_gpio();
+    setup_timer4();
+    setup_timer3();
+    setup_lcd_pwr();
+    setup_rtc();
+    lcd.setup();
+
     lcd.wait_update();
     lcd.write_char(0, '1');
     lcd.write_char(1, '2');
@@ -136,9 +213,12 @@ void runner::run() {
     lcd.write_col(5);
     lcd.update();
 
+    view_rtc_time();
+
     // setup irq for sys_tick and enable it irq
     hal::nvic->enable_irq(hal::irq_n_t::sys_tick_timer);
     hal::sys_tick->config(8000000);
-    // setup irq for tim4
+    // setup irq for tim3, tim4
     hal::nvic->enable_irq(hal::irq_dev_n_t::TIM4);
+    hal::nvic->enable_irq(hal::irq_dev_n_t::TIM3);
 }

@@ -8,8 +8,8 @@ extern "C" {
         struct device_vectors { // Table of pointer to interrupt vectors - STM32L152xC specific interrupts
             void (*WWDG)            (); /*!%0 Window WatchDog */
             void (*PVD)             (); /*!%1 PVD through EXTI Line detection */
-            void (*tamp_stamp)      (); /*!%2 Tamper and TimeStamps through the EXTI line */
-            void (*rtc_wkup)        (); /*!%3 RTC Wakeup through the EXTI line */
+            void (*TAMP_STAMP)      (); /*!%2 Tamper and TimeStamps through the EXTI line */
+            void (*RTC_wkup)        (); /*!%3 RTC Wakeup through the EXTI line */
             void (*flash)           (); /*!%4 FLASH */
             void (*RCC)             (); /*!%5 RCC */
             void (*EXTI0)           (); /*!%6 EXTI Line0 */
@@ -48,7 +48,7 @@ extern "C" {
             void (*USART3)          (); /*!%39 USART3 */
             void (*EXTI15_10)       (); /*!%40 External Line[15:10]s */
             void (*RTC_Alarm)       (); /*!%41 RTC Alarm (A and B) through EXTI Line */
-            void (*USB_WKUP)        (); /*!%42 USB OTG FS Wakeup through EXTI line */
+            void (*USB_wkup)        (); /*!%42 USB OTG FS Wakeup through EXTI line */
             void (*TIM6)            (); /*!%43 TIM6 */
             void (*TIM7)            (); /*!%44 TIM7 */
             void (*TIM5)            (); /*!%45 TIM5 */
@@ -64,8 +64,8 @@ extern "C" {
 
         void WWDG();
         void PVD();
-        void tamp_stamp();
-        void rtc_wkup();
+        void TAMP_stamp();
+        void RTC_wkup();
         void flash();
         void RCC();
         void EXTI0();
@@ -104,7 +104,7 @@ extern "C" {
         void USART3();
         void EXTI15_10();
         void RTC_Alarm();
-        void USB_WKUP();
+        void USB_wkup();
         void TIM6();
         void TIM7();
         void TIM5();

@@ -9,8 +9,8 @@ extern "C" {
 
         void WWDG() __attribute__ ((weak, alias ("default_handler_extend")));
         void PVD() __attribute__ ((weak, alias ("default_handler_extend")));
-        void tamp_stamp() __attribute__ ((weak, alias ("default_handler_extend")));
-        void rtc_wkup() __attribute__ ((weak, alias ("default_handler_extend")));
+        void TAMP_stamp() __attribute__ ((weak, alias ("default_handler_extend")));
+        void RTC_wkup() __attribute__ ((weak, alias ("default_handler_extend")));
         void flash() __attribute__ ((weak, alias ("default_handler_extend")));
         void RCC() __attribute__ ((weak, alias ("default_handler_extend")));
         void EXTI0() __attribute__ ((weak, alias ("default_handler_extend")));
@@ -49,7 +49,7 @@ extern "C" {
         void USART3() __attribute__ ((weak, alias ("default_handler_extend")));
         void EXTI15_10() __attribute__ ((weak, alias ("default_handler_extend")));
         void RTC_Alarm() __attribute__ ((weak, alias ("default_handler_extend")));
-        void USB_WKUP() __attribute__ ((weak, alias ("default_handler_extend")));
+        void USB_wkup() __attribute__ ((weak, alias ("default_handler_extend")));
         void TIM6() __attribute__ ((weak, alias ("default_handler_extend")));
         void TIM7() __attribute__ ((weak, alias ("default_handler_extend")));
         void TIM5() __attribute__ ((weak, alias ("default_handler_extend")));

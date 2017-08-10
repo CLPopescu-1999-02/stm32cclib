@@ -16,12 +16,17 @@ namespace {
     const uint32_t ld3_green{7};
     const uint32_t ld4_blue{6};
     const uint32_t all_leds = hal::value_of(ld3_green, ld4_blue);
-    static bool foward = true;
+
+    volatile bool foward = true;
     const int add_value = 10;
+
+    volatile int mode = 0;
 }
 
 extern "C" void isr::sys_tick_timer() {
     hal::tim4->capt_comp_mode1.oc2m ^= 0b001;
+
+    mode++;
 }
 
 extern "C" void isr::TIM4() {
@@ -47,7 +52,7 @@ extern "C" void isr::TIM4() {
 
 extern "C" void isr::RTC_wkup() {
     if (hal::rtc->init_status.wutf) {
-        runner::view_rtc_time();
+        runner::view_current_state();
 
         hal::rtc->init_status.wutf = 0;
     }
@@ -149,7 +154,13 @@ void setup_rtc() {
     // setup time & date
     hal::rtc->time.ht = 1;
     hal::rtc->time.hu = 2;
-    hal::rtc->date.wdu = 0b001; // Sunday
+    hal::rtc->date.yt = 1;
+    hal::rtc->date.yu = 7;
+    hal::rtc->date.mt = 0;
+    hal::rtc->date.mu = 8;
+    hal::rtc->date.dt = 1;
+    hal::rtc->date.du = 0;
+    hal::rtc->date.wdu = 0b100; // Thursday
 
     // setup wakeup timer
     hal::rtc->wakeup_timer.wut = 2048; // rtcclk/16/2048 -> 1s event
@@ -170,25 +181,50 @@ void setup_rtc() {
     hal::exti->unmask_int(20);
 }
 
-void runner::view_rtc_time() {
+void runner::view_current_state() {
     bsp::st_hex_lcd lcd;
 
-    lcd.wait_update()
-        .clear(0)
-        .write_digit(0, hal::rtc->time.ht)
-        .clear(1)
-        .write_digit(1, hal::rtc->time.hu)
-        .write_col(1)
-        .clear(2)
-        .write_digit(2, hal::rtc->time.mnt)
-        .clear(3)
-        .write_digit(3, hal::rtc->time.mnu)
-        .write_col(3)
-        .clear(4)
-        .write_digit(4, hal::rtc->time.st)
-        .clear(5)
-        .write_digit(5, hal::rtc->time.su)
-        .update();
+    switch (mode) {
+        case 0:
+            lcd.wait_update()
+                .clear(0)
+                .write_digit(0, hal::rtc->time.ht)
+                .clear(1)
+                .write_digit(1, hal::rtc->time.hu)
+                .write_col(1)
+                .clear(2)
+                .write_digit(2, hal::rtc->time.mnt)
+                .clear(3)
+                .write_digit(3, hal::rtc->time.mnu)
+                .write_col(3)
+                .clear(4)
+                .write_digit(4, hal::rtc->time.st)
+                .clear(5)
+                .write_digit(5, hal::rtc->time.su)
+                .update();
+                break;
+        case 1:
+            lcd.wait_update()
+                .clear(0)
+                .write_digit(0, hal::rtc->date.yt)
+                .clear(1)
+                .write_digit(1, hal::rtc->date.yu)
+                .write_dp(1)
+                .clear(2)
+                .write_digit(2, hal::rtc->date.mt)
+                .clear(3)
+                .write_digit(3, hal::rtc->date.mu)
+                .write_dp(3)
+                .clear(4)
+                .write_digit(4, hal::rtc->date.dt)
+                .clear(5)
+                .write_digit(5, hal::rtc->date.du)
+                .update();
+                break;
+        default:
+            mode = 0;
+            break;
+    }
 }
 
 void runner::run() {
@@ -200,20 +236,7 @@ void runner::run() {
     setup_rtc();
     lcd.setup();
 
-    lcd.wait_update();
-    lcd.write_char(0, '1');
-    lcd.write_char(1, '2');
-    lcd.write_col(1);
-    lcd.write_char(2, '3');
-    lcd.write_char(3, '4');
-    lcd.write_col(3);
-    lcd.write_char(4, '5');
-    lcd.write_dp(4);
-    lcd.write_char(5, '6');
-    lcd.write_col(5);
-    lcd.update();
-
-    view_rtc_time();
+    view_current_state();
 
     // setup irq for sys_tick and enable it irq
     hal::nvic->enable_irq(hal::irq_n_t::sys_tick_timer);

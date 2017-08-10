@@ -4,7 +4,7 @@
 namespace runner {
     void run();
 
-    void view_rtc_time();
+    void view_current_state();
 }
 
 #endif // RUNNER_HH

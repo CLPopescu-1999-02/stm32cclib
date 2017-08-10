@@ -146,7 +146,7 @@ namespace bsp {
         while (lcd->status.ens != 1);
     }
 
-    void st_hex_lcd::write_char(const unsigned int pos, const char ch) {
+    st_hex_lcd st_hex_lcd::write_char(const unsigned int pos, const char ch) {
         if (ch >= 'A' && ch <= 'Z') {
             scr[pos].write(cap_letter_masks[static_cast<const uint8_t>(ch-'A')]);
         } else if (ch >= '0' && ch <= '9') {
@@ -154,25 +154,47 @@ namespace bsp {
         } else {
             scr[pos].write(0x0000);
         }
+
+        return *this;
     }
 
-    void st_hex_lcd::write_col(const unsigned int pos) {
+    st_hex_lcd st_hex_lcd::write_digit(const unsigned int pos, const int dig) {
+        if (dig >= 0 && dig <= 9) {
+            scr[pos].write(number_masks[dig]);
+        } else {
+            scr[pos].write(0x0000);
+        }
+
+        return *this;
+    }
+
+    st_hex_lcd st_hex_lcd::write_col(const unsigned int pos) {
         scr[pos].write(0x0020);
+
+        return *this;
     }
 
-    void st_hex_lcd::write_dp(const unsigned int pos) {
+    st_hex_lcd st_hex_lcd::write_dp(const unsigned int pos) {
         scr[pos].write(0x0080);
+
+        return *this;
     }
 
-    void st_hex_lcd::clear(const unsigned int pos) {
+    st_hex_lcd st_hex_lcd::clear(const unsigned int pos) {
         scr[pos].clear();
+
+        return *this;
     }
 
-    void st_hex_lcd::wait_update() {
+    st_hex_lcd st_hex_lcd::wait_update() {
         while (lcd->status.udr == 1);
+
+        return *this;
     }
 
-    void st_hex_lcd::update() {
+    st_hex_lcd st_hex_lcd::update() {
         lcd->status.udr = 1;
+
+        return *this;
     }
 }

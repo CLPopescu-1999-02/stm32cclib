@@ -173,22 +173,22 @@ void setup_rtc() {
 void runner::view_rtc_time() {
     bsp::st_hex_lcd lcd;
 
-    lcd.wait_update();
-    lcd.clear(0);
-    lcd.write_char(0, '0' + hal::rtc->time.ht);
-    lcd.clear(1);
-    lcd.write_char(1, '0' + hal::rtc->time.hu);
-    lcd.write_col(1);
-    lcd.clear(2);
-    lcd.write_char(2, '0' + hal::rtc->time.mnt);
-    lcd.clear(3);
-    lcd.write_char(3, '0' + hal::rtc->time.mnu);
-    lcd.write_col(3);
-    lcd.clear(4);
-    lcd.write_char(4, '0' + hal::rtc->time.st);
-    lcd.clear(5);
-    lcd.write_char(5, '0' + hal::rtc->time.su);
-    lcd.update();
+    lcd.wait_update()
+        .clear(0)
+        .write_digit(0, hal::rtc->time.ht)
+        .clear(1)
+        .write_digit(1, hal::rtc->time.hu)
+        .write_col(1)
+        .clear(2)
+        .write_digit(2, hal::rtc->time.mnt)
+        .clear(3)
+        .write_digit(3, hal::rtc->time.mnu)
+        .write_col(3)
+        .clear(4)
+        .write_digit(4, hal::rtc->time.st)
+        .clear(5)
+        .write_digit(5, hal::rtc->time.su)
+        .update();
 }
 
 void runner::run() {

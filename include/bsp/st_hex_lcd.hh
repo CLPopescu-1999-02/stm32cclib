@@ -35,17 +35,19 @@ namespace bsp {
 
         void setup();
 
-        void write_char(const unsigned int pos, const char ch);
+        st_hex_lcd write_char(const unsigned int pos, const char ch);
 
-        void write_col(const unsigned int pos);
+        st_hex_lcd write_digit(const unsigned int pos, const int dig);
 
-        void write_dp(const unsigned int pos);
+        st_hex_lcd write_col(const unsigned int pos);
 
-        void clear(const unsigned int pos);
+        st_hex_lcd write_dp(const unsigned int pos);
 
-        void wait_update();
+        st_hex_lcd clear(const unsigned int pos);
 
-        void update();
+        st_hex_lcd wait_update();
+
+        st_hex_lcd update();
 
     private:
         volatile hal::lcd_t * lcd;

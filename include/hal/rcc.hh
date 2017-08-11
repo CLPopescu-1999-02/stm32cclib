@@ -3,6 +3,25 @@
 #include <stdint.h>
 
 namespace hal {
+    struct rcc_control_t {
+        uint32_t hsion:1;
+        uint32_t hsirdy:1;
+        uint32_t _unused0:6;
+        uint32_t msion:1;
+        uint32_t msirdy:1;
+        uint32_t _unused1:6;
+        uint32_t hseon:1;
+        uint32_t hserdy:1;
+        uint32_t hsebyp:1;
+        uint32_t _unused2:5;
+        uint32_t pllon:1;
+        uint32_t pllrdy:1;
+        uint32_t _unused3:2;
+        uint32_t csson:1;
+        uint32_t rtcpre:2;
+        uint32_t _unused4:1;
+    };
+
     struct ahb_devices_t {
         uint32_t gpioa:1;
         uint32_t gpiob:1;
@@ -24,6 +43,22 @@ namespace hal {
         uint32_t _unused4:2;
         uint32_t fsmc:1;
         uint32_t _unused5:1;
+    };
+
+    struct apb2_device_t {
+        uint32_t syscfgr:1;
+        uint32_t _unused0:1;
+        uint32_t tim9:1;
+        uint32_t tim10:1;
+        uint32_t tim11:1;
+        uint32_t _unused1:4;
+        uint32_t adc1:1;
+        uint32_t _unused2:1;
+        uint32_t sdio:1;
+        uint32_t spi1:1;
+        uint32_t _unused3:1;
+        uint32_t usart1:1;
+        uint32_t _unused4:17;
     };
 
     struct apb1_device_t {
@@ -80,15 +115,15 @@ namespace hal {
     };
 
     struct rcc_t {
-        uint32_t cr;
+        rcc_control_t control;
         uint32_t icscr;
         uint32_t cfgr;
         uint32_t cir;
         ahb_devices_t ahb_reset;
-        uint32_t apb2rstr;
+        apb2_device_t apb2_reset;
         apb1_device_t apb1_reset;
         ahb_devices_t ahb_enable;
-        uint32_t apb2enr;
+        apb2_device_t apb2_enable;
         apb1_device_t apb1_enable;
         uint32_t ahb_lpenr;
         uint32_t apb2_lpenr;

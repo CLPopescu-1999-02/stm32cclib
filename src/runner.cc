@@ -2,6 +2,7 @@
 
 #include "isr_base.hh"
 #include "isr_extend.hh"
+#include "hal/adc.hh"
 #include "hal/core.hh"
 #include "hal/exti.hh"
 #include "hal/gpio.hh"
@@ -181,6 +182,37 @@ void setup_rtc() {
     hal::exti->unmask_int(20);
 }
 
+void setup_adc() {
+    // enable hsi clock for adc1
+    hal::rcc->control.hsion = 1;
+    while (hal::rcc->control.hsirdy == 0);
+    // reset adc module
+    hal::rcc->apb2_reset.adc1 = 1;
+    hal::rcc->apb2_reset.adc1 = 0;
+    // enable adc module
+    hal::rcc->apb2_enable.adc1 = 1;
+    // setup clock to HSI / 4
+    hal::adc1_common->control.adcpre = 0b11;
+    // enable Temperature sensor (channel 16), Vrefint (channel 17)
+    hal::adc1_common->control.tsvrefe = 1;
+    // disable adc low power mode
+    hal::adc1->control2.adon = 1;
+    // switch to bank A
+    hal::adc1->control2.adc_cfg = 0;
+    // wait for setup adc1 hw
+    while (hal::adc1->status.adons == 0);
+    // setup 17 channel - vref internal, 16 channel - Temperature
+    hal::adc1->inject_sequence.jl = 0b01;
+    hal::adc1->inject_sequence.jsq3 = 17;
+    hal::adc1->inject_sequence.jsq4 = 16;
+    // wait for setup regular channel
+    while (hal::adc1->status.jcnr == 1);
+    // clear eoc
+    hal::adc1->status.jeoc = 0;
+    // start conversion
+    hal::adc1->control2.jswstart = 1;
+}
+
 void runner::view_current_state() {
     bsp::st_hex_lcd lcd;
 
@@ -221,6 +253,54 @@ void runner::view_current_state() {
                 .write_digit(5, hal::rtc->date.du)
                 .update();
                 break;
+        case 2:
+        {
+            uint32_t adc_value = *(uint16_t *)0x1ff800f8 * 1224;
+            if (hal::adc1->status.jeoc == 1) {
+                adc_value /= hal::adc1->jdr1;
+                hal::adc1->status.jeoc = 0;
+                hal::adc1->control2.jswstart = 1;
+            }
+            lcd.wait_update()
+                .clear(0)
+                .write_digit(0, adc_value / 1000 % 10)
+                .clear(1)
+                .write_digit(1, adc_value / 100 % 10)
+                .clear(2)
+                .write_digit(2, adc_value / 10 % 10)
+                .clear(3)
+                .write_digit(3, adc_value % 10)
+                .clear(4)
+                .write_char(4, 'V')
+                .clear(5)
+                .write_char(5, 'R')
+                .update();
+            break;
+        }
+        case 3:
+        {
+            uint32_t adc_value = (110 - 30) / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
+            if (hal::adc1->status.jeoc == 1) {
+                adc_value = adc_value * (hal::adc1->jdr2 - *(uint16_t *)0x1ff800fa) + 30;
+                hal::adc1->status.jeoc = 0;
+                hal::adc1->control2.jswstart = 1;
+            }
+            lcd.wait_update()
+                .clear(0)
+                .write_digit(0, adc_value / 1000 % 10)
+                .clear(1)
+                .write_digit(1, adc_value / 100 % 10)
+                .clear(2)
+                .write_digit(2, adc_value / 10 % 10)
+                .clear(3)
+                .write_digit(3, adc_value % 10)
+                .clear(4)
+                .write_char(4, 'T')
+                .clear(5)
+                .write_char(5, 'R')
+                .update();
+            break;
+        }
         default:
             mode = 0;
             break;
@@ -234,6 +314,7 @@ void runner::run() {
     setup_timer4();
     setup_lcd_pwr();
     setup_rtc();
+    setup_adc();
     lcd.setup();
 
     view_current_state();

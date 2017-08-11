@@ -27,6 +27,7 @@ namespace hal {
         uint32_t awdsgl:1;
         uint32_t jauto:1;
         uint32_t discen:1;
+        uint32_t jdiscen:1;
         uint32_t discnum:3;
         uint32_t pdd:1;
         uint32_t pdi:1;
@@ -55,7 +56,7 @@ namespace hal {
         uint32_t jswstart:1;
         uint32_t _unused3:1;
         uint32_t extsel:4;
-        uint32_t exten:1;
+        uint32_t exten:2;
         uint32_t swstart:1;
         uint32_t _unused4:1;
     };

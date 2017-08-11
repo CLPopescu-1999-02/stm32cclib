@@ -22,6 +22,23 @@ namespace hal {
         uint32_t _unused4:1;
     };
 
+    struct rcc_clock_config_t {
+        uint32_t sw:2;
+        uint32_t sws:2;
+        uint32_t hpre:4;
+        uint32_t ppre1:3;
+        uint32_t ppre2:3;
+        uint32_t _unused0:2;
+        uint32_t pllsrc:1;
+        uint32_t _unused1:1;
+        uint32_t pllmul:4;
+        uint32_t plldiv:2;
+        uint32_t mcosel:3;
+        uint32_t _unused2:1;
+        uint32_t mcopre:3;
+        uint32_t _unused3:1;
+    };
+
     struct ahb_devices_t {
         uint32_t gpioa:1;
         uint32_t gpiob:1;
@@ -117,7 +134,7 @@ namespace hal {
     struct rcc_t {
         rcc_control_t control;
         uint32_t icscr;
-        uint32_t cfgr;
+        rcc_clock_config_t clock_config;
         uint32_t cir;
         ahb_devices_t ahb_reset;
         apb2_device_t apb2_reset;

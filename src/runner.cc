@@ -195,6 +195,8 @@ void setup_adc() {
     hal::adc1_common->control.adcpre = 0b11;
     // enable Temperature sensor (channel 16), Vrefint (channel 17)
     hal::adc1_common->control.tsvrefe = 1;
+    // wait for enable Vrefint
+    while (hal::pwr->control_status.vrefintrdyf == 0);
     // disable adc low power mode
     hal::adc1->control2.adon = 1;
     // switch to bank A
@@ -202,15 +204,16 @@ void setup_adc() {
     // wait for setup adc1 hw
     while (hal::adc1->status.adons == 0);
     // setup 17 channel - vref internal, 16 channel - Temperature
-    hal::adc1->inject_sequence.jl = 0b01;
-    hal::adc1->inject_sequence.jsq3 = 17;
-    hal::adc1->inject_sequence.jsq4 = 16;
+    hal::adc1->set_regular_sequence(17, 0);
+    hal::adc1->set_sample_time(7, 17);
+    hal::adc1->set_regular_sequence(16, 1);
+    hal::adc1->set_sample_time(7, 16);
     // wait for setup regular channel
-    while (hal::adc1->status.jcnr == 1);
+    while (hal::adc1->status.rcnr == 1);
     // clear eoc
-    hal::adc1->status.jeoc = 0;
+    hal::adc1->status.eoc = 0;
     // start conversion
-    hal::adc1->control2.jswstart = 1;
+    hal::adc1->control2.swstart = 1;
 }
 
 void runner::view_current_state() {
@@ -255,15 +258,25 @@ void runner::view_current_state() {
                 break;
         case 2:
         {
-            uint32_t adc_value = *(uint16_t *)0x1ff800f8 * 1224;
-            if (hal::adc1->status.jeoc == 1) {
-                adc_value /= hal::adc1->jdr1;
-                hal::adc1->status.jeoc = 0;
-                hal::adc1->control2.jswstart = 1;
-            }
+            uint32_t adc_value = *(uint16_t *)0x1ff800f8 * 3000;
+            // setup 17 channel - vref internal
+            hal::adc1->set_regular_sequence(17, 0);
+            hal::adc1->set_sample_time(7, 17);
+            // wait for setup regular channel
+            while (hal::adc1->status.rcnr == 1);
+            // clear eoc
+            hal::adc1->status.eoc = 0;
+            // start conversion
+            hal::adc1->control2.swstart = 1;
+            // while end conversion
+            while (hal::adc1->status.eoc == 0);
+            // get data
+            adc_value /= hal::adc1->dr;
+
             lcd.wait_update()
                 .clear(0)
                 .write_digit(0, adc_value / 1000 % 10)
+                .write_dp(0)
                 .clear(1)
                 .write_digit(1, adc_value / 100 % 10)
                 .clear(2)
@@ -279,17 +292,27 @@ void runner::view_current_state() {
         }
         case 3:
         {
-            uint32_t adc_value = (110 - 30) / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
-            if (hal::adc1->status.jeoc == 1) {
-                adc_value = adc_value * (hal::adc1->jdr2 - *(uint16_t *)0x1ff800fa) + 30;
-                hal::adc1->status.jeoc = 0;
-                hal::adc1->control2.jswstart = 1;
-            }
+            uint32_t adc_value = (110 - 30) * 100 / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
+            // setup 16 channel - Temperature
+            hal::adc1->set_regular_sequence(16, 0);
+            hal::adc1->set_sample_time(7, 16);
+            // wait for setup regular channel
+            while (hal::adc1->status.rcnr == 1);
+            // clear eoc
+            hal::adc1->status.eoc = 0;
+            // start conversion
+            hal::adc1->control2.swstart = 1;
+            // while end conversion
+            while (hal::adc1->status.eoc == 0);
+            // get data
+            adc_value = adc_value * (hal::adc1->dr - *(uint16_t *)0x1ff800fa) + 30;
+
             lcd.wait_update()
                 .clear(0)
                 .write_digit(0, adc_value / 1000 % 10)
                 .clear(1)
                 .write_digit(1, adc_value / 100 % 10)
+                .write_dp(1)
                 .clear(2)
                 .write_digit(2, adc_value / 10 % 10)
                 .clear(3)

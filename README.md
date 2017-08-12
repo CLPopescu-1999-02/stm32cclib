@@ -8,5 +8,5 @@ It include:
 4) Startup code for Cortex-M3 cpu with initialization of data & bss sections.
 5) Setup C++ static objects
 6) Prototype of startup and run code for stm32l152c-discovery.
-7) RCC, GPIO, PWR, LCD, TIM, RTC, EXTI, ADC, Core structures and helpers to simplified operations with hardware.
+7) RCC, GPIO, PWR, LCD, TIM, RTC, EXTI, ADC, DMA, Core structures and helpers to simplified operations with hardware.
 8) stm32l152c-discovery hex lcd bsp to simplified operation with hardware modules

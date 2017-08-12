@@ -4,6 +4,7 @@
 #include "isr_extend.hh"
 #include "hal/adc.hh"
 #include "hal/core.hh"
+#include "hal/dma.hh"
 #include "hal/exti.hh"
 #include "hal/gpio.hh"
 #include "hal/pwr.hh"
@@ -22,6 +23,8 @@ namespace {
     const int add_value = 10;
 
     volatile int mode = 0;
+
+    volatile uint16_t adc_values[2];
 }
 
 extern "C" void isr::sys_tick_timer() {
@@ -182,6 +185,32 @@ void setup_rtc() {
     hal::exti->unmask_int(20);
 }
 
+void setup_dma() {
+    // enable dma1 power
+    hal::rcc->ahb_enable.dma1 = 1;
+    // config dma1 channel 1 (ADC1)
+    // disable dma conversion
+    hal::dma1_channel1->config.en = 0;
+    // memory increment
+    hal::dma1_channel1->config.minc = 1;
+    // peripheral size 16 bit
+    hal::dma1_channel1->config.psize = 0b01;
+    // memory size 16 bit
+    hal::dma1_channel1->config.msize = 0b01;
+    // priority medium
+    hal::dma1_channel1->config.pl = 0b01;
+    // circular mode
+    hal::dma1_channel1->config.circ = 1;
+    // setup memory address
+    hal::dma1_channel1->memory_address = (uint32_t)adc_values;
+    // setup peripheral address
+    hal::dma1_channel1->peripheral_address = (uint32_t)&(hal::adc1->dr);
+    // setup number conversions
+    hal::dma1_channel1->number_of_data = 2;
+    // enable dma conversion
+    hal::dma1_channel1->config.en = 1;
+}
+
 void setup_adc() {
     // enable hsi clock for adc1
     hal::rcc->control.hsion = 1;
@@ -197,6 +226,14 @@ void setup_adc() {
     hal::adc1_common->control.tsvrefe = 1;
     // wait for enable Vrefint
     while (hal::pwr->control_status.vrefintrdyf == 0);
+    // scan mode enabled
+    hal::adc1->control1.scan = 1;
+    // continuous conversion
+    hal::adc1->control2.cont = 1;
+    // dma mode enable
+    hal::adc1->control2.dma = 1;
+    // dma disable selection
+    hal::adc1->control2.dds = 1;
     // disable adc low power mode
     hal::adc1->control2.adon = 1;
     // switch to bank A
@@ -208,8 +245,10 @@ void setup_adc() {
     hal::adc1->set_sample_time(7, 17);
     hal::adc1->set_regular_sequence(16, 1);
     hal::adc1->set_sample_time(7, 16);
+    hal::adc1->set_regular_sequence(1, 28);
     // wait for setup regular channel
     while (hal::adc1->status.rcnr == 1);
+
     // clear eoc
     hal::adc1->status.eoc = 0;
     // start conversion
@@ -259,19 +298,8 @@ void runner::view_current_state() {
         case 2:
         {
             uint32_t adc_value = *(uint16_t *)0x1ff800f8 * 3000;
-            // setup 17 channel - vref internal
-            hal::adc1->set_regular_sequence(17, 0);
-            hal::adc1->set_sample_time(7, 17);
-            // wait for setup regular channel
-            while (hal::adc1->status.rcnr == 1);
-            // clear eoc
-            hal::adc1->status.eoc = 0;
-            // start conversion
-            hal::adc1->control2.swstart = 1;
-            // while end conversion
-            while (hal::adc1->status.eoc == 0);
             // get data
-            adc_value /= hal::adc1->dr;
+            adc_value /= adc_values[0];
 
             lcd.wait_update()
                 .clear(0)
@@ -292,20 +320,9 @@ void runner::view_current_state() {
         }
         case 3:
         {
-            uint32_t adc_value = (110 - 30) * 100 / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
-            // setup 16 channel - Temperature
-            hal::adc1->set_regular_sequence(16, 0);
-            hal::adc1->set_sample_time(7, 16);
-            // wait for setup regular channel
-            while (hal::adc1->status.rcnr == 1);
-            // clear eoc
-            hal::adc1->status.eoc = 0;
-            // start conversion
-            hal::adc1->control2.swstart = 1;
-            // while end conversion
-            while (hal::adc1->status.eoc == 0);
+            int32_t adc_value = (110 - 30) * 100 / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
             // get data
-            adc_value = adc_value * (hal::adc1->dr - *(uint16_t *)0x1ff800fa) + 30;
+            adc_value = adc_value * (adc_values[1] - *(uint16_t *)0x1ff800fa) + 3000;
 
             lcd.wait_update()
                 .clear(0)
@@ -337,6 +354,7 @@ void runner::run() {
     setup_timer4();
     setup_lcd_pwr();
     setup_rtc();
+    setup_dma();
     setup_adc();
     lcd.setup();
 

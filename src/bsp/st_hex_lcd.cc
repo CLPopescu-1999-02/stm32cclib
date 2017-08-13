@@ -17,12 +17,12 @@ namespace bsp {
         0x700d,0x4008,0xd007,0x500e,0xe00a,0xb00e,0xb00f,0x5008,0xf00f,0xf00e
     };
 
-    digit::digit(const uint32_t pos, volatile uint32_t * const ram) :
-        _pos{pos}, _ram{ram} {
+    digit::digit(volatile uint32_t * const ram) :
+        _ram{ram} {
     }
 
-    void digit::write(const uint16_t mask) const {
-        switch (_pos) {
+    void digit::write(const uint32_t pos, const uint16_t mask) const {
+        switch (pos) {
             case 0:
                 _ram[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
                 _ram[2] |= (mask & 0x3000) << 16 | (mask & 0x000c) >> 2;
@@ -63,8 +63,8 @@ namespace bsp {
         }
     }
 
-    void digit::clear() const {
-        switch (_pos) {
+    void digit::clear(const uint32_t pos) const {
+        switch (pos) {
             case 0:
                 _ram[0] &= 0xcffffffc;
                 _ram[2] &= 0xcffffffc;
@@ -105,16 +105,6 @@ namespace bsp {
         }
     }
 
-    screen::screen (volatile uint32_t * const ram) : 
-        digits{{0, ram}, {1, ram}, {2, ram},
-            {3, ram}, {4, ram}, {5, ram}} { }
-
-    const digit & screen::operator [] (const uint32_t pos) const {
-        if (pos > 6 - 1)
-            return digits[6 - 1];
-        return digits[pos];
-    }
-
     st_hex_lcd::st_hex_lcd() :
         lcd{hal::lcd}, scr{lcd->ram} {
     }
@@ -148,11 +138,11 @@ namespace bsp {
 
     st_hex_lcd st_hex_lcd::write_char(const unsigned int pos, const char ch) {
         if (ch >= 'A' && ch <= 'Z') {
-            scr[pos].write(cap_letter_masks[static_cast<const uint8_t>(ch-'A')]);
+            scr.write(pos, cap_letter_masks[static_cast<const uint8_t>(ch-'A')]);
         } else if (ch >= '0' && ch <= '9') {
-            scr[pos].write(number_masks[static_cast<const uint8_t>(ch-'0')]);
+            scr.write(pos, number_masks[static_cast<const uint8_t>(ch-'0')]);
         } else {
-            scr[pos].write(0x0000);
+            scr.write(pos, 0x0000);
         }
 
         return *this;
@@ -160,28 +150,28 @@ namespace bsp {
 
     st_hex_lcd st_hex_lcd::write_digit(const unsigned int pos, const int dig) {
         if (dig >= 0 && dig <= 9) {
-            scr[pos].write(number_masks[dig]);
+            scr.write(pos, number_masks[dig]);
         } else {
-            scr[pos].write(0x0000);
+            scr.write(pos, 0x0000);
         }
 
         return *this;
     }
 
     st_hex_lcd st_hex_lcd::write_col(const unsigned int pos) {
-        scr[pos].write(0x0020);
+        scr.write(pos, 0x0020);
 
         return *this;
     }
 
     st_hex_lcd st_hex_lcd::write_dp(const unsigned int pos) {
-        scr[pos].write(0x0080);
+        scr.write(pos, 0x0080);
 
         return *this;
     }
 
     st_hex_lcd st_hex_lcd::clear(const unsigned int pos) {
-        scr[pos].clear();
+        scr.clear(pos);
 
         return *this;
     }

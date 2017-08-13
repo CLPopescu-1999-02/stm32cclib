@@ -54,8 +54,8 @@ namespace hal {
         uint32_t _unused0;
         uint32_t ram[16];
     };
-
-    volatile lcd_t * const lcd = reinterpret_cast<lcd_t *>(0x40002400);
 }
+
+#include "hal/lcd_d.hh"
 
 #endif // LCD_HH

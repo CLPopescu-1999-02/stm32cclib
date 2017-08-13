@@ -76,8 +76,8 @@ namespace hal {
             pr |= event_of(pins...);
         }
     };
-
-    volatile exti_t * const exti = reinterpret_cast<exti_t *>(0x40010400);
 }
+
+#include "hal/exti_d.hh"
 
 #endif // EXTI_HH

@@ -147,7 +147,8 @@ namespace hal {
         uint32_t apb1_lpenr;
         rcc_control_status_t control_status;
     };
-
-    volatile rcc_t * const rcc = reinterpret_cast<rcc_t *>(0x40023800);
 } // namespace Hal
+
+#include "hal/rcc_d.hh"
+
 #endif // RCC_HH

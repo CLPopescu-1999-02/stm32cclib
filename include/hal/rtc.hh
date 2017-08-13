@@ -183,8 +183,8 @@ namespace hal {
         rtc_alarm_sub_second_t alarmb_sub_second;
         uint32_t bkpr[32];
     };
-
-    volatile rtc_t * const rtc = reinterpret_cast<rtc_t *>(0x40002800);
 }
+
+#include "hal/rtc_d.hh"
 
 #endif // RTC_HH

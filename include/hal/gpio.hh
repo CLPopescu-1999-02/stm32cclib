@@ -119,9 +119,8 @@ namespace hal {
             brr |= value_of(pins...);
         }
     };
-
-    volatile gpio_t * const gpioa = reinterpret_cast<gpio_t *>(0x40020000);
-    volatile gpio_t * const gpiob = reinterpret_cast<gpio_t *>(0x40020400);
-    volatile gpio_t * const gpioc = reinterpret_cast<gpio_t *>(0x40020800);
 } // namespace Hal
+
+#include "hal/gpio_d.hh"
+
 #endif // GPIO_HH

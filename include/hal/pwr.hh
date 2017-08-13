@@ -38,8 +38,8 @@ namespace hal {
         pwr_control_t control;
         pwr_control_status_t control_status;
     };
-
-    volatile pwr_t * const pwr = reinterpret_cast<pwr_t *>(0x40007000);
 }
+
+#include "hal/pwr_d.hh"
 
 #endif // PWR_HH

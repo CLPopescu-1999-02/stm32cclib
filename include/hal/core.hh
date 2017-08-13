@@ -2,8 +2,8 @@
 #define CORE_HH
 #include <stdint.h>
 
-#include "core_irq.hh"
-#include "device_irq.hh"
+#include "hal/core_irq.hh"
+#include "hal/device_irq.hh"
 
 namespace hal {
     struct nvic_t {
@@ -62,9 +62,8 @@ namespace hal {
             return true;
         }
     };
-
-    volatile sys_tick_t * const sys_tick = reinterpret_cast<sys_tick_t *>(0xe000e000 + 0x10);
-    volatile nvic_t * const nvic = reinterpret_cast<nvic_t *>(0xe000e000 + 0x100);
 } // namespace Hal
+
+#include "hal/core_d.hh"
 
 #endif // CORE_HH

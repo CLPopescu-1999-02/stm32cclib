@@ -19,8 +19,8 @@ ST_FLASH = $(ST_UTILS_PATH)st-flash
 # user defined sources
 CXXSRCS = \
 	src/bsp/st_hex_lcd.cc \
-	src/isr_base.cc \
-	src/isr_extend.cc \
+	src/device/stm32l1xx/isr_base.cc \
+	src/device/stm32l1xx/isr_extend.cc \
 	src/reset.cc \
 	src/runner.cc
 
@@ -43,6 +43,8 @@ CFLAGS += -mcpu=cortex-m3 -DSTM32l1XX
 
 # Options for include header files
 CFLAGS += -Iinclude
+# Options for include device header files
+CFLAGS += -Iinclude/device/stm32l1xx
 
 # Options for compile source for C++ compiler
 CXXFLAGS = $(CFLAGS)

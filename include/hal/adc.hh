@@ -182,10 +182,8 @@ namespace hal {
         adc_common_status_t status;
         adc_common_control_t control;
     };
-
-    volatile adc_t * const adc1 = reinterpret_cast<adc_t *>(0x40012400);
-
-    volatile adc_common_t * const adc1_common = reinterpret_cast<adc_common_t *>(0x40012400 + 0x300);
 }
+
+#include "hal/adc_d.hh"
 
 #endif // ADC_HH

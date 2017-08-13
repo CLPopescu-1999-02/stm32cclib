@@ -15,13 +15,15 @@ SIZE = $(CROSS_PREFIX)size
 #ST-Utils for flash and erase devices
 ST_UTILS_PATH = /home/nis/old_frame/stm32/stlink/
 ST_FLASH = $(ST_UTILS_PATH)st-flash
+# LIBRARY discen
+STM32CXXLIB_DIR=../../
 
 # user defined sources
 CXXSRCS = \
-	src/bsp/st_hex_lcd.cc \
-	src/device/stm32l1xx/isr_base.cc \
-	src/device/stm32l1xx/isr_extend.cc \
-	src/reset.cc \
+	$(STM32CXXLIB_DIR)src/bsp/st_hex_lcd.cc \
+	$(STM32CXXLIB_DIR)src/device/stm32l1xx/isr_base.cc \
+	$(STM32CXXLIB_DIR)src/device/stm32l1xx/isr_extend.cc \
+	$(STM32CXXLIB_DIR)src/reset.cc \
 	src/runner.cc
 
 OBJS=$(CXXSRCS:.cc=.o)
@@ -43,8 +45,9 @@ CFLAGS += -mcpu=cortex-m3 -DSTM32l1XX
 
 # Options for include header files
 CFLAGS += -Iinclude
+CFLAGS += -I$(STM32CXXLIB_DIR)include
 # Options for include device header files
-CFLAGS += -Iinclude/device/stm32l1xx
+CFLAGS += -I$(STM32CXXLIB_DIR)include/device/stm32l1xx
 
 # Options for compile source for C++ compiler
 CXXFLAGS = $(CFLAGS)

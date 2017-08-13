@@ -10,3 +10,4 @@ It include:
 6) Prototype of startup and run code for stm32l152c-discovery.
 7) RCC, GPIO, PWR, LCD, TIM, RTC, EXTI, ADC, DMA, Core structures and helpers to simplified operations with hardware.
 8) stm32l152c-discovery hex lcd bsp to simplified operation with hardware modules
+9) stm32l152c-disco example proto

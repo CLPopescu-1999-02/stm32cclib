@@ -1,5 +1,8 @@
 #include "runner.hh"
 
+#include "lib/types.hh"
+#include "lib/bit.hh"
+
 #include "isr_base.hh"
 #include "isr_extend.hh"
 #include "hal/adc.hh"
@@ -15,9 +18,10 @@
 #include "bsp/st_hex_lcd.hh"
 
 namespace {
-    const uint32_t ld3_green{7};
-    const uint32_t ld4_blue{6};
-    const uint32_t all_leds = hal::value_of(ld3_green, ld4_blue);
+    using ld3_green = hal::p7;
+    using ld4_blue = hal::p6;
+    const lib::u32 all_leds = lib::bits<lib::u32, lib::u32, 1, 0,
+        ld3_green, ld4_blue>::mask;
 
     volatile bool foward = true;
     const int add_value = 10;
@@ -69,24 +73,32 @@ static void setup_gpio() {
     hal::rcc->ahb_enable.gpioc = 1;
 
     // enable lcd pins
-    hal::gpioa->set_mode(hal::pin_mode_t::alt_func,
-        1, 2, 3, 8, 9, 10, 15);
-    hal::gpioa->set_alt_func(11,
-        1, 2, 3, 8, 9, 10, 15);
-    hal::gpiob->set_mode(hal::pin_mode_t::alt_func,
-        3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15);
-    hal::gpiob->set_alt_func(11,
-        3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15);
-    hal::gpioc->set_mode(hal::pin_mode_t::alt_func,
-        0, 1, 2, 3, 6, 7, 8, 9, 10, 11);
-    hal::gpioc->set_alt_func(11,
-        0, 1, 2, 3, 6, 7, 8, 9, 10, 11);
+    hal::gpioa->set_mode<hal::pin_mode::alt_func,
+        hal::p1, hal::p2, hal::p3, hal::p8, hal::p9, hal::p10, hal::p15>();
+    hal::gpioa->set_alt_func<11,
+        hal::p1, hal::p2, hal::p3, hal::p8, hal::p9, hal::p10, hal::p15>();
+    hal::gpiob->set_mode<hal::pin_mode::alt_func,
+        hal::p3, hal::p4, hal::p5, hal::p8,
+        hal::p9, hal::p10, hal::p11, hal::p12,
+        hal::p13, hal::p14, hal::p15>();
+    hal::gpiob->set_alt_func<11,
+        hal::p3, hal::p4, hal::p5, hal::p8,
+        hal::p9, hal::p10, hal::p11, hal::p12,
+        hal::p13, hal::p14, hal::p15>();
+    hal::gpioc->set_mode<hal::pin_mode::alt_func,
+        hal::p0, hal::p1, hal::p2, hal::p3,
+        hal::p6, hal::p7, hal::p8, hal::p9,
+        hal::p10, hal::p11>();
+    hal::gpioc->set_alt_func<11,
+        hal::p0, hal::p1, hal::p2, hal::p3,
+        hal::p6, hal::p7, hal::p8, hal::p9,
+        hal::p10, hal::p11>();
 
     // enable led pins, connect to tim4 output
-    hal::gpiob->set_mode(hal::pin_mode_t::alt_func,
-        ld3_green, ld4_blue);
-    hal::gpiob->set_alt_func(2,
-        ld3_green, ld4_blue);
+    hal::gpiob->set_mode<hal::pin_mode::alt_func,
+        ld3_green, ld4_blue>();
+    hal::gpiob->set_alt_func<2,
+        ld3_green, ld4_blue>();
 }
 
 static void setup_lcd_pwr() {
@@ -202,9 +214,9 @@ void setup_dma() {
     // circular mode
     hal::dma1_channel1->config.circ = 1;
     // setup memory address
-    hal::dma1_channel1->memory_address = (uint32_t)adc_values;
+    hal::dma1_channel1->memory_address = (lib::u32)adc_values;
     // setup peripheral address
-    hal::dma1_channel1->peripheral_address = (uint32_t)&(hal::adc1->dr);
+    hal::dma1_channel1->peripheral_address = (lib::u32)&(hal::adc1->dr);
     // setup number conversions
     hal::dma1_channel1->number_of_data = 2;
     // enable dma conversion
@@ -297,7 +309,7 @@ void runner::view_current_state() {
                 break;
         case 2:
         {
-            uint32_t adc_value = *(uint16_t *)0x1ff800f8 * 3000;
+            lib::u32 adc_value = *(uint16_t *)0x1ff800f8 * 3000;
             // get data
             adc_value /= adc_values[0];
 

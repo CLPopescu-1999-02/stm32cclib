@@ -31,7 +31,7 @@ namespace {
         return pdst;
     }
 
-    static void call_ctors(ctor **start, ctor **end) {
+    static void call_ctors(const ctor **start, const ctor **end) {
         for (; start < end; ++start) {
             if (*start)
                 (*start)();

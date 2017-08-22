@@ -1,122 +1,113 @@
 #ifndef GPIO_HH
 #define GPIO_HH
-#include <stdint.h>
+
+#include "lib/types.hh"
+#include "lib/bit.hh"
 
 namespace hal {
-    enum struct pin_mode_t : uint32_t {
+    enum struct pin_mode : lib::u32 {
         input = 0b00,
         output = 0b01,
         alt_func = 0b10,
         analog = 0b11
     };
 
-    enum struct pin_speed_t : uint32_t {
+    enum struct pin_speed : lib::u32 {
         very_low = 0b00,
         low = 0b01,
         medium = 0b10,
         high = 0b11
     };
 
-    enum struct pin_pull_t : uint32_t {
+    enum struct pin_pull : lib::u32 {
         none = 0b00,
         up = 0b01,
         dow = 0b10,
         _reserved = 0b11
     };
 
-    template <typename Type>
-    constexpr uint32_t mode_of(const Type type, const uint32_t pin) {
-        return (static_cast<uint32_t>(type) << (pin * 2));
-    }
-
-    template <typename Type, typename ...Pins>
-    constexpr uint32_t mode_of(const Type type, const uint32_t pin, Pins ...pins) {
-        return mode_of(type, pin) | mode_of(type, pins...);
-    }
-
-    constexpr uint64_t alt_func_of(const uint32_t alt_func, const uint32_t pin) {
-        return ((uint64_t)alt_func << (pin * 4));
-    }
-
-    template <typename ...Pins>
-    constexpr uint64_t alt_func_of(const uint32_t alt_func, const uint32_t pin, Pins ...pins) {
-        return alt_func_of(alt_func, pin) | alt_func_of(alt_func, pins...);
-    }
-
-    constexpr uint32_t value_of(const uint32_t pin) {
-        return (1 << pin);
-    }
-
-    template <typename ...Pins>
-    constexpr uint32_t value_of(const uint32_t pin, Pins ...pins) {
-        return value_of(pin) | value_of(pins...);
-    }
+    using p0 = lib::bit<0>;
+    using p1 = lib::bit<1>;
+    using p2 = lib::bit<2>;
+    using p3 = lib::bit<3>;
+    using p4 = lib::bit<4>;
+    using p5 = lib::bit<5>;
+    using p6 = lib::bit<6>;
+    using p7 = lib::bit<7>;
+    using p8 = lib::bit<8>;
+    using p9 = lib::bit<9>;
+    using p10 = lib::bit<10>;
+    using p11 = lib::bit<11>;
+    using p12 = lib::bit<12>;
+    using p13 = lib::bit<13>;
+    using p14 = lib::bit<14>;
+    using p15 = lib::bit<15>;
 
     struct gpio_t {
-        uint32_t moder;
-        uint32_t otyper;
-        uint32_t ospeedr;
-        uint32_t pupdr;
-        uint32_t idr; 
-        uint32_t odr; 
-        uint32_t bsrr;
-        uint32_t lckr;
-        uint64_t afr;
-        uint32_t brr;
+        lib::u32 moder;
+        lib::u32 otyper;
+        lib::u32 ospeedr;
+        lib::u32 pupdr;
+        lib::u32 idr; 
+        lib::u32 odr; 
+        lib::u32 bsrr;
+        lib::u32 lckr;
+        lib::u64 afr;
+        lib::u32 brr;
 
-        template <typename ...Pins>
-        void set_mode(const pin_mode_t mode, Pins ...pins) volatile {
-            moder |= mode_of(mode, pins...);
+        template <pin_mode mode, typename ...Pins>
+        void set_mode() volatile {
+            moder |= lib::bits<lib::u32, pin_mode, mode, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_open_drain(Pins ...pins) volatile {
-            otyper |= value_of(pins...);
+        void set_open_drain() volatile {
+            otyper |= lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_push_pull(Pins ...pins) volatile {
-            otyper &= ~value_of(pins...);
+        void set_push_pull() volatile {
+            otyper &= ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        }
+
+        template <pin_speed speed, typename ...Pins>
+        void set_speed() volatile {
+            ospeedr |= lib::bits<lib::u32, pin_speed, speed, 1, Pins...>::mask;
+        }
+
+        template <pin_pull pull, typename ...Pins>
+        void set_pull() volatile {
+            pupdr |= lib::bits<lib::u32, pin_pull, pull, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_speed(const pin_speed_t speed, Pins ...pins) volatile {
-            ospeedr |= mode_of(speed, pins...);
+        void set_value() volatile {
+            bsrr = lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_pull(const pin_pull_t pull, Pins ...pins) volatile {
-            pupdr |= mode_of(pull, pins...);
+        void reset_value() volatile {
+            bsrr = lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask << 16;
         }
 
         template <typename ...Pins>
-        void set_value(Pins ...pins) volatile {
-            bsrr = value_of(pins...);
+        void lock() volatile {
+            lckr |= lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void reset_value(Pins ...pins) volatile {
-            bsrr = value_of(pins...) << 16;
+        void unlock() volatile {
+            lckr &= ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
-        template <typename ...Pins>
-        void lock(Pins ...pins) volatile {
-            lckr |= value_of(pins...);
-        }
-
-        template <typename ...Pins>
-        void unlock(Pins ...pins) volatile {
-            lckr &= ~value_of(pins...);
-        }
-
-        template <typename ...Pins>
-        void set_alt_func(const uint32_t alt_func, Pins ...pins) volatile {
-            afr |= alt_func_of(alt_func, pins...);
+        template <lib::u32 alt_func, typename ...Pins>
+        void set_alt_func() volatile {
+            afr |= lib::bits<lib::u64, lib::u32, alt_func, 2, Pins...>::mask;
         }
 
         template <typename ...Pins>
         void reset(Pins ...pins) volatile {
-            brr |= value_of(pins...);
+            brr |= lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
     };
 } // namespace Hal

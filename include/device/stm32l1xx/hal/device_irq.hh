@@ -1,10 +1,10 @@
 #ifndef DEVICE_IRQ_HH
 #define DEVICE_IRQ_HH
 
-#include <stdint.h>
+#include "lib/types.hh"
 
 namespace hal {
-    enum struct irq_dev_n_t : int32_t {
+    enum struct irq_dev_n_t : lib::s32 {
         WWDG = 0,
         PVD = 1,
         TAMP_STAMP = 2,

@@ -1,10 +1,10 @@
 #ifndef CORE_IRQ_HH
 #define CORE_IRQ_HH
 
-#include <stdint.h>
+#include "lib/types.hh"
 
 namespace hal {
-    enum struct irq_n_t : int32_t {
+    enum struct irq_n_t : lib::s32 {
         NMI = -14,
         mem_manage = -12,
         bus_fault = -11,

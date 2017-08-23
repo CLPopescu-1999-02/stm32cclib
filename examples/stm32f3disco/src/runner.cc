@@ -40,7 +40,7 @@ void runner::run() {
         hal::p12, hal::p13, hal::p14, hal::p15>();
 
     // setup irq for sys_tick
-    hal::sys_tick->config(8000000);
+    hal::sys_tick->config<8000000>();
 
     while (true);
 }

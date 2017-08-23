@@ -1,46 +1,48 @@
+#ifndef CORE_T_HH
+#define CORE_T_HH
+
+#include "lib/regbit.hh"
+
 namespace hal {
     struct nvic_t {
-        uint32_t iser[8];
-        uint32_t __reserved0[24];
-        uint32_t icer[8];
-        uint32_t __reserved1[24];
-        uint32_t ispr[8];
-        uint32_t __reserved2[24];
-        uint32_t icpr[8];
-        uint32_t __reserved3[24];
-        uint32_t iabr[8];
-        uint32_t __reserved4[56];
-        uint32_t ip[240];
-        uint32_t __reserved5[644];
-        uint32_t stir;
+        lib::u32 iser[8];
+        lib::u32 __reserved0[24];
+        lib::u32 icer[8];
+        lib::u32 __reserved1[24];
+        lib::u32 ispr[8];
+        lib::u32 __reserved2[24];
+        lib::u32 icpr[8];
+        lib::u32 __reserved3[24];
+        lib::u32 iabr[8];
+        lib::u32 __reserved4[56];
+        lib::u32 ip[240];
+        lib::u32 __reserved5[644];
+        lib::u32 stir;
 
-        template <typename Irq_t>
-        void enable_irq(Irq_t irq_n) volatile {
-            iser[((uint32_t)(irq_n) >> 5)] =
-                (1 << ((uint32_t)(irq_n) & 0x1f));
+        template <typename Irq_t, Irq_t irq_n>
+        void enable_irq() volatile {
+            iser[((lib::u32)(irq_n) >> 5)] =
+                1 << ((lib::u32)(irq_n) & 0x1f);
         }
     };
 
     namespace sys_tick_int {
-        const uint32_t load_reload_msk = 0xffffff;
+        const lib::u32 load_reload_msk = 0xffffff;
     }
 
-    struct sys_tick_control_t {
-        uint32_t enable:1;
-        uint32_t tickint:1;
-        uint32_t clksource:1;
-        uint32_t _unused0:13;
-        uint32_t countf:1;
-        uint32_t _unused1:15;
-    };
+    using sys_tick_control_enable = lib::regbit<bool, 0, 1>;
+    using sys_tick_control_tickint = lib::regbit<bool, 1, 1>;
+    using sys_tick_control_clksource = lib::regbit<bool, 2, 1>;
+    using sys_tick_control_countf = lib::regbit<bool, 16, 1>;
 
     struct sys_tick_t {
-        sys_tick_control_t control;
-        uint32_t load;
-        uint32_t value;
-        uint32_t calib;
+        lib::u32 control;
+        lib::u32 load;
+        lib::u32 value;
+        lib::u32 calib;
 
-        bool config(uint32_t ticks) volatile {
+        template <lib::u32 ticks>
+        bool config() volatile {
             if (ticks > sys_tick_int::load_reload_msk)
                 return false;
 
@@ -48,11 +50,15 @@ namespace hal {
 
             value = 0;
 
-            control.clksource = 1;
-            control.tickint = 1;
-            control.enable = 1;
+            control |= lib::regbits<lib::u32,
+                sys_tick_control_clksource::val<true>,
+                sys_tick_control_tickint::val<true>,
+                sys_tick_control_enable::val<true>
+            >::mask;
 
             return true;
         }
     };
-} // namespace Hal 
+} // namespace Hal
+
+#endif // CORE_T_HH

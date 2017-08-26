@@ -17,12 +17,13 @@ ST_UTILS_PATH = /home/nis/old_frame/stm32/stlink/
 ST_FLASH = $(ST_UTILS_PATH)st-flash
 # LIBRARY discen
 STM32CXXLIB_DIR=../../
+DEVICE=stm32l1xx
 
 # user defined sources
 CXXSRCS = \
 	$(STM32CXXLIB_DIR)src/bsp/st_hex_lcd.cc \
-	$(STM32CXXLIB_DIR)src/device/stm32l1xx/isr_base.cc \
-	$(STM32CXXLIB_DIR)src/device/stm32l1xx/isr_extend.cc \
+	$(STM32CXXLIB_DIR)src/core/isr_base.cc \
+	$(STM32CXXLIB_DIR)src/device/$(DEVICE)/isr_extend.cc \
 	$(STM32CXXLIB_DIR)src/reset.cc \
 	src/runner.cc
 
@@ -46,8 +47,10 @@ CFLAGS += -mcpu=cortex-m3 -DSTM32l1XX
 # Options for include header files
 CFLAGS += -Iinclude
 CFLAGS += -I$(STM32CXXLIB_DIR)include
+# Options for include core header files
+CFLAGS += -I$(STM32CXXLIB_DIR)include/core/
 # Options for include device header files
-CFLAGS += -I$(STM32CXXLIB_DIR)include/device/stm32l1xx
+CFLAGS += -I$(STM32CXXLIB_DIR)include/device/$(DEVICE)
 
 # Options for compile source for C++ compiler
 CXXFLAGS = $(CFLAGS)

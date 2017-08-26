@@ -21,7 +21,7 @@ DEVICE=stm32f3xx
 
 # user defined sources
 CXXSRCS = \
-	$(STM32CXXLIB_DIR)src/device/$(DEVICE)/isr_base.cc \
+	$(STM32CXXLIB_DIR)src/core/isr_base.cc \
 	$(STM32CXXLIB_DIR)src/device/$(DEVICE)/isr_extend.cc \
 	$(STM32CXXLIB_DIR)src/reset.cc \
 	src/runner.cc
@@ -46,6 +46,8 @@ CFLAGS += -mcpu=cortex-m4 -DSTM32F3XX
 # Options for include header files
 CFLAGS += -Iinclude
 CFLAGS += -I$(STM32CXXLIB_DIR)include
+# Options for include core header files
+CFLAGS += -I$(STM32CXXLIB_DIR)include/core/
 # Options for include device header files
 CFLAGS += -I$(STM32CXXLIB_DIR)include/device/$(DEVICE)
 

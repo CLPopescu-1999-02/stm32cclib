@@ -18,9 +18,7 @@ set(CMAKE_CROSSCOMPILING 1)
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-g++)
 set(CROSS_PREFIX ${TARGET_TRIPLET}-)
 
-set(CMAKE_CXX_COMPILER ${CROSS_PREFIX}g++ )
-
-set(LINKER_SCRIPT ${PROJECT_SOURCE_DIR}/stm32f407e_flash.ld)
+set(LINKER_SCRIPT ${PROJECT_SOURCE_DIR}/stm32_flash.ld)
 set(COMMON_FLAGS "-g -mlittle-endian -mthumb -nostdlib -DTHUMB -fno-common -mno-thumb-interwork")
 set(WARN_FLAGS "-Wall -Wextra")
 set(OPTIMIZE_FLAGS "-ffreestanding -fomit-frame-pointer")
@@ -37,7 +35,7 @@ set(SIZE ${CROSS_PREFIX}size)
 set(ST_UTILS_PATH /home/nis/old_frame/stm32/stlink)
 set(ST_FLASH ${ST_UTILS_PATH}/st-flash)
 
-function (SET_TARGET_PROPERTIES TARGET)
+function (SETUP_TARGET_PROPERTIES TARGET)
     set(CMAKE_EXE_LINKER_FLAGS
         "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Map=${TARGET}.map"
     )

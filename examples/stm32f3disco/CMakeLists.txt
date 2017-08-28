@@ -1,10 +1,10 @@
-project (stm32f4-black CXX)
+project (stm32f3disco CXX)
 cmake_minimum_required(VERSION 3.5.0)
 
-add_definitions(-DSTM32F4XX)
+add_definitions(-DSTM32F3XX)
 
-set(DEVICE stm32f4xx)
-set(BOARD stm32f4-black)
+set(DEVICE stm32f3xx)
+set(BOARD stm32f3disco)
 
 # library base directory
 set(STM32CXXLIB_DIR ../..)

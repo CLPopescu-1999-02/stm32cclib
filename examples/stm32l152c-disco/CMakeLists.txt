@@ -1,10 +1,10 @@
-project (stm32f4-black CXX)
+project (stm32l152c-discovery CXX)
 cmake_minimum_required(VERSION 3.5.0)
 
-add_definitions(-DSTM32F4XX)
+add_definitions(-DSTM32F3XX)
 
-set(DEVICE stm32f4xx)
-set(BOARD stm32f4-black)
+set(DEVICE stm32l1xx)
+set(BOARD stm32l152c-discovery)
 
 # library base directory
 set(STM32CXXLIB_DIR ../..)
@@ -16,6 +16,7 @@ file(GLOB_RECURSE STM32CCLIB
     "${STM32CXXLIB_DIR}/src/core/isr_base.cc"
     "${STM32CXXLIB_DIR}/src/device/${DEVICE}/isr_extend.cc"
     "${STM32CXXLIB_DIR}/src/reset.cc"
+    "${STM32CXXLIB_DIR}/src/bsp/st_hex_lcd.cc"
 )
 
 include_directories(include)

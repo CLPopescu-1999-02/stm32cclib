@@ -4,8 +4,14 @@
 #include "lib/types.hh"
 
 namespace lib {
-    template <u8 bit_n, typename U = bool, u8 bit_size = 1>
+    template <u8 bit_n, typename U = bool, u8 bit_size = 1, U default_value = true>
     struct regbit {
+        template<typename T>
+        constexpr static T mask() {
+                return
+                    (static_cast<T>(default_value) & (-1 >> (sizeof(T) - bit_size))) << (bit_n);
+        }
+
         template <U value>
         struct val {
             template<typename T>

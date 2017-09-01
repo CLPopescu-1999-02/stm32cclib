@@ -6,6 +6,19 @@
 
 namespace hal {
     using rcc_ahb1_gpioa = lib::regbit<0>;
+    using rcc_ahb1_gpiob = lib::regbit<1>;
+    using rcc_ahb1_gpioc = lib::regbit<2>;
+    using rcc_ahb1_gpiod = lib::regbit<3>;
+    using rcc_ahb1_gpioe = lib::regbit<4>;
+    using rcc_ahb1_gpiof = lib::regbit<5>;
+    using rcc_ahb1_gpiog = lib::regbit<6>;
+    using rcc_ahb1_gpioh = lib::regbit<7>;
+    using rcc_ahb1_gpioi = lib::regbit<8>;
+    using rcc_ahb1_crc = lib::regbit<12>;
+    using rcc_ahb1_dma1 = lib::regbit<21>;
+    using rcc_ahb1_dma2 = lib::regbit<22>;
+    using rcc_ahb1_ethmac = lib::regbit<25>;
+    using rcc_ahb1_otghs = lib::regbit<29>;
 
     struct rcc_t {
         lib::u32 cr;

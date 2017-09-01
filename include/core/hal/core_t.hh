@@ -51,9 +51,9 @@ namespace hal {
             value = 0;
 
             control |= lib::regbits<lib::u32,
-                sys_tick_control_clksource::val<true>,
-                sys_tick_control_tickint::val<true>,
-                sys_tick_control_enable::val<true>
+                sys_tick_control_clksource,
+                sys_tick_control_tickint,
+                sys_tick_control_enable
             >::mask;
 
             return true;

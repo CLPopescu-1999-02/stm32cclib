@@ -30,10 +30,10 @@ namespace hal {
         const lib::u32 load_reload_msk = 0xffffff;
     }
 
-    using sys_tick_control_enable = lib::regbit<bool, 0, 1>;
-    using sys_tick_control_tickint = lib::regbit<bool, 1, 1>;
-    using sys_tick_control_clksource = lib::regbit<bool, 2, 1>;
-    using sys_tick_control_countf = lib::regbit<bool, 16, 1>;
+    using sys_tick_control_enable = lib::regbit<0>;
+    using sys_tick_control_tickint = lib::regbit<1>;
+    using sys_tick_control_clksource = lib::regbit<2>;
+    using sys_tick_control_countf = lib::regbit<16>;
 
     struct sys_tick_t {
         lib::u32 control;

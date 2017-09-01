@@ -4,7 +4,7 @@
 #include "lib/types.hh"
 
 namespace lib {
-    template <typename U, u8 bit_n, u8 bit_size>
+    template <u8 bit_n, typename U = bool, u8 bit_size = 1>
     struct regbit {
         template <U value>
         struct val {

@@ -5,7 +5,7 @@
 #include "lib/regbit.hh"
 
 namespace hal {
-    using rcc_ahb1_gpioa = lib::regbit<bool, 0, 1>;
+    using rcc_ahb1_gpioa = lib::regbit<0>;
 
     struct rcc_t {
         lib::u32 cr;

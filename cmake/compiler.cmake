@@ -22,7 +22,6 @@ set(LINKER_SCRIPT ${PROJECT_SOURCE_DIR}/stm32_flash.ld)
 set(COMMON_FLAGS "-g -mlittle-endian -mthumb -nostdlib -DTHUMB -fno-common -mno-thumb-interwork")
 set(WARN_FLAGS "-Wall -Wextra")
 set(OPTIMIZE_FLAGS "-ffreestanding -fomit-frame-pointer")
-set(CPU_FLAGS "-mcpu=cortex-m4")
 
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} ${WARN_FLAGS} ${OPTIMIZE_FLAGS} ${CPU_FLAGS} -std=c++11 -fno-rtti -fno-exceptions" CACHE INTERNAL "cxx compiler flags")
 set(CMAKE_EXE_LINKER_FLAGS "-Wl,-T ${LINKER_SCRIPT} -nostartfiles")

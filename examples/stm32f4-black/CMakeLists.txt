@@ -5,6 +5,7 @@ add_definitions(-DSTM32F4XX)
 
 set(DEVICE stm32f4xx)
 set(BOARD stm32f4-black)
+set(CPU_FLAGS "-mcpu=cortex-m4")
 
 # library base directory
 set(STM32CXXLIB_DIR ../..)

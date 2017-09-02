@@ -26,6 +26,25 @@ namespace hal {
         _reserved = 0b11
     };
 
+    enum struct pin_alt : lib::u32 {
+        af0 = 0,
+        af1 = 1,
+        af2 = 2,
+        af3 = 3,
+        af4 = 4,
+        af5 = 5,
+        af6 = 6,
+        af7 = 7,
+        af8 = 8,
+        af9 = 9,
+        af10 = 10,
+        af11 = 11,
+        af12 = 12,
+        af13 = 13,
+        af14 = 14,
+        af15 = 15
+    };
+
     using p0 = lib::bit<0>;
     using p1 = lib::bit<1>;
     using p2 = lib::bit<2>;
@@ -100,9 +119,9 @@ namespace hal {
             lckr &= ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
-        template <lib::u32 alt_func, typename ...Pins>
+        template <pin_alt alt_func, typename ...Pins>
         void set_alt_func() volatile {
-            afr |= lib::bits<lib::u64, lib::u32, alt_func, 2, Pins...>::mask;
+            afr |= lib::bits<lib::u64, pin_alt, alt_func, 2, Pins...>::mask;
         }
 
         template <typename ...Pins>

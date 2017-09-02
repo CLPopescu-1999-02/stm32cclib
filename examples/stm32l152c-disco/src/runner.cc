@@ -75,13 +75,13 @@ static void setup_gpio() {
     // enable lcd pins
     hal::gpioa->set_mode<hal::pin_mode::alt_func,
         hal::p1, hal::p2, hal::p3, hal::p8, hal::p9, hal::p10, hal::p15>();
-    hal::gpioa->set_alt_func<11,
+    hal::gpioa->set_alt_func<hal::pin_alt::af11,
         hal::p1, hal::p2, hal::p3, hal::p8, hal::p9, hal::p10, hal::p15>();
     hal::gpiob->set_mode<hal::pin_mode::alt_func,
         hal::p3, hal::p4, hal::p5, hal::p8,
         hal::p9, hal::p10, hal::p11, hal::p12,
         hal::p13, hal::p14, hal::p15>();
-    hal::gpiob->set_alt_func<11,
+    hal::gpiob->set_alt_func<hal::pin_alt::af11,
         hal::p3, hal::p4, hal::p5, hal::p8,
         hal::p9, hal::p10, hal::p11, hal::p12,
         hal::p13, hal::p14, hal::p15>();
@@ -89,7 +89,7 @@ static void setup_gpio() {
         hal::p0, hal::p1, hal::p2, hal::p3,
         hal::p6, hal::p7, hal::p8, hal::p9,
         hal::p10, hal::p11>();
-    hal::gpioc->set_alt_func<11,
+    hal::gpioc->set_alt_func<hal::pin_alt::af11,
         hal::p0, hal::p1, hal::p2, hal::p3,
         hal::p6, hal::p7, hal::p8, hal::p9,
         hal::p10, hal::p11>();
@@ -97,7 +97,7 @@ static void setup_gpio() {
     // enable led pins, connect to tim4 output
     hal::gpiob->set_mode<hal::pin_mode::alt_func,
         ld3_green, ld4_blue>();
-    hal::gpiob->set_alt_func<2,
+    hal::gpiob->set_alt_func<hal::pin_alt::af2,
         ld3_green, ld4_blue>();
 }
 

@@ -17,7 +17,7 @@ namespace {
 }
 
 extern "C" void isr::sys_tick_timer() {
-    hal::gpioe->odr ^= all_leds;
+    hal::gpioe::regs->odr ^= all_leds;
 }
 
 static void setup_gpio() {
@@ -25,7 +25,7 @@ static void setup_gpio() {
     hal::rcc->ahb_enable.gpioe = 1;
 
     // enable led pins, connect to output
-    hal::gpioe->set_mode<hal::pin_mode::output,
+    hal::gpioe::set_mode<hal::pin_mode::output,
         hal::p8, hal::p9, hal::p10, hal::p11,
         hal::p12, hal::p13, hal::p14, hal::p15>();
 }
@@ -35,7 +35,7 @@ void runner::run() {
     setup_gpio();
 
     // enable all leds
-    hal::gpioe->set_value<
+    hal::gpioe::set_value<
         hal::p8, hal::p9, hal::p10, hal::p11,
         hal::p12, hal::p13, hal::p14, hal::p15>();
 

@@ -16,7 +16,7 @@ namespace {
 }
 
 extern "C" void isr::sys_tick_timer() {
-    hal::gpioa->odr ^= all_leds;
+    hal::gpioa::regs->odr ^= all_leds;
 }
 
 static void setup_gpio() {
@@ -25,7 +25,7 @@ static void setup_gpio() {
         lib::regbits<lib::u32, hal::rcc_ahb1_gpioa>::mask;
 
     // enable led pins, connect to output
-    hal::gpioa->set_mode<hal::pin_mode::output,
+    hal::gpioa::set_mode<hal::pin_mode::output,
         hal::p6, hal::p7>();
 }
 
@@ -34,7 +34,7 @@ void runner::run() {
     setup_gpio();
 
     // enable all leds
-    hal::gpioa->set_value<hal::p6, hal::p7>();
+    hal::gpioa::set_value<hal::p6, hal::p7>();
 
     // setup irq for sys_tick
     hal::sys_tick->config<8000000>();

@@ -62,72 +62,89 @@ namespace hal {
     using p14 = lib::bit<14>;
     using p15 = lib::bit<15>;
 
-    struct gpio_t {
-        lib::u32 moder;
-        lib::u32 otyper;
-        lib::u32 ospeedr;
-        lib::u32 pupdr;
-        lib::u32 idr; 
-        lib::u32 odr; 
-        lib::u32 bsrr;
-        lib::u32 lckr;
-        lib::u64 afr;
-        lib::u32 brr;
+    template <lib::u32 addr>
+    struct gpio_d {
+        struct gpio_t {
+            lib::u32 moder;
+            lib::u32 otyper;
+            lib::u32 ospeedr;
+            lib::u32 pupdr;
+            lib::u32 idr; 
+            lib::u32 odr; 
+            lib::u32 bsrr;
+            lib::u32 lckr;
+            lib::u64 afr;
+            lib::u32 brr;
+        };
 
         template <pin_mode mode, typename ...Pins>
-        void set_mode() volatile {
-            moder |= lib::bits<lib::u32, pin_mode, mode, 1, Pins...>::mask;
+        static void set_mode() {
+            regs->moder |=
+                lib::bits<lib::u32, pin_mode, mode, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_open_drain() volatile {
-            otyper |= lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        static void set_open_drain() {
+            regs->otyper |=
+                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_push_pull() volatile {
-            otyper &= ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        static void set_push_pull() {
+            regs->otyper &=
+                ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <pin_speed speed, typename ...Pins>
-        void set_speed() volatile {
-            ospeedr |= lib::bits<lib::u32, pin_speed, speed, 1, Pins...>::mask;
+        static void set_speed() {
+            regs->ospeedr |=
+                lib::bits<lib::u32, pin_speed, speed, 1, Pins...>::mask;
         }
 
         template <pin_pull pull, typename ...Pins>
-        void set_pull() volatile {
-            pupdr |= lib::bits<lib::u32, pin_pull, pull, 1, Pins...>::mask;
+        static void set_pull() {
+            regs->pupdr |=
+                lib::bits<lib::u32, pin_pull, pull, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void set_value() volatile {
-            bsrr = lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        static void set_value() {
+            regs->bsrr =
+                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void reset_value() volatile {
-            bsrr = lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask << 16;
+        static void reset_value() {
+            regs->bsrr =
+                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask << 16;
         }
 
         template <typename ...Pins>
-        void lock() volatile {
-            lckr |= lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        static void lock() {
+            regs->lckr |=
+                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void unlock() volatile {
-            lckr &= ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        static void unlock() {
+            regs->lckr &=
+                ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
 
         template <pin_alt alt_func, typename ...Pins>
-        void set_alt_func() volatile {
-            afr |= lib::bits<lib::u64, pin_alt, alt_func, 2, Pins...>::mask;
+        static void set_alt_func() {
+            regs->afr |=
+                lib::bits<lib::u64, pin_alt, alt_func, 2, Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void reset(Pins ...pins) volatile {
-            brr |= lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+        static void reset(Pins ...pins) {
+            regs->brr |=
+                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
         }
+
+        static constexpr volatile gpio_t * const regs =
+            reinterpret_cast<gpio_t *>(addr);
     };
 } // namespace Hal
 

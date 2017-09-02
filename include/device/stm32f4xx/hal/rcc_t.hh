@@ -239,41 +239,47 @@ namespace hal {
     using rcc_plli2s_config_mul = lib::regbit<6, lib::u16, 9, 192>;
     using rcc_plli2s_config_div = lib::regbit<28, lib::u8, 3, 2>;
 
-    struct rcc_t {
-        lib::u32 control;
-        lib::u32 pll_config;
-        lib::u32 config;
-        lib::u32 interrupt;
-        lib::u32 ahb1_reset;
-        lib::u32 ahb2_reset;
-        lib::u32 ahb3_reset;
-        lib::u32 _unused0;
-        lib::u32 apb1_reset;
-        lib::u32 apb2_reset;
-        lib::u32 _unused1;
-        lib::u32 _unused2;
-        lib::u32 ahb1_enable;
-        lib::u32 ahb2_enable;
-        lib::u32 ahb3_enable;
-        lib::u32 _unused3;
-        lib::u32 apb1_enable;
-        lib::u32 apb2_enable;
-        lib::u32 _unused4;
-        lib::u32 _unused5;
-        lib::u32 ahb1lp_enable;
-        lib::u32 ahb2lp_enable;
-        lib::u32 ahb3lp_enable;
-        lib::u32 _unused6;
-        lib::u32 apb1lp_enable;
-        lib::u32 apb2lp_enable;
-        lib::u32 _unused7;
-        lib::u32 _unused8;
-        lib::u32 backupd_control;
-        lib::u32 control_status;
-        lib::u32 _unused9;
-        lib::u32 _unused10;
-        lib::u32 spread_spectrum;
-        lib::u32 plli2s_config;
+    template <lib::u32 addr>
+    struct rcc_d {
+        struct rcc_t {
+            lib::u32 control;
+            lib::u32 pll_config;
+            lib::u32 config;
+            lib::u32 interrupt;
+            lib::u32 ahb1_reset;
+            lib::u32 ahb2_reset;
+            lib::u32 ahb3_reset;
+            lib::u32 _unused0;
+            lib::u32 apb1_reset;
+            lib::u32 apb2_reset;
+            lib::u32 _unused1;
+            lib::u32 _unused2;
+            lib::u32 ahb1_enable;
+            lib::u32 ahb2_enable;
+            lib::u32 ahb3_enable;
+            lib::u32 _unused3;
+            lib::u32 apb1_enable;
+            lib::u32 apb2_enable;
+            lib::u32 _unused4;
+            lib::u32 _unused5;
+            lib::u32 ahb1lp_enable;
+            lib::u32 ahb2lp_enable;
+            lib::u32 ahb3lp_enable;
+            lib::u32 _unused6;
+            lib::u32 apb1lp_enable;
+            lib::u32 apb2lp_enable;
+            lib::u32 _unused7;
+            lib::u32 _unused8;
+            lib::u32 backupd_control;
+            lib::u32 control_status;
+            lib::u32 _unused9;
+            lib::u32 _unused10;
+            lib::u32 spread_spectrum;
+            lib::u32 plli2s_config;
+        };
+
+        static constexpr volatile rcc_t * const regs =
+            reinterpret_cast<rcc_t *>(addr);
     };
 } // namespace Hal
 

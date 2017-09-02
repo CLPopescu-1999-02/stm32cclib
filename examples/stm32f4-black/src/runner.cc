@@ -34,10 +34,10 @@ void runner::run() {
     setup_gpio();
 
     // enable all leds
-    hal::gpioa::set_value<hal::p6, hal::p7>();
+    hal::gpioa::reset_value<hal::p6, hal::p7>();
 
     // setup irq for sys_tick
-    hal::sys_tick->config<8000000>();
+    hal::sys_tick::config<8000000>();
 
     while (true);
 }

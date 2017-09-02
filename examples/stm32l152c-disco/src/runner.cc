@@ -373,10 +373,10 @@ void runner::run() {
     view_current_state();
 
     // setup irq for sys_tick and enable it irq
-    hal::nvic->enable_irq<hal::irq_n_t, hal::irq_n_t::sys_tick_timer>();
-    hal::sys_tick->config<8000000>();
+    hal::nvic::enable_irq<hal::irq_n_t, hal::irq_n_t::sys_tick_timer>();
+    hal::sys_tick::config<8000000>();
     // setup irq for tim4
-    hal::nvic->enable_irq<hal::irq_dev_n_t, hal::irq_dev_n_t::TIM4>();
+    hal::nvic::enable_irq<hal::irq_dev_n_t, hal::irq_dev_n_t::TIM4>();
     // setup irq for rtc wakeup
-    hal::nvic->enable_irq<hal::irq_dev_n_t, hal::irq_dev_n_t::RTC_wkup>();
+    hal::nvic::enable_irq<hal::irq_dev_n_t, hal::irq_dev_n_t::RTC_wkup>();
 }

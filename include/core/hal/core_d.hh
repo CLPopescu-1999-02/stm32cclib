@@ -2,9 +2,9 @@
 #define CORE_D_HH
 
 namespace hal {
-    volatile sys_tick_t * const sys_tick = reinterpret_cast<sys_tick_t *>(0xe000e000 + 0x10);
+    using sys_tick = sys_tick_d<0xe000e000 + 0x10>;
 
-    volatile nvic_t * const nvic = reinterpret_cast<nvic_t *>(0xe000e000 + 0x100);
+    using nvic = nvic_d<0xe000e000 + 0x100>;
 }
 
 #endif // CORE_D_HH

@@ -32,29 +32,32 @@ namespace {
 }
 
 extern "C" void isr::sys_tick_timer() {
-    hal::tim4->capt_comp_mode1.oc2m ^= 0b001;
+    hal::tim4::regs->capt_comp_mode1 ^= lib::regbits16<
+        hal::tim_capt_comp_mode_oc2m::val<
+            hal::tim_capt_comp_mode_ocm_t::active>
+    >::mask;
 
     mode++;
 }
 
 extern "C" void isr::TIM4() {
-    if (hal::tim4->status.uif) {
+    if (hal::tim4::regs->status & lib::regbits16<hal::tim_status_uif>::mask) {
         if (foward) {
-            if (hal::tim4->ccr1 < 10)
+            if (hal::tim4::regs->ccr1 < 10)
                 foward = false;
             else {
-                hal::tim4->ccr1 -= add_value;
-                hal::tim4->ccr2 -= add_value;
+                hal::tim4::regs->ccr1 -= add_value;
+                hal::tim4::regs->ccr2 -= add_value;
             }
         } else {
-            if (hal::tim4->ccr1 > 1000)
+            if (hal::tim4::regs->ccr1 > 1000)
                 foward = true;
             else {
-                hal::tim4->ccr1 += add_value;
-                hal::tim4->ccr2 += add_value;
+                hal::tim4::regs->ccr1 += add_value;
+                hal::tim4::regs->ccr2 += add_value;
             }
         }
-        hal::tim4->status.uif = 0;
+        hal::tim4::regs->status &= ~lib::regbits16<hal::tim_status_uif>::mask;
     }
 }
 
@@ -125,26 +128,36 @@ static void setup_timer4() {
     // setup tim4
     hal::rcc->apb1_enable.tim4 = 1;
     // setup tim4 counter block
-    hal::tim4->psc = 40 - 1;
-    hal::tim4->arr = 1000;
+    hal::tim4::regs->psc = 40 - 1;
+    hal::tim4::regs->arr = 1000;
     // setup tim4 compare blocks 1, 2
+    hal::tim4::regs->capt_comp_mode1 =
+        lib::regbits16<
+            hal::tim_capt_comp_mode_cc1s::val<
+                hal::tim_capt_comp_mode_ccs_t::output>,
+            hal::tim_capt_comp_mode_cc2s::val<
+                hal::tim_capt_comp_mode_ccs_t::output>,
+            hal::tim_capt_comp_mode_oc1m::val<
+                hal::tim_capt_comp_mode_ocm_t::pwm1>,
+            hal::tim_capt_comp_mode_oc2m::val<
+                hal::tim_capt_comp_mode_ocm_t::pwm1>
+        >::mask;
 
-    // setup tim4 compare blocks to output
-    hal::tim4->capt_comp_mode1.cc1s = 0b00;
-    hal::tim4->capt_comp_mode1.cc2s = 0b00;
-    // setup tim4 compare blocks to pwm mode 1
-    hal::tim4->capt_comp_mode1.oc1m = 0b110;
-    hal::tim4->capt_comp_mode1.oc2m = 0b110;
+    hal::tim4::regs->capt_comp_enable =
+        lib::regbits16<
+            hal::tim_capt_comp_enable_cc1e,
+            hal::tim_capt_comp_enable_cc2e
+        >::mask;
+
     // setup value to tim4 compare registers
-    hal::tim4->ccr1 = 500;
-    hal::tim4->ccr2 = 500;
-    // setup tim4 channels 1, 2 to corresponding output pin
-    hal::tim4->capt_comp_enable.cc1e = 1;
-    hal::tim4->capt_comp_enable.cc2e = 1;
-    // enable tim4 interrupt for update
-    hal::tim4->dma_interrupt_enable.uie = 1;
+    hal::tim4::regs->ccr1 = 500;
+    hal::tim4::regs->ccr2 = 500;
+
+    hal::tim4::regs->dma_interrupt = lib::regbits16<
+        hal::tim_dma_interrupt_uie>::mask;
     // enable tim4
-    hal::tim4->control1.cen = 1;
+    hal::tim4::regs->control1 = lib::regbits16<
+        hal::tim_control1_cen>::mask;
 }
 
 void setup_rtc() {

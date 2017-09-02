@@ -9,7 +9,10 @@ namespace lib {
         template<typename T>
         constexpr static T mask() {
                 return
-                    (static_cast<T>(default_value) & (-1 >> (sizeof(T) - bit_size))) << (bit_n);
+                    (
+                        static_cast<T>(default_value) &
+                            (-1 >> (sizeof(T) * 8 - bit_size))
+                    ) << (bit_n);
         }
 
         template <U value>
@@ -17,7 +20,10 @@ namespace lib {
             template<typename T>
             constexpr static T mask() {
                 return
-                    (static_cast<T>(value) & (-1 >> (sizeof(T) - bit_size))) << (bit_n);
+                    (
+                        static_cast<T>(value) &
+                            (-1 >> (sizeof(T) * 8 - bit_size))
+                    ) << (bit_n);
             }
         };
     };
@@ -35,6 +41,9 @@ namespace lib {
         static const T mask =
             Bit::template mask<T>() | regbits<T, Bits...>::mask;
     };
+
+    template <typename ...Bits>
+    using regbits16 = regbits<u16, Bits...>;
 
     template <typename ...Bits>
     using regbits32 = regbits<u32, Bits...>;

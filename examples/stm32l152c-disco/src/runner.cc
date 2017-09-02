@@ -20,7 +20,7 @@
 namespace {
     using ld3_green = hal::p7;
     using ld4_blue = hal::p6;
-    const lib::u32 all_leds = lib::bits<lib::u32, lib::u32, 1, 0,
+    const auto all_leds = hal::bits32val<
         ld3_green, ld4_blue>::mask;
 
     volatile bool foward = true;

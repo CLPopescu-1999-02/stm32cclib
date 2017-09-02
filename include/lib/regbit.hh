@@ -35,6 +35,9 @@ namespace lib {
         static const T mask =
             Bit::template mask<T>() | regbits<T, Bits...>::mask;
     };
+
+    template <typename ...Bits>
+    using regbits32 = regbits<u32, Bits...>;
 }
 
 #endif // REGBIT_HH

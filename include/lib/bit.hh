@@ -27,6 +27,9 @@ namespace lib {
             Bit::template mask<T, U, step>(val) |
             bits<T, U, val, step, Bits...>::mask;
     };
+
+    template <typename U, U val, u8 step, typename ...Bits>
+    using bits32 = bits<u32, U, val, step, Bits...>;
 }
 
 #endif // BIT_HH

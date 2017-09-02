@@ -62,6 +62,9 @@ namespace hal {
     using p14 = lib::bit<14>;
     using p15 = lib::bit<15>;
 
+    template <typename ...Pins>
+    using bits32val = lib::bits32<lib::u32, 1, 0, Pins...>;
+
     template <lib::u32 addr>
     struct gpio_d {
         struct gpio_t {
@@ -80,55 +83,55 @@ namespace hal {
         template <pin_mode mode, typename ...Pins>
         static void set_mode() {
             regs->moder |=
-                lib::bits<lib::u32, pin_mode, mode, 1, Pins...>::mask;
+                lib::bits32<pin_mode, mode, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void set_open_drain() {
             regs->otyper |=
-                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void set_push_pull() {
             regs->otyper &=
-                ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+                ~bits32val<Pins...>::mask;
         }
 
         template <pin_speed speed, typename ...Pins>
         static void set_speed() {
             regs->ospeedr |=
-                lib::bits<lib::u32, pin_speed, speed, 1, Pins...>::mask;
+                lib::bits32<pin_speed, speed, 1, Pins...>::mask;
         }
 
         template <pin_pull pull, typename ...Pins>
         static void set_pull() {
             regs->pupdr |=
-                lib::bits<lib::u32, pin_pull, pull, 1, Pins...>::mask;
+                lib::bits32<pin_pull, pull, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void set_value() {
             regs->bsrr =
-                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void reset_value() {
             regs->bsrr =
-                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask << 16;
+                bits32val<Pins...>::mask << 16;
         }
 
         template <typename ...Pins>
         static void lock() {
             regs->lckr |=
-                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void unlock() {
             regs->lckr &=
-                ~lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+                ~bits32val<Pins...>::mask;
         }
 
         template <pin_alt alt_func, typename ...Pins>
@@ -140,7 +143,7 @@ namespace hal {
         template <typename ...Pins>
         static void reset(Pins ...pins) {
             regs->brr |=
-                lib::bits<lib::u32, lib::u32, 1, 0, Pins...>::mask;
+                bits32val<Pins...>::mask;
         }
 
         static constexpr volatile gpio_t * const regs =

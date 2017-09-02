@@ -10,9 +10,8 @@
 
 
 namespace {
-    const lib::u32 all_leds = 
-       lib::bits<lib::u32, lib::u32, 1, 0,
-        hal::p6, hal::p7>::mask;
+    const auto all_leds = 
+        hal::bits32val<hal::p6, hal::p7>::mask;
 }
 
 extern "C" void isr::sys_tick_timer() {
@@ -22,7 +21,7 @@ extern "C" void isr::sys_tick_timer() {
 static void setup_gpio() {
     // enable led port
     hal::rcc::regs->ahb1_enable |=
-        lib::regbits<lib::u32, hal::rcc_ahb1_gpioa>::mask;
+        lib::regbits32<hal::rcc_ahb1_gpioa>::mask;
 
     // enable led pins, connect to output
     hal::gpioa::set_mode<hal::pin_mode::output,

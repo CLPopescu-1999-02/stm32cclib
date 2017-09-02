@@ -10,10 +10,11 @@
 
 
 namespace {
-    const lib::u32 all_leds = 
-       lib::bits<lib::u32, lib::u32, 1, 0,
-        hal::p8, hal::p9, hal::p10, hal::p11,
-        hal::p12, hal::p13, hal::p14, hal::p15>::mask;
+    const auto all_leds = 
+        hal::bits32val<
+            hal::p8, hal::p9, hal::p10, hal::p11,
+            hal::p12, hal::p13, hal::p14, hal::p15
+        >::mask;
 }
 
 extern "C" void isr::sys_tick_timer() {

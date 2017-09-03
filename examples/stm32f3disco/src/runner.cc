@@ -23,7 +23,8 @@ extern "C" void isr::sys_tick_timer() {
 
 static void setup_gpio() {
     // enable led port
-    hal::rcc->ahb_enable.gpioe = 1;
+    hal::rcc::regs->ahb1_enable |= 
+        hal::rcc_ahb1_gpioe::clean<lib::u32>::mask;
 
     // enable led pins, connect to output
     hal::gpioe::set_mode<hal::pin_mode::output,

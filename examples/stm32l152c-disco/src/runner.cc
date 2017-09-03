@@ -73,9 +73,12 @@ extern "C" void isr::RTC_wkup() {
 
 static void setup_gpio() {
     // enable led and lcd port
-    hal::rcc->ahb_enable.gpioa = 1;
-    hal::rcc->ahb_enable.gpiob = 1;
-    hal::rcc->ahb_enable.gpioc = 1;
+    hal::rcc::regs->ahb1_enable |=
+        lib::regbits32<
+            hal::rcc_ahb1_gpioa,
+            hal::rcc_ahb1_gpiob,
+            hal::rcc_ahb1_gpioc
+        >::mask;
 
     // enable lcd pins
     hal::gpioa::set_mode<hal::pin_mode::alt_func,
@@ -108,27 +111,41 @@ static void setup_gpio() {
 
 static void setup_lcd_pwr() {
     // enable lcd and pwr module
-    hal::rcc->apb1_enable.pwr = 1;
-    hal::rcc->apb1_enable.lcd = 1;
+    hal::rcc::regs->apb1_enable |=
+        lib::regbits32<
+            hal::rcc_apb1_pwr,
+            hal::rcc_apb1_lcd
+        >::mask;
 
     // disable clock protection for rtc/lcd
     hal::pwr->control.dbp = 1;
 
     // reset clock rtc/lcd
-    hal::rcc->control_status.rtcrst = 1;
-    hal::rcc->control_status.rtcrst = 0;
+    hal::rcc::regs->control_status |= 
+        hal::rcc_control_status_rtcrst::clean<lib::u32>::mask;
+    hal::rcc::regs->control_status &= 
+        ~hal::rcc_control_status_rtcrst::clean<lib::u32>::mask;
 
     // enable LSE and wait it stable
-    hal::rcc->control_status.lseon = 1;
-    while (hal::rcc->control_status.lserdy != 1);
+    hal::rcc::regs->control_status |= 
+        hal::rcc_control_status_lseon::clean<lib::u32>::mask;
+    while ((hal::rcc::regs->control_status & 
+        hal::rcc_control_status_lserdy::clean<lib::u32>::mask) == 0);
 
     // set LSE for clocking rtc/lcd
-    hal::rcc->control_status.rtcsel = 0b01;
+    hal::rcc::regs->control_status |=
+        lib::regbits32<
+            hal::rcc_control_status_rtc_sel::val<
+                hal::rcc_control_status_rtc_sel_t::lse>
+        >::mask;
 }
 
 static void setup_timer4() {
     // setup tim4
-    hal::rcc->apb1_enable.tim4 = 1;
+    hal::rcc::regs->apb1_enable |=
+        lib::regbits32<
+            hal::rcc_apb1_tim4
+        >::mask;
     // setup tim4 counter block
     hal::tim4::regs->psc = 40 - 1;
     hal::tim4::regs->arr = 1000;
@@ -164,7 +181,8 @@ static void setup_timer4() {
 
 void setup_rtc() {
     // enable rtc clock
-    hal::rcc->control_status.rtcen = 1;
+    hal::rcc::regs->control_status |= 
+        hal::rcc_control_status_rtcen::clean<lib::u32>::mask;
 
     // disable protection
     hal::rtc::regs->write_protect.key = 0xca;
@@ -225,7 +243,10 @@ void setup_rtc() {
 
 void setup_dma() {
     // enable dma1 power
-    hal::rcc->ahb_enable.dma1 = 1;
+    hal::rcc::regs->ahb1_enable |=
+        lib::regbits32<
+            hal::rcc_ahb1_dma1
+        >::mask;
     // config dma1 channel 1 (ADC1)
     // disable dma conversion
     hal::dma1_channel1->config.en = 0;
@@ -251,13 +272,15 @@ void setup_dma() {
 
 void setup_adc() {
     // enable hsi clock for adc1
-    hal::rcc->control.hsion = 1;
-    while (hal::rcc->control.hsirdy == 0);
-    // reset adc module
-    hal::rcc->apb2_reset.adc1 = 1;
-    hal::rcc->apb2_reset.adc1 = 0;
+    hal::rcc::regs->control |= 
+        hal::rcc_control_hsion::clean<lib::u32>::mask;
+    while ((hal::rcc::regs->control & 
+        hal::rcc_control_hsirdy::clean<lib::u32>::mask) == 0);
     // enable adc module
-    hal::rcc->apb2_enable.adc1 = 1;
+    hal::rcc::regs->apb2_enable |=
+        lib::regbits32<
+            hal::rcc_apb2_adc
+        >::mask;
     // setup clock to HSI / 4
     hal::adc1_common->control.adcpre = 0b11;
     // enable Temperature sensor (channel 16), Vrefint (channel 17)

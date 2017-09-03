@@ -4,184 +4,224 @@
 #include <stdint.h>
 
 namespace hal {
-    struct rtc_time_t {
-        uint32_t su:4;
-        uint32_t st:3;
-        uint32_t _unused0:1;
-        uint32_t mnu:4;
-        uint32_t mnt:3;
-        uint32_t _unused1:1;
-        uint32_t hu:4;
-        uint32_t ht:2;
-        uint32_t pm:1;
-        uint32_t _unused2:9;
-    };
+    using rtc_time_su = lib::regbit<0, lib::u8, 4, 0>;
+    using rtc_time_st = lib::regbit<4, lib::u8, 3, 0>;
+    using rtc_time_mnu = lib::regbit<8, lib::u8, 4, 0>;
+    using rtc_time_mnt = lib::regbit<12, lib::u8, 3, 0>;
+    using rtc_time_hu = lib::regbit<16, lib::u8, 4, 0>;
+    using rtc_time_ht = lib::regbit<20, lib::u8, 2, 0>;
+    using rtc_time_pm = lib::regbit<22>;
 
-    struct rtc_date_t {
-        uint32_t du:4;
-        uint32_t dt:2;
-        uint32_t _unused0:2;
-        uint32_t mu:4;
-        uint32_t mt:1;
-        uint32_t wdu:3;
-        uint32_t yu:4;
-        uint32_t yt:4;
-        uint32_t _unused1:8;
+    using rtc_date_du = lib::regbit<0, lib::u8, 4, 0>;
+    using rtc_date_dt = lib::regbit<4, lib::u8, 2, 0>;
+    using rtc_date_mu = lib::regbit<8, lib::u8, 4, 0>;
+    using rtc_date_mt = lib::regbit<12, lib::u8, 1, 0>;
+    enum struct rtc_date_wdu_t : lib::u8 {
+        monday = 0b001,
+        tuesday = 0b010,
+        wednesday = 0b011,
+        thursday = 0b100,
+        friday = 0b101,
+        saturday = 0b110,
+        sunday = 0b111
     };
+    using rtc_date_wdu =
+        lib::regbit<13,
+        rtc_date_wdu_t,
+        3,
+        rtc_date_wdu_t::monday>;
+    using rtc_date_yu = lib::regbit<16, lib::u8, 4, 0>;
+    using rtc_date_yt = lib::regbit<20, lib::u8, 4, 0>;
 
-    struct rtc_control_t {
-        uint32_t wucksel:3;
-        uint32_t tsedge:1;
-        uint32_t refckon:1;
-        uint32_t bypshad:1;
-        uint32_t fmt:1;
-        uint32_t dce:1;
-        uint32_t alrae:1;
-        uint32_t alrbe:1;
-        uint32_t wute:1;
-        uint32_t tse:1;
-        uint32_t alraie:1;
-        uint32_t alrbie:1;
-        uint32_t wutie:1;
-        uint32_t tsie:1;
-        uint32_t add1h:1;
-        uint32_t sub1h:1;
-        uint32_t bkp:1;
-        uint32_t cosel:1;
-        uint32_t pol:1;
-        uint32_t osel:2;
-        uint32_t coe:1;
-        uint32_t _unused0:8;
+    enum struct rtc_control_wucksel_t : lib::u8 {
+        rtc_by16 = 0b000,
+        rtc_by8 = 0b001,
+        rtc_by4 = 0b010,
+        rtc_by2 = 0b011,
+        ck_spre = 0b100,
+        ck_spre_wut_add = 0b110
     };
+    using rtc_control_wucksel =
+        lib::regbit<0,
+        rtc_control_wucksel_t,
+        3,
+        rtc_control_wucksel_t::rtc_by16>;
+    using rtc_control_tsedge = lib::regbit<3>;
+    using rtc_control_refckon = lib::regbit<4>;
+    using rtc_control_bypshad = lib::regbit<5>;
+    using rtc_control_fmt = lib::regbit<6>;
+    using rtc_control_dce = lib::regbit<7>;
+    using rtc_control_alrae = lib::regbit<8>;
+    using rtc_control_alrbe = lib::regbit<9>;
+    using rtc_control_wute = lib::regbit<10>;
+    using rtc_control_tse = lib::regbit<11>;
+    using rtc_control_alraie = lib::regbit<12>;
+    using rtc_control_alrbie = lib::regbit<13>;
+    using rtc_control_wutie = lib::regbit<14>;
+    using rtc_control_tsie = lib::regbit<15>;
+    using rtc_control_add1h = lib::regbit<16>;
+    using rtc_control_sub1h = lib::regbit<17>;
+    using rtc_control_bkp = lib::regbit<18>;
+    using rtc_control_cosel = lib::regbit<19>;
+    using rtc_control_pol = lib::regbit<20>;
+    enum struct rtc_control_osel_t : lib::u8 {
+        disabled = 0b00,
+        alarm_a = 0b01,
+        alarm_b = 0b10,
+        wakeup = 0b11,
+    };
+    using rtc_control_osel =
+        lib::regbit<21,
+        rtc_control_osel_t,
+        2,
+        rtc_control_osel_t::disabled>;
+    using rtc_control_coe = lib::regbit<23>;
 
-    struct rtc_init_status_t {
-        uint32_t alrawf:1;
-        uint32_t alrbwf:1;
-        uint32_t wutwf:1;
-        uint32_t shpf:1;
-        uint32_t inits:1;
-        uint32_t rsf:1;
-        uint32_t initf:1;
-        uint32_t init:1;
-        uint32_t alraf:1;
-        uint32_t alrbf:1;
-        uint32_t wutf:1;
-        uint32_t tsf:1;
-        uint32_t tsovf:1;
-        uint32_t tamp1f:1;
-        uint32_t tamp2f:1;
-        uint32_t tamp3f:1;
-        uint32_t recalpf:1;
-        uint32_t _unused0:15;
-    };
+    using rtc_init_status_alrawf = lib::regbit<0>;
+    using rtc_init_status_alrbwf = lib::regbit<1>;
+    using rtc_init_status_wutwf = lib::regbit<2>;
+    using rtc_init_status_shpf = lib::regbit<3>;
+    using rtc_init_status_inits = lib::regbit<4>;
+    using rtc_init_status_rsf = lib::regbit<5>;
+    using rtc_init_status_initf = lib::regbit<6>;
+    using rtc_init_status_init = lib::regbit<7>;
+    using rtc_init_status_alraf = lib::regbit<8>;
+    using rtc_init_status_alrbf = lib::regbit<9>;
+    using rtc_init_status_wutf = lib::regbit<10>;
+    using rtc_init_status_tsf = lib::regbit<11>;
+    using rtc_init_status_tsovf = lib::regbit<12>;
+    using rtc_init_status_tamp1f = lib::regbit<13>;
+    using rtc_init_status_tamp2f = lib::regbit<14>;
+    using rtc_init_status_tamp3f = lib::regbit<15>;
+    using rtc_init_status_recalpf = lib::regbit<16>;
 
-    struct rtc_prescaler_t {
-        uint32_t prediv_s:15;
-        uint32_t _unused0:1;
-        uint32_t prediv_a:7;
-        uint32_t _unused1:9;
-    };
+    using rtc_prescaler_prediv_s = lib::regbit<0, lib::u16, 15, 0>;
+    using rtc_prescaler_prediv_a = lib::regbit<16, lib::u8, 7, 1>;
 
     struct rtc_wakeup_timer_t {
-        uint32_t wut:16;
-        uint32_t _unused0:16;
+        uint16_t wut;
+        uint16_t _unused0;
     };
 
-    struct rtc_calib_t {
-        uint32_t dc:5;
-        uint32_t _unused0:2;
-        uint32_t dcs:1;
-        uint32_t _unused1:24;
+    using rtc_calib_dc = lib::regbit<0, lib::u8, 5, 0>;
+    using rtc_calib_dcs = lib::regbit<7>;
+
+    using rtc_alarm_su = lib::regbit<0, lib::u8, 4, 0>;
+    using rtc_alarm_st = lib::regbit<4, lib::u8, 3, 0>;
+    using rtc_alarm_msk1 = lib::regbit<7>;
+    using rtc_alarm_mnu = lib::regbit<8, lib::u8, 4, 0>;
+    using rtc_alarm_mnt = lib::regbit<12, lib::u8, 3, 0>;
+    using rtc_alarm_msk2 = lib::regbit<15>;
+    using rtc_alarm_hu = lib::regbit<16, lib::u8, 4, 0>;
+    using rtc_alarm_ht = lib::regbit<20, lib::u8, 2, 0>;
+    using rtc_alarm_pm = lib::regbit<22>;
+    using rtc_alarm_msk3 = lib::regbit<23>;
+    using rtc_alarm_du = lib::regbit<24, lib::u8, 4, 0>;
+    using rtc_alarm_wdu =
+        lib::regbit<24,
+        rtc_date_wdu_t,
+        3,
+        rtc_date_wdu_t::monday>;
+    using rtc_alarm_dt = lib::regbit<28, lib::u8, 2, 0>;
+    using rtc_alarm_wdsel = lib::regbit<30>;
+    using rtc_alarm_msk4 = lib::regbit<31>;
+
+    struct rtc_sub_second_t {
+        uint16_t ss;
+        uint16_t _unused0;
     };
 
-    struct rtc_alarm_t {
-        uint32_t su:4;
-        uint32_t st:3;
-        uint32_t msk1:1;
-        uint32_t mnu:4;
-        uint32_t mnt:3;
-        uint32_t msk2:1;
-        uint32_t hu:4;
-        uint32_t ht:2;
-        uint32_t pm:1;
-        uint32_t msk3:1;
-        uint32_t du:4;
-        uint32_t dt:2;
-        uint32_t wdsel:1;
-        uint32_t msk4:1;
-    };
+    using rtc_shift_subfs = lib::regbit<0, lib::u16, 15, 0>;
+    using rtc_shift_add1s = lib::regbit<31>;
 
     struct rtc_write_protect_t {
         uint8_t key;
         uint8_t _unused0[3];
     };
 
-    struct rtc_sub_second_t {
-        uint32_t ss:16;
-        uint32_t _unused0:16;
-    };
+    using rtc_calib2_calm = lib::regbit<0, lib::u16, 9, 0>;
+    using rtc_calib2_calw16 = lib::regbit<13>;
+    using rtc_calib2_calw8 = lib::regbit<14>;
+    using rtc_calib2_calp = lib::regbit<15>;
 
-    struct rtc_shift_t {
-        uint32_t subfs:15;
-        uint32_t _unused0:16;
-        uint32_t add1s:1;
+    using rtc_tamper_alt_func_tamp1e = lib::regbit<0>;
+    using rtc_tamper_alt_func_tamp1trg = lib::regbit<1>;
+    using rtc_tamper_alt_func_tampie = lib::regbit<2>;
+    using rtc_tamper_alt_func_tamp2e = lib::regbit<3>;
+    using rtc_tamper_alt_func_tamp2trg = lib::regbit<4>;
+    using rtc_tamper_alt_func_tamp3e = lib::regbit<5>;
+    using rtc_tamper_alt_func_tamp3trg = lib::regbit<6>;
+    using rtc_tamper_alt_func_tampts = lib::regbit<7>;
+    enum struct rtc_tamper_alt_func_tampfreq_t : lib::u8 {
+        rtc_by32768 = 0x0,
+        rtc_by16384 = 0x1,
+        rtc_by8192 = 0x2,
+        rtc_by4096 = 0x3,
+        rtc_by2048 = 0x4,
+        rtc_by1024 = 0x5,
+        rtc_by512 = 0x6,
+        rtc_by256 = 0x7,
     };
-
-    struct rtc_calib2_t {
-        uint32_t calm:9;
-        uint32_t _unused0:4;
-        uint32_t calw16:1;
-        uint32_t calw8:1;
-        uint32_t calp:1;
-        uint32_t _unused1:16;
+    using rtc_tamper_alt_func_tampfreq =
+        lib::regbit<8,
+        rtc_tamper_alt_func_tampfreq_t,
+        3,
+        rtc_tamper_alt_func_tampfreq_t::rtc_by32768>;
+    enum struct rtc_tamper_alt_func_tampflt_t : lib::u8 {
+        on_edge = 0x0,
+        after2 = 0x1,
+        after4 = 0x2,
+        after8 = 0x3,
     };
-
-    struct rtc_tamper_alt_func_t {
-        uint32_t tamp1e:1;
-        uint32_t tamp1trg:1;
-        uint32_t tampie:1;
-        uint32_t tamp2e:1;
-        uint32_t tamp2trg:1;
-        uint32_t tamp3e:1;
-        uint32_t tamp3trg:1;
-        uint32_t tampts:1;
-        uint32_t tampfreq:3;
-        uint32_t tampflt:2;
-        uint32_t tampprch:2;
-        uint32_t tamppudis:1;
-        uint32_t _unused0:2;
-        uint32_t alarmouttype:1;
-        uint32_t _unused1:13;
+    using rtc_tamper_alt_func_tampflt =
+        lib::regbit<11,
+        rtc_tamper_alt_func_tampflt_t,
+        2,
+        rtc_tamper_alt_func_tampflt_t::on_edge>;
+    enum struct rtc_tamper_alt_func_tampprch_t : lib::u8 {
+        each1 = 0x0,
+        each2 = 0x1,
+        each4 = 0x2,
+        each8 = 0x3,
     };
+    using rtc_tamper_alt_func_tampprch =
+        lib::regbit<13,
+        rtc_tamper_alt_func_tampprch_t,
+        2,
+        rtc_tamper_alt_func_tampprch_t::each1>;
+    using rtc_tamper_alt_func_tamppudis = lib::regbit<15>;
+    using rtc_tamper_alt_func_alarmouttype = lib::regbit<18>;
 
-    struct rtc_alarm_sub_second_t {
-        uint32_t ss:15;
-        uint32_t _unused0:9;
-        uint32_t maskss:4;
-        uint32_t _unused1:4;
-    };
+    using rtc_alarm_sub_second_ss = lib::regbit<0, lib::u16, 15, 0>;
+    using rtc_alarm_sub_second_maskss = lib::regbit<24, lib::u8, 4, 0>;
 
-    struct rtc_t {
-        rtc_time_t time;
-        rtc_date_t date;
-        rtc_control_t control;
-        rtc_init_status_t init_status;
-        rtc_prescaler_t prescaler;
-        rtc_wakeup_timer_t wakeup_timer;
-        rtc_calib_t calib;
-        rtc_alarm_t alarma;
-        rtc_alarm_t alarmb;
-        rtc_write_protect_t write_protect;
-        rtc_sub_second_t sub_second;
-        rtc_shift_t shift;
-        rtc_time_t ts_time;
-        rtc_date_t ts_date;
-        rtc_sub_second_t ts_sub_second;
-        rtc_calib2_t calib2;
-        rtc_tamper_alt_func_t tamper_alt_func;
-        rtc_alarm_sub_second_t alarma_sub_second;
-        rtc_alarm_sub_second_t alarmb_sub_second;
-        uint32_t bkpr[32];
+    template <lib::u32 addr, lib::u8 backup_size>
+    struct rtc_d {
+        struct rtc_t {
+            uint32_t time;
+            uint32_t date;
+            uint32_t control;
+            uint32_t init_status;
+            uint32_t prescaler;
+            rtc_wakeup_timer_t wakeup_timer;
+            uint32_t calib;
+            uint32_t alarma;
+            uint32_t alarmb;
+            rtc_write_protect_t write_protect;
+            rtc_sub_second_t sub_second;
+            uint32_t shift;
+            uint32_t ts_time;
+            uint32_t ts_date;
+            rtc_sub_second_t ts_sub_second;
+            uint32_t calib2;
+            uint32_t tamper_alt_func;
+            uint32_t alarma_sub_second;
+            uint32_t alarmb_sub_second;
+            uint32_t bkpr[backup_size];
+        };
+
+        static constexpr volatile rtc_t * const regs =
+            reinterpret_cast<rtc_t *>(addr);
     };
 }
 

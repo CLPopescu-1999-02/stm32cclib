@@ -41,7 +41,7 @@ extern "C" void isr::sys_tick_timer() {
 }
 
 extern "C" void isr::TIM4() {
-    if (hal::tim4::regs->status & hal::tim_status_uif::clean_mask<lib::u16>::mask) {
+    if (hal::tim4::regs->status & hal::tim_status_uif::clean<lib::u16>::mask) {
         if (foward) {
             if (hal::tim4::regs->ccr1 < 10)
                 foward = false;
@@ -57,15 +57,17 @@ extern "C" void isr::TIM4() {
                 hal::tim4::regs->ccr2 += add_value;
             }
         }
-        hal::tim4::regs->status &= ~hal::tim_status_uif::clean_mask<lib::u16>::mask;
+        hal::tim4::regs->status &= ~hal::tim_status_uif::clean<lib::u16>::mask;
     }
 }
 
 extern "C" void isr::RTC_wkup() {
-    if (hal::rtc->init_status.wutf) {
+    if (hal::rtc::regs->init_status &
+        hal::rtc_init_status_wutf::clean<lib::u32>::mask) {
         runner::view_current_state();
 
-        hal::rtc->init_status.wutf = 0;
+        hal::rtc::regs->init_status &=
+            ~hal::rtc_init_status_wutf::clean<lib::u32>::mask;
     }
 }
 
@@ -165,44 +167,55 @@ void setup_rtc() {
     hal::rcc->control_status.rtcen = 1;
 
     // disable protection
-    hal::rtc->write_protect.key = 0xca;
-    hal::rtc->write_protect.key = 0x53;
+    hal::rtc::regs->write_protect.key = 0xca;
+    hal::rtc::regs->write_protect.key = 0x53;
 
     // enter initialization mode
-    hal::rtc->init_status.init = 1;
+    hal::rtc::regs->init_status |= 
+        hal::rtc_init_status_init::clean<lib::u32>::mask;
     // wait to enter init
-    while (hal::rtc->init_status.initf == 0);
+    while ((hal::rtc::regs->init_status &
+        hal::rtc_init_status_initf::clean<lib::u32>::mask) == 0);
 
-    // setup prescaler value
-    hal::rtc->prescaler.prediv_s = 255; // 32768
-    hal::rtc->prescaler.prediv_a = 127;
+    // setup prescaler value as 32768
+    hal::rtc::regs->prescaler = lib::regbits32<
+        hal::rtc_prescaler_prediv_s::val<255>, 
+        hal::rtc_prescaler_prediv_a::val<127>
+        >::mask;
     // setup 24h hour/day format
-    hal::rtc->control.fmt = 0;
     // enable direction take value from registers
-    hal::rtc->control.bypshad = 1;
+    // enable wakeup timer interrupt
+    // enable wakeup timer
+    hal::rtc::regs->control = lib::regbits32<
+        hal::rtc_control_fmt::val<false>,
+        hal::rtc_control_bypshad,
+        hal::rtc_control_wute,
+        hal::rtc_control_wutie
+        >::mask;
     // setup time & date
-    hal::rtc->time.ht = 1;
-    hal::rtc->time.hu = 2;
-    hal::rtc->date.yt = 1;
-    hal::rtc->date.yu = 7;
-    hal::rtc->date.mt = 0;
-    hal::rtc->date.mu = 8;
-    hal::rtc->date.dt = 1;
-    hal::rtc->date.du = 0;
-    hal::rtc->date.wdu = 0b100; // Thursday
+    hal::rtc::regs->time = lib::regbits32<
+        hal::rtc_time_ht::val<1>,
+        hal::rtc_time_hu::val<2>
+        >::mask;
+    hal::rtc::regs->date = lib::regbits32<
+        hal::rtc_date_yt::val<1>,
+        hal::rtc_date_yu::val<7>,
+        hal::rtc_date_mt::val<0>,
+        hal::rtc_date_mu::val<8>,
+        hal::rtc_date_dt::val<1>,
+        hal::rtc_date_du::val<0>,
+        hal::rtc_date_wdu::val<hal::rtc_date_wdu_t::tuesday>
+        >::mask;
 
     // setup wakeup timer
-    hal::rtc->wakeup_timer.wut = 2048; // rtcclk/16/2048 -> 1s event
-    // enable wakeup timer
-    hal::rtc->control.wute = 1;
-    // enable wakeup timer interrupt
-    hal::rtc->control.wutie = 1;
+    hal::rtc::regs->wakeup_timer.wut = 2048; // rtcclk/16/2048 -> 1s event
 
     // exit initialization mode
-    hal::rtc->init_status.init = 0;
+    hal::rtc::regs->init_status &=
+        ~hal::rtc_init_status_init::clean<lib::u32>::mask;
 
     // enable protection
-    hal::rtc->write_protect.key = 0xff;
+    hal::rtc::regs->write_protect.key = 0xff;
 
     // setup EXTI20 -> RTC_wkup to rising edge
     hal::exti->rising_edge_en(20);
@@ -284,44 +297,47 @@ void runner::view_current_state() {
     bsp::st_hex_lcd lcd;
 
     switch (mode) {
-        case 0:
+        case 0: {
+            lib::u32 time = hal::rtc::regs->time;
             lcd.wait_update()
                 .clear(0)
-                .write_digit(0, hal::rtc->time.ht)
+                .write_digit(0, hal::rtc_time_ht::get_val(time))
                 .clear(1)
-                .write_digit(1, hal::rtc->time.hu)
+                .write_digit(1, hal::rtc_time_hu::get_val(time))
                 .write_col(1)
                 .clear(2)
-                .write_digit(2, hal::rtc->time.mnt)
+                .write_digit(2, hal::rtc_time_mnt::get_val(time))
                 .clear(3)
-                .write_digit(3, hal::rtc->time.mnu)
+                .write_digit(3, hal::rtc_time_mnu::get_val(time))
                 .write_col(3)
                 .clear(4)
-                .write_digit(4, hal::rtc->time.st)
+                .write_digit(4, hal::rtc_time_st::get_val(time))
                 .clear(5)
-                .write_digit(5, hal::rtc->time.su)
+                .write_digit(5, hal::rtc_time_su::get_val(time))
                 .update();
                 break;
-        case 1:
+        }
+        case 1: {
+            lib::u32 date = hal::rtc::regs->date;
             lcd.wait_update()
                 .clear(0)
-                .write_digit(0, hal::rtc->date.yt)
+                .write_digit(0, hal::rtc_date_yt::get_val(date))
                 .clear(1)
-                .write_digit(1, hal::rtc->date.yu)
+                .write_digit(1, hal::rtc_date_yu::get_val(date))
                 .write_dp(1)
                 .clear(2)
-                .write_digit(2, hal::rtc->date.mt)
+                .write_digit(2, hal::rtc_date_mt::get_val(date))
                 .clear(3)
-                .write_digit(3, hal::rtc->date.mu)
+                .write_digit(3, hal::rtc_date_mu::get_val(date))
                 .write_dp(3)
                 .clear(4)
-                .write_digit(4, hal::rtc->date.dt)
+                .write_digit(4, hal::rtc_date_dt::get_val(date))
                 .clear(5)
-                .write_digit(5, hal::rtc->date.du)
+                .write_digit(5, hal::rtc_date_du::get_val(date))
                 .update();
                 break;
-        case 2:
-        {
+        }
+        case 2: {
             lib::u32 adc_value = *(uint16_t *)0x1ff800f8 * 3000;
             // get data
             adc_value /= adc_values[0];
@@ -343,8 +359,7 @@ void runner::view_current_state() {
                 .update();
             break;
         }
-        case 3:
-        {
+        case 3: {
             int32_t adc_value = (110 - 30) * 100 / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
             // get data
             adc_value = adc_value * (adc_values[1] - *(uint16_t *)0x1ff800fa) + 3000;

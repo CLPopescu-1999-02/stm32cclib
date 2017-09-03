@@ -2,7 +2,7 @@
 #define RTC_D_HH
 
 namespace hal {
-    volatile rtc_t * const rtc = reinterpret_cast<rtc_t *>(0x40002800);
+    using rtc = rtc_d<0x40002800, 32>;
 }
 
 #endif // RTC_D_HH

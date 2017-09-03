@@ -11,14 +11,19 @@ namespace lib {
                 return
                     (
                         static_cast<T>(default_value) &
-                            (-1 >> (sizeof(T) * 8 - bit_size))
+                            ((T)-1 >> (sizeof(T) * 8 - bit_size))
                     ) << (bit_n);
         }
 
         template <typename T>
-        struct clean_mask {
-            static const T mask = (-1 >> (sizeof(T) * 8 - bit_size)) << (bit_n);
+        struct clean {
+            static const T mask = ((T)-1 >> (sizeof(T) * 8 - bit_size)) << (bit_n);
         };
+
+        template <typename T>
+        static U get_val(const T reg) {
+            return (reg & clean<T>::mask) >> (bit_n);
+        }
 
         template <U value>
         struct val {
@@ -27,7 +32,7 @@ namespace lib {
                 return
                     (
                         static_cast<T>(value) &
-                            (-1 >> (sizeof(T) * 8 - bit_size))
+                            ((T)-1 >> (sizeof(T) * 8 - bit_size))
                     ) << (bit_n);
             }
         };

@@ -6,7 +6,7 @@
 namespace lib {
     template <u8 bit_n, typename U = bool, u8 bit_size = 1, U default_value = true>
     struct regbit {
-        template<typename T>
+        template <typename T>
         constexpr static T mask() {
                 return
                     (
@@ -15,9 +15,14 @@ namespace lib {
                     ) << (bit_n);
         }
 
+        template <typename T>
+        struct clean_mask {
+            static const T mask = (-1 >> (sizeof(T) * 8 - bit_size)) << (bit_n);
+        };
+
         template <U value>
         struct val {
-            template<typename T>
+            template <typename T>
             constexpr static T mask() {
                 return
                     (

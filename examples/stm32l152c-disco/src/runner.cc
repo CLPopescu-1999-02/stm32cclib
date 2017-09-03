@@ -41,7 +41,7 @@ extern "C" void isr::sys_tick_timer() {
 }
 
 extern "C" void isr::TIM4() {
-    if (hal::tim4::regs->status & lib::regbits16<hal::tim_status_uif>::mask) {
+    if (hal::tim4::regs->status & hal::tim_status_uif::clean_mask<lib::u16>::mask) {
         if (foward) {
             if (hal::tim4::regs->ccr1 < 10)
                 foward = false;
@@ -57,7 +57,7 @@ extern "C" void isr::TIM4() {
                 hal::tim4::regs->ccr2 += add_value;
             }
         }
-        hal::tim4::regs->status &= ~lib::regbits16<hal::tim_status_uif>::mask;
+        hal::tim4::regs->status &= ~hal::tim_status_uif::clean_mask<lib::u16>::mask;
     }
 }
 

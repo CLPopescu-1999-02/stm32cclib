@@ -1,7 +1,8 @@
 #ifndef RTC_HH
 #define RTC_HH
 
-#include <stdint.h>
+#include "lib/types.hh"
+#include "lib/regbit.hh"
 
 namespace hal {
     using rtc_time_su = lib::regbit<0, lib::u8, 4, 0>;
@@ -198,26 +199,26 @@ namespace hal {
     template <lib::u32 addr, lib::u8 backup_size>
     struct rtc_d {
         struct rtc_t {
-            uint32_t time;
-            uint32_t date;
-            uint32_t control;
-            uint32_t init_status;
-            uint32_t prescaler;
+            lib::u32 time;
+            lib::u32 date;
+            lib::u32 control;
+            lib::u32 init_status;
+            lib::u32 prescaler;
             rtc_wakeup_timer_t wakeup_timer;
-            uint32_t calib;
-            uint32_t alarma;
-            uint32_t alarmb;
+            lib::u32 calib;
+            lib::u32 alarma;
+            lib::u32 alarmb;
             rtc_write_protect_t write_protect;
             rtc_sub_second_t sub_second;
-            uint32_t shift;
-            uint32_t ts_time;
-            uint32_t ts_date;
+            lib::u32 shift;
+            lib::u32 ts_time;
+            lib::u32 ts_date;
             rtc_sub_second_t ts_sub_second;
-            uint32_t calib2;
-            uint32_t tamper_alt_func;
-            uint32_t alarma_sub_second;
-            uint32_t alarmb_sub_second;
-            uint32_t bkpr[backup_size];
+            lib::u32 calib2;
+            lib::u32 tamper_alt_func;
+            lib::u32 alarma_sub_second;
+            lib::u32 alarmb_sub_second;
+            lib::u32 bkpr[backup_size];
         };
 
         static constexpr volatile rtc_t * const regs =

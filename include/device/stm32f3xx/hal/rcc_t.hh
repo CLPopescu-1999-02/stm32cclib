@@ -1,44 +1,46 @@
 #ifndef RCC_T_HH
 #define RCC_T_HH
 
+#include "lib/types.hh"
+
 namespace hal {
     struct ahb_devices_t {
-        uint32_t dma1:1;
-        uint32_t dma2:1;
-        uint32_t sram:1;
-        uint32_t _unused0:1;
-        uint32_t flitf:1;
-        uint32_t _unused1:1;
-        uint32_t crc:1;
-        uint32_t _unused2:10;
-        uint32_t gpioa:1;
-        uint32_t gpiob:1;
-        uint32_t gpioc:1;
-        uint32_t gpiod:1;
-        uint32_t gpioe:1;
-        uint32_t gpiof:1;
-        uint32_t _unused3:1;
-        uint32_t tsc:1;
-        uint32_t _unused4:3;
-        uint32_t adc12:1;
-        uint32_t adc32:1;
-        uint32_t _unused5:2;
+        lib::u32 dma1:1;
+        lib::u32 dma2:1;
+        lib::u32 sram:1;
+        lib::u32 _unused0:1;
+        lib::u32 flitf:1;
+        lib::u32 _unused1:1;
+        lib::u32 crc:1;
+        lib::u32 _unused2:10;
+        lib::u32 gpioa:1;
+        lib::u32 gpiob:1;
+        lib::u32 gpioc:1;
+        lib::u32 gpiod:1;
+        lib::u32 gpioe:1;
+        lib::u32 gpiof:1;
+        lib::u32 _unused3:1;
+        lib::u32 tsc:1;
+        lib::u32 _unused4:3;
+        lib::u32 adc12:1;
+        lib::u32 adc32:1;
+        lib::u32 _unused5:2;
     };
 
     struct rcc_t {
-        uint32_t cr;
-        uint32_t cfgr;
-        uint32_t cir;
-        uint32_t apb2rstr;
-        uint32_t apb1rstr;
+        lib::u32 cr;
+        lib::u32 cfgr;
+        lib::u32 cir;
+        lib::u32 apb2rstr;
+        lib::u32 apb1rstr;
         ahb_devices_t ahb_enable;
-        uint32_t apb2enr;
-        uint32_t apb1enr;
-        uint32_t bdcr;
-        uint32_t csr;
+        lib::u32 apb2enr;
+        lib::u32 apb1enr;
+        lib::u32 bdcr;
+        lib::u32 csr;
         ahb_devices_t ahb_reset;
-        uint32_t cfgr2;
-        uint32_t cfgr3;
+        lib::u32 cfgr2;
+        lib::u32 cfgr3;
     };
 } // namespace Hal
 

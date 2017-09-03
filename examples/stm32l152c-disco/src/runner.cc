@@ -28,7 +28,7 @@ namespace {
 
     volatile int mode = 0;
 
-    volatile uint16_t adc_values[2];
+    volatile lib::u16 adc_values[2];
 }
 
 extern "C" void isr::sys_tick_timer() {
@@ -338,7 +338,7 @@ void runner::view_current_state() {
                 break;
         }
         case 2: {
-            lib::u32 adc_value = *(uint16_t *)0x1ff800f8 * 3000;
+            lib::u32 adc_value = *(lib::u16 *)0x1ff800f8 * 3000;
             // get data
             adc_value /= adc_values[0];
 
@@ -360,9 +360,9 @@ void runner::view_current_state() {
             break;
         }
         case 3: {
-            int32_t adc_value = (110 - 30) * 100 / (*(uint16_t *)0x1ff800fe - *(uint16_t *)0x1ff800fa);
+            lib::s32 adc_value = (110 - 30) * 100 / (*(lib::u16 *)0x1ff800fe - *(lib::u16 *)0x1ff800fa);
             // get data
-            adc_value = adc_value * (adc_values[1] - *(uint16_t *)0x1ff800fa) + 3000;
+            adc_value = adc_value * (adc_values[1] - *(lib::u16 *)0x1ff800fa) + 3000;
 
             lcd.wait_update()
                 .clear(0)

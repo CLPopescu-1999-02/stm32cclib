@@ -1,21 +1,21 @@
 #ifndef ST_HEX_LCD_HH
 #define ST_HEX_LCD_HH
 
-#include <stdint.h>
+#include "lib/types.hh"
 
 #include "hal/lcd.hh"
 
 namespace bsp {
     class digit {
     public:
-        digit(volatile uint32_t * const ram);
+        digit(volatile lib::u32 * const ram);
 
-        void write(const uint32_t pos, const uint16_t mask) const;
+        void write(const lib::u32 pos, const lib::u16 mask) const;
 
-        void clear(const uint32_t pos) const;
+        void clear(const lib::u32 pos) const;
 
     private:
-        volatile uint32_t * const _ram;
+        volatile lib::u32 * const _ram;
     };
 
     class st_hex_lcd {

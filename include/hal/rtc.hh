@@ -100,8 +100,8 @@ namespace hal {
     using rtc_prescaler_prediv_a = lib::regbit<16, lib::u8, 7, 1>;
 
     struct rtc_wakeup_timer_t {
-        uint16_t wut;
-        uint16_t _unused0;
+        lib::u16 wut;
+        lib::u16 _unused0;
     };
 
     using rtc_calib_dc = lib::regbit<0, lib::u8, 5, 0>;
@@ -128,16 +128,16 @@ namespace hal {
     using rtc_alarm_msk4 = lib::regbit<31>;
 
     struct rtc_sub_second_t {
-        uint16_t ss;
-        uint16_t _unused0;
+        lib::u16 ss;
+        lib::u16 _unused0;
     };
 
     using rtc_shift_subfs = lib::regbit<0, lib::u16, 15, 0>;
     using rtc_shift_add1s = lib::regbit<31>;
 
     struct rtc_write_protect_t {
-        uint8_t key;
-        uint8_t _unused0[3];
+        lib::u8 key;
+        lib::u8 _unused0[3];
     };
 
     using rtc_calib2_calm = lib::regbit<0, lib::u16, 9, 0>;

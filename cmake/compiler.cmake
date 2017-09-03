@@ -19,7 +19,7 @@ set(CMAKE_CXX_COMPILER ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-g++)
 set(CROSS_PREFIX ${TARGET_TRIPLET}-)
 
 set(LINKER_SCRIPT ${PROJECT_SOURCE_DIR}/stm32_flash.ld)
-set(COMMON_FLAGS "-g -mlittle-endian -mthumb -nostdlib -DTHUMB -fno-common -mno-thumb-interwork")
+set(COMMON_FLAGS "-g -mlittle-endian -mthumb -nostdlib -nostdinc -DTHUMB -fno-common")
 set(WARN_FLAGS "-Wall -Wextra")
 set(OPTIMIZE_FLAGS "-ffreestanding -fomit-frame-pointer")
 

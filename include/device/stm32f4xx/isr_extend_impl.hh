@@ -1,8 +1,6 @@
 #ifndef ISR_EXTEND_IMPL_HH
 #define ISR_EXTEND_IMPL_HH
 
-#include "lib/types.hh"
-
 extern "C" {
     namespace isr {
         void default_handler_extend(); // default handler for undefined device handlers

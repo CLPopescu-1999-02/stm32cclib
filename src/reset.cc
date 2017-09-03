@@ -1,15 +1,15 @@
-#include <stdint.h>
+#include "lib/types.hh"
 
 #include "isr_base.hh"
 #include "runner.hh"
 
 namespace {
     /* data and bss section starts and ends */
-    extern "C" uint32_t __text_end;
-    extern "C" uint32_t __data_start;
-    extern "C" uint32_t __data_end;
-    extern "C" uint32_t __bss_start;
-    extern "C" uint32_t __bss_end;
+    extern "C" lib::u32 __text_end;
+    extern "C" lib::u32 __data_start;
+    extern "C" lib::u32 __data_end;
+    extern "C" lib::u32 __bss_start;
+    extern "C" lib::u32 __bss_end;
     /* constructors */
     using ctor = void();
 
@@ -20,9 +20,9 @@ namespace {
     extern "C" ctor *__init_array_start[];
     extern "C" ctor *__init_array_end[];
 
-    extern "C" void * memcpy(void *dest, const void *src, uint32_t num) {
-        uint8_t *pdst = static_cast<uint8_t *>(dest);
-        const uint8_t *psrc = static_cast<const uint8_t *>(src);
+    extern "C" void * memcpy(void *dest, const void *src, lib::u32 num) {
+        lib::u8 *pdst = static_cast<lib::u8 *>(dest);
+        const lib::u8 *psrc = static_cast<const lib::u8 *>(src);
 
         while (num--) {
             *pdst++ = *psrc++;
@@ -39,8 +39,8 @@ namespace {
     }
 
     static inline void __attribute__((always_inline)) setup_env() {
-        uint32_t *src;
-        uint32_t *dest;
+        lib::u32 *src;
+        lib::u32 *dest;
 
         // Setup initial values for inited data
         src = &__text_end;

@@ -2,7 +2,7 @@
 
 namespace bsp {
     // constant upper letters
-    const uint16_t cap_letter_masks[26] = {
+    const lib::u16 cap_letter_masks[26] = {
         // A      B      C      D      E      F      G      H      I
         0xf00b,0x511e,0x3005,0x511c,0xb005,0xb001,0x300f,0xe00b,0x0110,
         // J      K      L      M      N      O      P      Q      R
@@ -12,16 +12,16 @@ namespace bsp {
     };
 
     // constant numbers
-    const uint16_t number_masks[10] = {
+    const lib::u16 number_masks[10] = {
         // 0      1      2      3      4      5      6      7      8      9
         0x700d,0x4008,0xd007,0x500e,0xe00a,0xb00e,0xb00f,0x5008,0xf00f,0xf00e
     };
 
-    digit::digit(volatile uint32_t * const ram) :
+    digit::digit(volatile lib::u32 * const ram) :
         _ram{ram} {
     }
 
-    void digit::write(const uint32_t pos, const uint16_t mask) const {
+    void digit::write(const lib::u32 pos, const lib::u16 mask) const {
         switch (pos) {
             case 0:
                 _ram[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
@@ -63,7 +63,7 @@ namespace bsp {
         }
     }
 
-    void digit::clear(const uint32_t pos) const {
+    void digit::clear(const lib::u32 pos) const {
         switch (pos) {
             case 0:
                 _ram[0] &= 0xcffffffc;
@@ -138,9 +138,9 @@ namespace bsp {
 
     st_hex_lcd st_hex_lcd::write_char(const unsigned int pos, const char ch) {
         if (ch >= 'A' && ch <= 'Z') {
-            scr.write(pos, cap_letter_masks[static_cast<const uint8_t>(ch-'A')]);
+            scr.write(pos, cap_letter_masks[static_cast<const lib::u8>(ch-'A')]);
         } else if (ch >= '0' && ch <= '9') {
-            scr.write(pos, number_masks[static_cast<const uint8_t>(ch-'0')]);
+            scr.write(pos, number_masks[static_cast<const lib::u8>(ch-'0')]);
         } else {
             scr.write(pos, 0x0000);
         }

@@ -1,14 +1,14 @@
 #ifndef ISR_BASE_HH
 #define ISR_BASE_HH
 
-#include <stdint.h>
-extern uint32_t _estack; // linker defined variable - is a stack size
+#include "lib/types.hh"
+extern lib::u32 _estack; // linker defined variable - is a stack size
 
 extern "C" {
     namespace isr {
         struct vectors // table of pointer to interrupt vectors - arm cortex core interrupts
         {
-            uint32_t *estack; /*! stack begin */
+            lib::u32 *estack; /*! stack begin */
             void (*reset)           (); /*!#0 cortex reset interrupt begin code of this */
             void (*NMI)             (); /*!#1 cortex non maskable interrupt */
             void (*hard_fault)      (); /*!#2 cortex hardware fault interrupt */

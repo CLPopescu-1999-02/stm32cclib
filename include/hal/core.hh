@@ -1,6 +1,5 @@
 #ifndef CORE_HH
 #define CORE_HH
-#include "lib/types.hh"
 
 #include "hal/core_irq.hh"
 #include "hal/device_irq.hh"

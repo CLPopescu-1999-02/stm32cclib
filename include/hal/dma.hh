@@ -1,71 +1,71 @@
 #ifndef DMA_HH
 #define DMA_HH
 
-#include <stdint.h>
+#include "lib/types.hh"
 
 namespace hal {
     struct dma_interrupt_status_t {
-        uint32_t gif1:1;
-        uint32_t tcif1:1;
-        uint32_t htif1:1;
-        uint32_t teif1:1;
-        uint32_t gif2:1;
-        uint32_t tcif2:1;
-        uint32_t htif2:1;
-        uint32_t teif2:1;
-        uint32_t gif3:1;
-        uint32_t tcif3:1;
-        uint32_t htif3:1;
-        uint32_t teif3:1;
-        uint32_t gif4:1;
-        uint32_t tcif4:1;
-        uint32_t htif4:1;
-        uint32_t teif4:1;
-        uint32_t gif5:1;
-        uint32_t tcif5:1;
-        uint32_t htif5:1;
-        uint32_t teif5:1;
-        uint32_t gif6:1;
-        uint32_t tcif6:1;
-        uint32_t htif6:1;
-        uint32_t teif6:1;
-        uint32_t gif7:1;
-        uint32_t tcif7:1;
-        uint32_t htif7:1;
-        uint32_t teif7:1;
-        uint32_t _unused0:4;
+        lib::u32 gif1:1;
+        lib::u32 tcif1:1;
+        lib::u32 htif1:1;
+        lib::u32 teif1:1;
+        lib::u32 gif2:1;
+        lib::u32 tcif2:1;
+        lib::u32 htif2:1;
+        lib::u32 teif2:1;
+        lib::u32 gif3:1;
+        lib::u32 tcif3:1;
+        lib::u32 htif3:1;
+        lib::u32 teif3:1;
+        lib::u32 gif4:1;
+        lib::u32 tcif4:1;
+        lib::u32 htif4:1;
+        lib::u32 teif4:1;
+        lib::u32 gif5:1;
+        lib::u32 tcif5:1;
+        lib::u32 htif5:1;
+        lib::u32 teif5:1;
+        lib::u32 gif6:1;
+        lib::u32 tcif6:1;
+        lib::u32 htif6:1;
+        lib::u32 teif6:1;
+        lib::u32 gif7:1;
+        lib::u32 tcif7:1;
+        lib::u32 htif7:1;
+        lib::u32 teif7:1;
+        lib::u32 _unused0:4;
     };
 
     struct dma_interrupt_clear_t {
-        uint32_t gif1:1;
-        uint32_t tcif1:1;
-        uint32_t htif1:1;
-        uint32_t teif1:1;
-        uint32_t gif2:1;
-        uint32_t tcif2:1;
-        uint32_t htif2:1;
-        uint32_t teif2:1;
-        uint32_t gif3:1;
-        uint32_t tcif3:1;
-        uint32_t htif3:1;
-        uint32_t teif3:1;
-        uint32_t gif4:1;
-        uint32_t tcif4:1;
-        uint32_t htif4:1;
-        uint32_t teif4:1;
-        uint32_t gif5:1;
-        uint32_t tcif5:1;
-        uint32_t htif5:1;
-        uint32_t teif5:1;
-        uint32_t gif6:1;
-        uint32_t tcif6:1;
-        uint32_t htif6:1;
-        uint32_t teif6:1;
-        uint32_t gif7:1;
-        uint32_t tcif7:1;
-        uint32_t htif7:1;
-        uint32_t teif7:1;
-        uint32_t _unused0:4;
+        lib::u32 gif1:1;
+        lib::u32 tcif1:1;
+        lib::u32 htif1:1;
+        lib::u32 teif1:1;
+        lib::u32 gif2:1;
+        lib::u32 tcif2:1;
+        lib::u32 htif2:1;
+        lib::u32 teif2:1;
+        lib::u32 gif3:1;
+        lib::u32 tcif3:1;
+        lib::u32 htif3:1;
+        lib::u32 teif3:1;
+        lib::u32 gif4:1;
+        lib::u32 tcif4:1;
+        lib::u32 htif4:1;
+        lib::u32 teif4:1;
+        lib::u32 gif5:1;
+        lib::u32 tcif5:1;
+        lib::u32 htif5:1;
+        lib::u32 teif5:1;
+        lib::u32 gif6:1;
+        lib::u32 tcif6:1;
+        lib::u32 htif6:1;
+        lib::u32 teif6:1;
+        lib::u32 gif7:1;
+        lib::u32 tcif7:1;
+        lib::u32 htif7:1;
+        lib::u32 teif7:1;
+        lib::u32 _unused0:4;
     };
 
     struct dma_t {
@@ -74,31 +74,31 @@ namespace hal {
     };
 
     struct dma_channel_config_t {
-        uint32_t en:1;
-        uint32_t tcie:1;
-        uint32_t htie:1;
-        uint32_t teie:1;
-        uint32_t dir:1;
-        uint32_t circ:1;
-        uint32_t pinc:1;
-        uint32_t minc:1;
-        uint32_t psize:2;
-        uint32_t msize:2;
-        uint32_t pl:2;
-        uint32_t mem2mem:1;
-        uint32_t _unused0:17;
+        lib::u32 en:1;
+        lib::u32 tcie:1;
+        lib::u32 htie:1;
+        lib::u32 teie:1;
+        lib::u32 dir:1;
+        lib::u32 circ:1;
+        lib::u32 pinc:1;
+        lib::u32 minc:1;
+        lib::u32 psize:2;
+        lib::u32 msize:2;
+        lib::u32 pl:2;
+        lib::u32 mem2mem:1;
+        lib::u32 _unused0:17;
     };
 
     struct dma_channel_number_of_data_t {
-        uint16_t ndt;
-        uint16_t _unused0;
+        lib::u16 ndt;
+        lib::u16 _unused0;
     };
 
     struct dma_channel_t {
         dma_channel_config_t config;
-        uint32_t number_of_data;
-        uint32_t peripheral_address;
-        uint32_t memory_address;
+        lib::u32 number_of_data;
+        lib::u32 peripheral_address;
+        lib::u32 memory_address;
     };
 }
 

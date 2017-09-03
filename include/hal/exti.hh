@@ -1,25 +1,25 @@
 #ifndef EXTI_HH
 #define EXTI_HH
 
-#include <stdint.h>
+#include "lib/types.hh"
 
 namespace hal {
-    constexpr uint32_t event_of(const uint32_t pin) {
+    constexpr lib::u32 event_of(const lib::u32 pin) {
         return (1 << pin);
     }
 
     template <typename ...Pins>
-    constexpr uint32_t event_of(const uint32_t pin, Pins ...pins) {
+    constexpr lib::u32 event_of(const lib::u32 pin, Pins ...pins) {
         return event_of(pin) | event_of(pins...);
     }
 
     struct exti_t {
-        uint32_t imr;
-        uint32_t emr;
-        uint32_t rtsr;
-        uint32_t ftsr;
-        uint32_t swier;
-        uint32_t pr;
+        lib::u32 imr;
+        lib::u32 emr;
+        lib::u32 rtsr;
+        lib::u32 ftsr;
+        lib::u32 swier;
+        lib::u32 pr;
 
         template <typename ...Pins>
         void unmask_int(Pins ...pins) volatile {

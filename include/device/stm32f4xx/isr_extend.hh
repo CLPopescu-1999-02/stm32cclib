@@ -1,8 +1,6 @@
 #ifndef ISR_EXTEND_HH
 #define ISR_EXTEND_HH
 
-#include "lib/types.hh"
-
 extern "C" {
     namespace isr {
         struct device_vectors { // Table of pointer to interrupt vectors - STM32F407xC specific interrupts

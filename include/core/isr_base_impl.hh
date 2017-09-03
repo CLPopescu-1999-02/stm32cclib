@@ -1,8 +1,6 @@
 #ifndef ISR_BASE_IMPL_HH
 #define ISR_BASE_IMPL_HH
 
-#include <stdint.h>
-
 extern "C" {
     namespace isr {
         void default_handler(); // default handler for undefined handlers

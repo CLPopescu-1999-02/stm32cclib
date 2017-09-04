@@ -17,11 +17,7 @@ namespace bsp {
         0x700d,0x4008,0xd007,0x500e,0xe00a,0xb00e,0xb00f,0x5008,0xf00f,0xf00e
     };
 
-    digit::digit(volatile lib::u32 * const ram) :
-        _ram{ram} {
-    }
-
-    void digit::write(const lib::u32 pos, const lib::u16 mask) const {
+    void st_hex_lcd::write(const lib::u32 pos, const lib::u16 mask) const {
         switch (pos) {
             case 0:
                 _ram[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
@@ -63,7 +59,7 @@ namespace bsp {
         }
     }
 
-    void digit::clear(const lib::u32 pos) const {
+    void st_hex_lcd::clear_int(const lib::u32 pos) const {
         switch (pos) {
             case 0:
                 _ram[0] &= 0xcffffffc;
@@ -106,84 +102,102 @@ namespace bsp {
     }
 
     st_hex_lcd::st_hex_lcd() :
-        lcd{hal::lcd}, scr{lcd->ram} {
+        _ram{lcd::regs->ram} {
     }
 
     void st_hex_lcd::setup() {
         // set BIAS to 1/3
-        lcd->control.bias = 0b10;
         // set DUTY to 1/4
-        lcd->control.duty = 0b011;
         // enable lcd remaping
-        lcd->control.mux_seg = 1;
+        lcd::regs->control =
+            lib::regbits32<
+                hal::lcd_control_bias::val<
+                    hal::lcd_control_bias_t::by1div3>,
+                hal::lcd_control_duty::val<
+                    hal::lcd_control_duty_t::by1div4>,
+                hal::lcd_control_mux_seg
+            >::mask;
 
         // setup lcd clock
-        lcd->frame_control.ps = 0b0100;
-        lcd->frame_control.div = 0b0001;
         // setup lcd contrast
-        lcd->frame_control.cc = 0b010;
+        lcd::regs->frame_control =
+            lib::regbits32<
+                hal::lcd_frame_control_ps::val<
+                    hal::lcd_frame_control_ps_t::by16>,
+                hal::lcd_frame_control_div::val<
+                    hal::lcd_frame_control_div_t::ck_psdiv17>,
+                hal::lcd_frame_control_cc::val<0b010>
+            >::mask;
         // wait for synchro lcd frame control
-        while (lcd->status.fcrsf == 0);
+        while ((lcd::regs->status &
+            hal::lcd_status_fcrsf::clean<lib::u32>::mask) == 0);
 
         // internal step-up converter
-        lcd->control.vsel = 0;
         // enable lcd controller
-        lcd->control.lcden = 1;
+        lcd::regs->control |=
+            lib::regbits32<
+                hal::lcd_control_vsel::val<false>,
+                hal::lcd_control_lcden
+            >::mask;
 
         // wait for ready step-up converter
-        while (lcd->status.rdy != 1);
+        while ((lcd::regs->status &
+            hal::lcd_status_rdy::clean<lib::u32>::mask) == 0);
         // wait for ready lcd controller
-        while (lcd->status.ens != 1);
+        while ((lcd::regs->status &
+            hal::lcd_status_ens::clean<lib::u32>::mask) == 0);
     }
 
-    st_hex_lcd st_hex_lcd::write_char(const unsigned int pos, const char ch) {
+    st_hex_lcd & st_hex_lcd::write_char(const unsigned int pos, const char ch) {
         if (ch >= 'A' && ch <= 'Z') {
-            scr.write(pos, cap_letter_masks[static_cast<const lib::u8>(ch-'A')]);
+            write(pos, cap_letter_masks[static_cast<const lib::u8>(ch-'A')]);
         } else if (ch >= '0' && ch <= '9') {
-            scr.write(pos, number_masks[static_cast<const lib::u8>(ch-'0')]);
+            write(pos, number_masks[static_cast<const lib::u8>(ch-'0')]);
         } else {
-            scr.write(pos, 0x0000);
+            write(pos, 0x0000);
         }
 
         return *this;
     }
 
-    st_hex_lcd st_hex_lcd::write_digit(const unsigned int pos, const int dig) {
+    st_hex_lcd & st_hex_lcd::write_digit(const unsigned int pos, const int dig) {
         if (dig >= 0 && dig <= 9) {
-            scr.write(pos, number_masks[dig]);
+            write(pos, number_masks[dig]);
         } else {
-            scr.write(pos, 0x0000);
+            write(pos, 0x0000);
         }
 
         return *this;
     }
 
-    st_hex_lcd st_hex_lcd::write_col(const unsigned int pos) {
-        scr.write(pos, 0x0020);
+    st_hex_lcd & st_hex_lcd::write_col(const unsigned int pos) {
+        write(pos, 0x0020);
 
         return *this;
     }
 
-    st_hex_lcd st_hex_lcd::write_dp(const unsigned int pos) {
-        scr.write(pos, 0x0080);
+    st_hex_lcd & st_hex_lcd::write_dp(const unsigned int pos) {
+        write(pos, 0x0080);
 
         return *this;
     }
 
-    st_hex_lcd st_hex_lcd::clear(const unsigned int pos) {
-        scr.clear(pos);
+    st_hex_lcd & st_hex_lcd::clear(const unsigned int pos) {
+        clear_int(pos);
 
         return *this;
     }
 
-    st_hex_lcd st_hex_lcd::wait_update() {
-        while (lcd->status.udr == 1);
+    st_hex_lcd & st_hex_lcd::wait_update() {
+        while ((lcd::regs->status &
+            hal::lcd_status_udr::clean<lib::u32>::mask));
 
         return *this;
     }
 
-    st_hex_lcd st_hex_lcd::update() {
-        lcd->status.udr = 1;
+    st_hex_lcd & st_hex_lcd::update() {
+        lcd::regs->status |=
+            hal::lcd_status_udr::clean<lib::u32>::mask;
 
         return *this;
     }

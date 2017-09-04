@@ -2,6 +2,7 @@
 #define RCC_T_HH
 
 #include "lib/types.hh"
+#include "lib/regbit.hh"
 
 namespace hal {
     using rcc_control_hsion = lib::regbit<0>;

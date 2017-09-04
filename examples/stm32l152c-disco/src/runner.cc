@@ -118,7 +118,8 @@ static void setup_lcd_pwr() {
         >::mask;
 
     // disable clock protection for rtc/lcd
-    hal::pwr->control.dbp = 1;
+    hal::pwr::regs->control |=
+        hal::pwr_control_dbp::clean<lib::u32>::mask;
 
     // reset clock rtc/lcd
     hal::rcc::regs->control_status |= 
@@ -286,7 +287,8 @@ void setup_adc() {
     // enable Temperature sensor (channel 16), Vrefint (channel 17)
     hal::adc1_common->control.tsvrefe = 1;
     // wait for enable Vrefint
-    while (hal::pwr->control_status.vrefintrdyf == 0);
+    while ((hal::pwr::regs->control_status &
+        hal::pwr_control_status_vrefintrdyf::clean<lib::u32>::mask) == 0);
     // scan mode enabled
     hal::adc1->control1.scan = 1;
     // continuous conversion

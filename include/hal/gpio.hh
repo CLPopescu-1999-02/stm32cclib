@@ -3,6 +3,7 @@
 
 #include "lib/types.hh"
 #include "lib/bit.hh"
+#include "hal/bit_operations.hh"
 
 namespace hal {
     enum struct pin_mode : lib::u32 {
@@ -61,9 +62,6 @@ namespace hal {
     using p13 = lib::bit<13>;
     using p14 = lib::bit<14>;
     using p15 = lib::bit<15>;
-
-    template <typename ...Pins>
-    using bits32val = lib::bits32<lib::u32, 1, 0, Pins...>;
 
     template <lib::u32 addr>
     struct gpio_d {

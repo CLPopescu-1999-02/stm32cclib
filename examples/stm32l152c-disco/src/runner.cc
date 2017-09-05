@@ -237,9 +237,9 @@ void setup_rtc() {
     hal::rtc::regs->write_protect.key = 0xff;
 
     // setup EXTI20 -> RTC_wkup to rising edge
-    hal::exti->rising_edge_en(20);
+    hal::exti::rising_edge_en<hal::p20>();
     // enable interrupt for EXTI20 -> RTC_wkup
-    hal::exti->unmask_int(20);
+    hal::exti::unmask_int<hal::p20>();
 }
 
 void setup_dma() {

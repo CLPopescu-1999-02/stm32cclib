@@ -2,79 +2,106 @@
 #define EXTI_HH
 
 #include "lib/types.hh"
+#include "lib/bit.hh"
+#include "hal/bit_operations.hh"
 
 namespace hal {
-    constexpr lib::u32 event_of(const lib::u32 pin) {
-        return (1 << pin);
-    }
+    using p16 = lib::bit<16>;
+    using p17 = lib::bit<17>;
+    using p18 = lib::bit<18>;
+    using p19 = lib::bit<19>;
+    using p20 = lib::bit<20>;
+    using p21 = lib::bit<21>;
+    using p22 = lib::bit<22>;
+    using p23 = lib::bit<23>;
+    using p24 = lib::bit<24>;
+    using p25 = lib::bit<25>;
+    using p26 = lib::bit<26>;
+    using p27 = lib::bit<27>;
+    using p28 = lib::bit<28>;
+    using p29 = lib::bit<29>;
+    using p30 = lib::bit<30>;
+    using p31 = lib::bit<31>;
 
-    template <typename ...Pins>
-    constexpr lib::u32 event_of(const lib::u32 pin, Pins ...pins) {
-        return event_of(pin) | event_of(pins...);
-    }
-
-    struct exti_t {
-        lib::u32 imr;
-        lib::u32 emr;
-        lib::u32 rtsr;
-        lib::u32 ftsr;
-        lib::u32 swier;
-        lib::u32 pr;
+    template <lib::u32 addr>
+    struct exti_d {
+        struct exti_t {
+            lib::u32 imr;
+            lib::u32 emr;
+            lib::u32 rtsr;
+            lib::u32 ftsr;
+            lib::u32 swier;
+            lib::u32 pr;
+        };
 
         template <typename ...Pins>
-        void unmask_int(Pins ...pins) volatile {
-            imr |= event_of(pins...);
+        static void unmask_int() {
+            regs->imr |=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void mask_int(Pins ...pins) volatile {
-            imr &= ~event_of(pins...);
+        static void mask_int() {
+            regs->imr &=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void unmask_event(Pins ...pins) volatile {
-            emr |= event_of(pins...);
+        static void unmask_event() {
+            regs->emr |=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void mask_event(Pins ...pins) volatile {
-            emr &= ~event_of(pins...);
+        static void mask_event() {
+            regs->emr &=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void rising_edge_en(Pins ...pins) volatile {
-            rtsr |= event_of(pins...);
+        static void rising_edge_en() {
+            regs->rtsr |=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void rising_edge_dis(Pins ...pins) volatile {
-            rtsr &= ~event_of(pins...);
+        static void rising_edge_dis() {
+            regs->rtsr &=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void faling_edge_en(Pins ...pins) volatile {
-            ftsr |= event_of(pins...);
+        static void faling_edge_en() {
+            regs->ftsr |=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void failng_edge_dis(Pins ...pins) volatile {
-            ftsr &= ~event_of(pins...);
+        static void failng_edge_dis() {
+            regs->ftsr &=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void sw_event_en(Pins ...pins) volatile {
-            swier |= event_of(pins...);
+        static void sw_event_en() {
+            regs->swier |=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void sw_event_dis(Pins ...pins) volatile {
-            swier &= ~event_of(pins...);
+        static void sw_event_dis() {
+            regs->swier &=
+                bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
-        void pend_occurred(Pins ...pins) volatile {
-            pr |= event_of(pins...);
+        static void pend_occurred() {
+            regs->pr |=
+                bits32val<Pins...>::mask;
         }
+
+        static constexpr volatile exti_t * const regs =
+            reinterpret_cast<exti_t *>(addr);
     };
 }
 

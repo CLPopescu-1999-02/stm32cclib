@@ -2,7 +2,7 @@
 #define EXTI_D_HH
 
 namespace hal {
-    using exti = exti_d<0x40010400>;
+    using exti = exti_d<0x40013c00>;
 }
 
 #endif // EXTI_D_HH

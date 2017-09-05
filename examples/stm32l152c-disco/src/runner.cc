@@ -250,25 +250,32 @@ void setup_dma() {
         >::mask;
     // config dma1 channel 1 (ADC1)
     // disable dma conversion
-    hal::dma1_channel1->config.en = 0;
-    // memory increment
-    hal::dma1_channel1->config.minc = 1;
-    // peripheral size 16 bit
-    hal::dma1_channel1->config.psize = 0b01;
-    // memory size 16 bit
-    hal::dma1_channel1->config.msize = 0b01;
-    // priority medium
-    hal::dma1_channel1->config.pl = 0b01;
-    // circular mode
-    hal::dma1_channel1->config.circ = 1;
+    hal::dma1_channel1::regs->config &=
+        ~hal::dma_channel_config_en::clean<lib::u32>::mask;
     // setup memory address
-    hal::dma1_channel1->memory_address = (lib::u32)adc_values;
+    hal::dma1_channel1::regs->memory_address = (lib::u32)adc_values;
     // setup peripheral address
-    hal::dma1_channel1->peripheral_address = (lib::u32)&(hal::adc1->dr);
+    hal::dma1_channel1::regs->peripheral_address = (lib::u32)&(hal::adc1->dr);
     // setup number conversions
-    hal::dma1_channel1->number_of_data = 2;
+    hal::dma1_channel1::regs->number_of_data = 2;
+    // memory increment
+    // peripheral size 16 bit
+    // memory size 16 bit
+    // priority medium
+    // circular mode
     // enable dma conversion
-    hal::dma1_channel1->config.en = 1;
+    hal::dma1_channel1::regs->config =
+        lib::regbits32<
+            hal::dma_channel_config_minc,
+            hal::dma_channel_config_psize::val<
+                hal::dma_channel_config_size_t::by16bit>,
+            hal::dma_channel_config_msize::val<
+                hal::dma_channel_config_size_t::by16bit>,
+            hal::dma_channel_config_pl::val<
+                hal::dma_channel_config_pl_t::medium>,
+            hal::dma_channel_config_circ,
+            hal::dma_channel_config_en
+        >::mask;
 }
 
 void setup_adc() {

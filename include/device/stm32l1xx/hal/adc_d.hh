@@ -2,9 +2,9 @@
 #define ADC_D_HH
 
 namespace hal {
-    volatile adc_t * const adc1 = reinterpret_cast<adc_t *>(0x40012400);
+    using adc1 = adc_d<0x40012400>;
 
-    volatile adc_common_t * const adc1_common = reinterpret_cast<adc_common_t *>(0x40012400 + 0x300);
+    using adc1_common = adc_common_d<0x40012400 + 0x300>;
 }
 
 #endif // ADC_D_HH

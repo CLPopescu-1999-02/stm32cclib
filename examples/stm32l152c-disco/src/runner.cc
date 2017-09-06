@@ -255,7 +255,7 @@ void setup_dma() {
     // setup memory address
     hal::dma1_channel1::regs->memory_address = (lib::u32)adc_values;
     // setup peripheral address
-    hal::dma1_channel1::regs->peripheral_address = (lib::u32)&(hal::adc1->dr);
+    hal::dma1_channel1::regs->peripheral_address = (lib::u32)&(hal::adc1::regs->dr);
     // setup number conversions
     hal::dma1_channel1::regs->number_of_data = 2;
     // memory increment
@@ -290,39 +290,62 @@ void setup_adc() {
             hal::rcc_apb2_adc
         >::mask;
     // setup clock to HSI / 4
-    hal::adc1_common->control.adcpre = 0b11;
     // enable Temperature sensor (channel 16), Vrefint (channel 17)
-    hal::adc1_common->control.tsvrefe = 1;
+    hal::adc1_common::regs->control =
+        lib::regbits32<
+            hal::adc_common_control_adcpre::val<
+                hal::adc_common_control_adcpre_t::by4>,
+                hal::adc_common_control_tsvrefe
+            >::mask;
     // wait for enable Vrefint
     while ((hal::pwr::regs->control_status &
         hal::pwr_control_status_vrefintrdyf::clean<lib::u32>::mask) == 0);
     // scan mode enabled
-    hal::adc1->control1.scan = 1;
+    hal::adc1::regs->control1 |=
+        hal::adc_control1_scan::clean<lib::u32>::mask;
     // continuous conversion
-    hal::adc1->control2.cont = 1;
     // dma mode enable
-    hal::adc1->control2.dma = 1;
     // dma disable selection
-    hal::adc1->control2.dds = 1;
     // disable adc low power mode
-    hal::adc1->control2.adon = 1;
     // switch to bank A
-    hal::adc1->control2.adc_cfg = 0;
+    hal::adc1::regs->control2 |=
+        lib::regbits32<
+            hal::adc_control2_cont,
+            hal::adc_control2_dma,
+            hal::adc_control2_dds,
+            hal::adc_control2_adon,
+            hal::adc_control2_adc_cfg::val<false>
+        >::mask;
     // wait for setup adc1 hw
-    while (hal::adc1->status.adons == 0);
+    while ((hal::adc1::regs->status &
+        hal::adc_status_adons::clean<lib::u32>::mask) == 0);
     // setup 17 channel - vref internal, 16 channel - Temperature
-    hal::adc1->set_regular_sequence(17, 0);
-    hal::adc1->set_sample_time(7, 17);
-    hal::adc1->set_regular_sequence(16, 1);
-    hal::adc1->set_sample_time(7, 16);
-    hal::adc1->set_regular_sequence(1, 28);
+    hal::adc1::regs->sample_time2 =
+        lib::regbits32<
+            hal::adc_sample_time2_smp16::val<
+                hal::adc_sample_time_t::by384cycles>,
+            hal::adc_sample_time2_smp17::val<
+                hal::adc_sample_time_t::by384cycles>
+            >::mask;
+    hal::adc1::regs->regular_sequence5 =
+        lib::regbits32<
+            hal::adc_regular_sequence5_sq1::val<17>,
+            hal::adc_regular_sequence5_sq2::val<16>
+        >::mask;
+    hal::adc1::regs->regular_sequence1 =
+        lib::regbits32<
+            hal::adc_regular_sequence1_l::val<1>
+        >::mask;
     // wait for setup regular channel
-    while (hal::adc1->status.rcnr == 1);
+    while ((hal::adc1::regs->status &
+        hal::adc_status_rcnr::clean<lib::u32>::mask) == 1);
 
     // clear eoc
-    hal::adc1->status.eoc = 0;
+    hal::adc1::regs->status &=
+        ~hal::adc_status_eoc::clean<lib::u32>::mask;
     // start conversion
-    hal::adc1->control2.swstart = 1;
+    hal::adc1::regs->control2 |=
+        hal::adc_control2_swstart::clean<lib::u32>::mask;
 }
 
 void runner::view_current_state() {

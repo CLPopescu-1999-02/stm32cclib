@@ -8,31 +8,26 @@
 namespace bsp {
     class st_hex_lcd {
     public:
-        st_hex_lcd();
+        static void setup();
 
-        void setup();
+        static void write_char(const lib::u32 pos, const char ch);
 
-        st_hex_lcd & write_char(const unsigned int pos, const char ch);
+        static void write_digit(const lib::u32 pos, const int dig);
 
-        st_hex_lcd & write_digit(const unsigned int pos, const int dig);
+        static void write_col(const lib::u32 pos);
 
-        st_hex_lcd & write_col(const unsigned int pos);
+        static void write_dp(const lib::u32 pos);
 
-        st_hex_lcd & write_dp(const unsigned int pos);
+        static void clear(const lib::u32 pos);
 
-        st_hex_lcd & clear(const unsigned int pos);
+        static void wait_update();
 
-        st_hex_lcd & wait_update();
+        static void update();
 
-        st_hex_lcd & update();
-
-    private:
-        void write(const lib::u32 pos, const lib::u16 mask) const;
-
-        void clear_int(const lib::u32 pos) const;
+        static void write(const lib::u32 pos, const lib::u16 mask);
 
         using lcd = hal::lcd;
-        volatile lib::u32 * const _ram;
+        static constexpr volatile lib::u32 * const _ram{lcd::regs->ram};
     };
 }
 

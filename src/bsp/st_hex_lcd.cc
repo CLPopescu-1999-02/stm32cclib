@@ -17,7 +17,7 @@ namespace bsp {
         0x700d,0x4008,0xd007,0x500e,0xe00a,0xb00e,0xb00f,0x5008,0xf00f,0xf00e
     };
 
-    void st_hex_lcd::write(const lib::u32 pos, const lib::u16 mask) const {
+    void st_hex_lcd::write(const lib::u32 pos, const lib::u16 mask) {
         switch (pos) {
             case 0:
                 _ram[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
@@ -59,7 +59,7 @@ namespace bsp {
         }
     }
 
-    void st_hex_lcd::clear_int(const lib::u32 pos) const {
+    void st_hex_lcd::clear(const lib::u32 pos) {
         switch (pos) {
             case 0:
                 _ram[0] &= 0xcffffffc;
@@ -99,10 +99,6 @@ namespace bsp {
                 _ram[6] &= 0xfffc3fff;
                 break;
         }
-    }
-
-    st_hex_lcd::st_hex_lcd() :
-        _ram{lcd::regs->ram} {
     }
 
     void st_hex_lcd::setup() {
@@ -148,7 +144,7 @@ namespace bsp {
             hal::lcd_status_ens::clean<lib::u32>::mask) == 0);
     }
 
-    st_hex_lcd & st_hex_lcd::write_char(const unsigned int pos, const char ch) {
+    void st_hex_lcd::write_char(const lib::u32 pos, const char ch) {
         if (ch >= 'A' && ch <= 'Z') {
             write(pos, cap_letter_masks[static_cast<const lib::u8>(ch-'A')]);
         } else if (ch >= '0' && ch <= '9') {
@@ -156,49 +152,31 @@ namespace bsp {
         } else {
             write(pos, 0x0000);
         }
-
-        return *this;
     }
 
-    st_hex_lcd & st_hex_lcd::write_digit(const unsigned int pos, const int dig) {
+    void  st_hex_lcd::write_digit(const lib::u32 pos, const int dig) {
         if (dig >= 0 && dig <= 9) {
             write(pos, number_masks[dig]);
         } else {
             write(pos, 0x0000);
         }
-
-        return *this;
     }
 
-    st_hex_lcd & st_hex_lcd::write_col(const unsigned int pos) {
+    void  st_hex_lcd::write_col(const lib::u32 pos) {
         write(pos, 0x0020);
-
-        return *this;
     }
 
-    st_hex_lcd & st_hex_lcd::write_dp(const unsigned int pos) {
+    void  st_hex_lcd::write_dp(const lib::u32 pos) {
         write(pos, 0x0080);
-
-        return *this;
     }
 
-    st_hex_lcd & st_hex_lcd::clear(const unsigned int pos) {
-        clear_int(pos);
-
-        return *this;
-    }
-
-    st_hex_lcd & st_hex_lcd::wait_update() {
+    void st_hex_lcd::wait_update() {
         while ((lcd::regs->status &
             hal::lcd_status_udr::clean<lib::u32>::mask));
-
-        return *this;
     }
 
-    st_hex_lcd & st_hex_lcd::update() {
+    void st_hex_lcd::update() {
         lcd::regs->status |=
             hal::lcd_status_udr::clean<lib::u32>::mask;
-
-        return *this;
     }
 }

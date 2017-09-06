@@ -20,6 +20,8 @@
 namespace {
     using ld3_green = hal::p7;
     using ld4_blue = hal::p6;
+    using lcd = bsp::st_hex_lcd;
+
     const auto all_leds = hal::bits32val<
         ld3_green, ld4_blue>::mask;
 
@@ -349,69 +351,69 @@ void setup_adc() {
 }
 
 void runner::view_current_state() {
-    bsp::st_hex_lcd lcd;
-
     switch (mode) {
         case 0: {
             lib::u32 time = hal::rtc::regs->time;
-            lcd.wait_update()
-                .clear(0)
-                .write_digit(0, hal::rtc_time_ht::get_val(time))
-                .clear(1)
-                .write_digit(1, hal::rtc_time_hu::get_val(time))
-                .write_col(1)
-                .clear(2)
-                .write_digit(2, hal::rtc_time_mnt::get_val(time))
-                .clear(3)
-                .write_digit(3, hal::rtc_time_mnu::get_val(time))
-                .write_col(3)
-                .clear(4)
-                .write_digit(4, hal::rtc_time_st::get_val(time))
-                .clear(5)
-                .write_digit(5, hal::rtc_time_su::get_val(time))
-                .update();
-                break;
+            lcd::wait_update();
+            lcd::clear(0);
+            lcd::write_digit(0, hal::rtc_time_ht::get_val(time));
+            lcd::clear(1);
+            lcd::write_digit(1, hal::rtc_time_hu::get_val(time));
+            lcd::write_col(1);
+            lcd::clear(2);
+            lcd::write_digit(2, hal::rtc_time_mnt::get_val(time));
+            lcd::clear(3);
+            lcd::write_digit(3, hal::rtc_time_mnu::get_val(time));
+            lcd::write_col(3);
+            lcd::clear(4);
+            lcd::write_digit(4, hal::rtc_time_st::get_val(time));
+            lcd::clear(5);
+            lcd::write_digit(5, hal::rtc_time_su::get_val(time));
+            lcd::update();
+            break;
         }
         case 1: {
             lib::u32 date = hal::rtc::regs->date;
-            lcd.wait_update()
-                .clear(0)
-                .write_digit(0, hal::rtc_date_yt::get_val(date))
-                .clear(1)
-                .write_digit(1, hal::rtc_date_yu::get_val(date))
-                .write_dp(1)
-                .clear(2)
-                .write_digit(2, hal::rtc_date_mt::get_val(date))
-                .clear(3)
-                .write_digit(3, hal::rtc_date_mu::get_val(date))
-                .write_dp(3)
-                .clear(4)
-                .write_digit(4, hal::rtc_date_dt::get_val(date))
-                .clear(5)
-                .write_digit(5, hal::rtc_date_du::get_val(date))
-                .update();
-                break;
+            lcd::wait_update();
+            lcd::clear(0);
+            lcd::write_digit(0, hal::rtc_date_yt::get_val(date));
+            lcd::clear(1);
+            lcd::write_digit(1, hal::rtc_date_yu::get_val(date));
+            lcd::write_dp(1);
+            lcd::clear(2);
+            lcd::write_digit(2, hal::rtc_date_mt::get_val(date));
+            lcd::clear(3);
+            lcd::write_digit(3, hal::rtc_date_mu::get_val(date));
+            lcd::write_dp(3);
+            lcd::clear(4);
+            lcd::write_digit(4, hal::rtc_date_dt::get_val(date));
+            lcd::clear(5);
+            lcd::write_digit(5, hal::rtc_date_du::get_val(date));
+            lcd::update();
+
+            break;
         }
         case 2: {
             lib::u32 adc_value = *(lib::u16 *)0x1ff800f8 * 3000;
             // get data
             adc_value /= adc_values[0];
 
-            lcd.wait_update()
-                .clear(0)
-                .write_digit(0, adc_value / 1000 % 10)
-                .write_dp(0)
-                .clear(1)
-                .write_digit(1, adc_value / 100 % 10)
-                .clear(2)
-                .write_digit(2, adc_value / 10 % 10)
-                .clear(3)
-                .write_digit(3, adc_value % 10)
-                .clear(4)
-                .write_char(4, 'V')
-                .clear(5)
-                .write_char(5, 'R')
-                .update();
+            lcd::wait_update();
+            lcd::clear(0);
+            lcd::write_digit(0, adc_value / 1000 % 10);
+            lcd::write_dp(0);
+            lcd::clear(1);
+            lcd::write_digit(1, adc_value / 100 % 10);
+            lcd::clear(2);
+            lcd::write_digit(2, adc_value / 10 % 10);
+            lcd::clear(3);
+            lcd::write_digit(3, adc_value % 10);
+            lcd::clear(4);
+            lcd::write_char(4, 'V');
+            lcd::clear(5);
+            lcd::write_char(5, 'R');
+            lcd::update();
+
             break;
         }
         case 3: {
@@ -419,21 +421,22 @@ void runner::view_current_state() {
             // get data
             adc_value = adc_value * (adc_values[1] - *(lib::u16 *)0x1ff800fa) + 3000;
 
-            lcd.wait_update()
-                .clear(0)
-                .write_digit(0, adc_value / 1000 % 10)
-                .clear(1)
-                .write_digit(1, adc_value / 100 % 10)
-                .write_dp(1)
-                .clear(2)
-                .write_digit(2, adc_value / 10 % 10)
-                .clear(3)
-                .write_digit(3, adc_value % 10)
-                .clear(4)
-                .write_char(4, 'T')
-                .clear(5)
-                .write_char(5, 'R')
-                .update();
+            lcd::wait_update();
+            lcd::clear(0);
+            lcd::write_digit(0, adc_value / 1000 % 10);
+            lcd::clear(1);
+            lcd::write_digit(1, adc_value / 100 % 10);
+            lcd::write_dp(1);
+            lcd::clear(2);
+            lcd::write_digit(2, adc_value / 10 % 10);
+            lcd::clear(3);
+            lcd::write_digit(3, adc_value % 10);
+            lcd::clear(4);
+            lcd::write_char(4, 'T');
+            lcd::clear(5);
+            lcd::write_char(5, 'R');
+            lcd::update();
+
             break;
         }
         default:
@@ -443,7 +446,6 @@ void runner::view_current_state() {
 }
 
 void runner::run() {
-    bsp::st_hex_lcd lcd;
 
     setup_gpio();
     setup_timer4();
@@ -451,7 +453,7 @@ void runner::run() {
     setup_rtc();
     setup_dma();
     setup_adc();
-    lcd.setup();
+    lcd::setup();
 
     view_current_state();
 

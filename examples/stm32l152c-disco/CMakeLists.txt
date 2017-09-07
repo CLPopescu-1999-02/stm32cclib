@@ -1,7 +1,7 @@
 project (stm32l152c-discovery CXX)
 cmake_minimum_required(VERSION 3.5.0)
 
-add_definitions(-DSTM32F3XX)
+add_definitions(-DSTM32L1XX)
 
 set(DEVICE stm32l1xx)
 set(BOARD stm32l152c-discovery)

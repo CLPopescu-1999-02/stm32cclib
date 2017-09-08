@@ -1,6 +1,7 @@
 #include "runner.hh"
 
 #include "lib/types.hh"
+#include "lib/out.hh"
 
 #include "isr_base.hh"
 #include "isr_extend.hh"
@@ -14,13 +15,14 @@ namespace {
     const auto all_leds = 
         hal::bits32val<hal::p6, hal::p7>::mask;
 
-    lib::u8 byte = '#';
+    lib::s8 byte = '#';
+    using sout = lib::out<hal::usart3>;
 }
 
 extern "C" void isr::sys_tick_timer() {
     hal::gpioa::regs->odr ^= all_leds;
 
-    hal::usart3::send_w(byte);
+    sout::send(byte);
 }
 
 static void setup_gpio() {
@@ -73,6 +75,9 @@ void runner::run() {
 
     // setup irq for sys_tick
     hal::sys_tick::config<8000000>();
+
+    sout::send("\r\nHi, I'm echo repiter service\r\n");
+    sout::send("My version is: ", 1, ".", 23, "\r\n");
 
     while (true) {
         byte = hal::usart3::recv_w();

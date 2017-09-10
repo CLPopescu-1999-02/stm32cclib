@@ -1,6 +1,7 @@
 #include "runner.hh"
 
 #include "lib/types.hh"
+#include "lib/in.hh"
 #include "lib/out.hh"
 
 #include "isr_base.hh"
@@ -16,13 +17,17 @@ namespace {
         hal::bits32val<hal::p6, hal::p7>::mask;
 
     lib::s8 byte = '#';
+    auto enable_echo = false;
+
     using sout = lib::out<hal::usart3>;
+    using sin = lib::in<hal::usart3>;
 }
 
 extern "C" void isr::sys_tick_timer() {
     hal::gpioa::regs->odr ^= all_leds;
 
-    sout::send(byte);
+    if (enable_echo)
+        sout::send(byte);
 }
 
 static void setup_gpio() {
@@ -79,7 +84,17 @@ void runner::run() {
     sout::send("\r\nHi, I'm echo repiter service\r\n");
     sout::send("My version is: ", 1, ".", 23, "\r\n");
 
+    lib::s16 num;
+    lib::s8 null;
+    sout::send("Enter you num: ");
+    sin::recv(num);
+    sout::send("\r\nYou num is: ", num, "\r\n");
+
+    sout::send("Push the any keys to start echo...\r\n");
+    sin::recv(null);
+    enable_echo = true;
+
     while (true) {
-        byte = hal::usart3::recv_w();
+        sin::recv(byte);
     }
 }

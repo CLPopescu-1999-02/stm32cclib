@@ -22,7 +22,7 @@ namespace hal {
         as16bit
     };
     using spi_control2_ds =
-        lib::regbit<8
+        lib::regbit<8,
             spi_control2_ds_t,
             4,
             spi_control2_ds_t::as8bit>;
@@ -37,12 +37,12 @@ namespace hal {
         full
     };
     using spi_status_frlvl =
-        lib::regbit<9
+        lib::regbit<9,
             spi_status_fifo_t,
             2,
             spi_status_fifo_t::empty>;
     using spi_status_ftlvl =
-        lib::regbit<11
+        lib::regbit<11,
             spi_status_fifo_t,
             2,
             spi_status_fifo_t::empty>;

@@ -147,6 +147,17 @@ namespace hal {
         static constexpr volatile gpio_t * const regs =
             reinterpret_cast<gpio_t *>(addr);
     };
+
+    template <typename Port, typename Pin>
+    struct gpio_pin {
+        static void set() {
+            Port::template set_value<Pin>();
+        }
+
+        static void reset() {
+            Port::template reset_value<Pin>();
+        }
+    };
 } // namespace Hal
 
 #include "hal/gpio_d.hh"

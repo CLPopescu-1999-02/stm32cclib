@@ -98,20 +98,44 @@ namespace hal {
     template <lib::u32 addr>
     struct spi_d {
         struct spi_t {
-            lib::u32 control1;
-            lib::u32 control2;
-            lib::u32 status;
-            lib::u16 dr;
+            lib::u16 control1;
             lib::u16 _unused0;
-            lib::u16 crc_poly;
+            lib::u16 control2;
             lib::u16 _unused1;
-            lib::u16 rx_crc;
+            lib::u16 status;
             lib::u16 _unused2;
-            lib::u16 tx_crc;
+            lib::u16 dr;
             lib::u16 _unused3;
-            lib::u32 i2s_config;
-            lib::u32 i2s_prescaler;
+            lib::u16 crc_poly;
+            lib::u16 _unused4;
+            lib::u16 rx_crc;
+            lib::u16 _unused5;
+            lib::u16 tx_crc;
+            lib::u16 _unused6;
+            lib::u16 i2s_config;
+            lib::u16 _unused7;
+            lib::u16 i2s_prescaler;
+            lib::u16 _unused8;
         };
+
+        static void send_w(lib::u16 word) {
+            while ((regs->status &
+                spi_status_txe::clean<lib::u32>::mask) == 0);
+
+            regs->dr = word;
+        }
+
+        static lib::u16 recv_w() {
+            while ((regs->status &
+                spi_status_rxne::clean<lib::u32>::mask) == 0);
+
+            return regs->dr;
+        }
+
+        static bool is_busy() {
+            return ((regs->status &
+                spi_status_bsy::clean<lib::u32>::mask) != 0);
+        }
 
         static constexpr volatile spi_t * const regs =
             reinterpret_cast<spi_t *>(addr);

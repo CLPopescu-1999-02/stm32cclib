@@ -9,7 +9,10 @@
 #include "hal/core.hh"
 #include "hal/gpio.hh"
 #include "hal/rcc.hh"
+#include "hal/spi.hh"
 #include "hal/usart.hh"
+
+#include "bsp/ssd1306.hh"
 
 
 namespace {
@@ -21,6 +24,12 @@ namespace {
 
     using sout = lib::out<hal::usart3>;
     using sin = lib::in<hal::usart3>;
+
+    using oled_cs = hal::gpio_pin<hal::gpiod, hal::p6>;
+    using oled_reset = hal::gpio_pin<hal::gpiod, hal::p5>;
+    using oled_dc = hal::gpio_pin<hal::gpiod, hal::p4>;
+
+    using oled = bsp::ssd1306<hal::spi1, oled_reset, oled_cs, oled_dc>;
 }
 
 extern "C" void isr::sys_tick_timer() {
@@ -35,7 +44,8 @@ static void setup_gpio() {
     hal::rcc::regs->ahb1_enable |=
         lib::regbits32<
             hal::rcc_ahb1_gpioa,
-            hal::rcc_ahb1_gpiod
+            hal::rcc_ahb1_gpiod,
+            hal::rcc_ahb1_gpiob
         >::mask;
 
     // enable led pins, connect to output
@@ -47,6 +57,32 @@ static void setup_gpio() {
         hal::p8, hal::p9>();
     hal::gpiod::set_alt_func<hal::pin_alt::af7,
         hal::p8, hal::p9>();
+    // enable lcd(spi1, gpio) pins
+    // connect to output
+    hal::gpiod::set_mode<hal::pin_mode::output,
+        hal::p4, hal::p5, hal::p6>();
+    // connect to alternative func 5 (spi)
+    hal::gpiob::set_mode<hal::pin_mode::alt_func,
+        hal::p3, hal::p5>();
+    hal::gpiob::set_alt_func<hal::pin_alt::af5,
+        hal::p3, hal::p5>();
+}
+
+static void setup_spi() {
+    // enable spi1
+    hal::rcc::regs->apb2_enable |=
+        hal::rcc_apb2_spi1::clean<lib::u32>::mask;
+
+    // spi1 setup
+    hal::spi1::regs->control1 |=
+        lib::regbits16<
+            hal::spi_control1_br::val<
+                hal::spi_control1_br_t::by2>,
+            hal::spi_control1_mstr,
+            hal::spi_control1_spe,
+            hal::spi_control1_ssi,
+            hal::spi_control1_ssm
+        >::mask;
 }
 
 static void setup_usart() {
@@ -74,6 +110,14 @@ static void setup_usart() {
 void runner::run() {
     setup_gpio();
     setup_usart();
+    setup_spi();
+    oled::setup();
+
+    for (volatile int i = 0; i < 128 * 64 / 8; i++)
+        oled::send_data(0xaa);
+
+    lib::u8 symbol[] = {0x0, 0x8, 0x8, 0x8, 0x8, 0x0};
+    oled::send_data(symbol);
 
     // enable all leds
     hal::gpioa::reset_value<hal::p6, hal::p7>();

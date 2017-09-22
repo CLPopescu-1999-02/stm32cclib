@@ -122,7 +122,7 @@ namespace hal {
             dma_channel_config_brust_t,
             2,
             dma_channel_config_brust_t::single>;
-    using dma_channel_config_chsel = lib::regbit<25, lib::u8, 3, 0>;
+    using dma_channel_config_chsel = lib::regbit8<25, 3>;
 
     template <lib::u32 addr>
     struct dma_channel_d {

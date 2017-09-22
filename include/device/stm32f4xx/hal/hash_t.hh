@@ -21,12 +21,12 @@ namespace hal {
     using hash_control_mode = lib::regbit<6>;
     using hash_control_algo = lib::regbit<7>;
     using hash_control_nbw =
-        lib::regbit<8, lib::u8, 4, 0>;
+        lib::regbit8<8, 4>;
     using hash_control_dinne = lib::regbit<12>;
     using hash_control_lkey = lib::regbit<16>;
 
     using hash_start_nblw =
-        lib::regbit<0, lib::u8, 5, 0>;
+        lib::regbit8<0, 5>;
     using hash_start_dcal = lib::regbit<8>;
 
     using hash_interrupt_dinie = lib::regbit<0>;

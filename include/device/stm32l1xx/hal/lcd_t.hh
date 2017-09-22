@@ -34,9 +34,9 @@ namespace hal {
     using lcd_frame_control_hd = lib::regbit<0>;
     using lcd_frame_control_sofie = lib::regbit<1>;
     using lcd_frame_control_uddie = lib::regbit<3>;
-    using lcd_frame_control_pon = lib::regbit<4, lib::u8, 3, 0>;
-    using lcd_frame_control_dead = lib::regbit<7, lib::u8, 3, 0>;
-    using lcd_frame_control_cc = lib::regbit<10, lib::u8, 3, 0>;
+    using lcd_frame_control_pon = lib::regbit8<4, 3>;
+    using lcd_frame_control_dead = lib::regbit8<7, 3>;
+    using lcd_frame_control_cc = lib::regbit8<10, 3>;
     enum struct lcd_frame_control_blinkf_t : lib::u8 {
         by8 = 0b000,
         by16 = 0b001,

@@ -6,9 +6,9 @@
 
 namespace hal {
     using dbg_id_code_dev =
-        lib::regbit<0, lib::u16, 12, 0>;
+        lib::regbit16<0, 12>;
     using dbg_id_code_rev =
-        lib::regbit<16, lib::u16, 16, 0>;
+        lib::regbit16<16, 16>;
 
     template <lib::u32 addr>
     struct dbg_d {

@@ -21,8 +21,8 @@ namespace hal {
     using usart_control1_mme = lib::regbit<13>;
     using usart_control1_cmie = lib::regbit<14>;
     using usart_control1_over8 = lib::regbit<15>;
-    using usart_control1_dedt = lib::regbit<16, lib::u8, 5, 0>;
-    using usart_control1_deat = lib::regbit<21, lib::u8, 5, 0>;
+    using usart_control1_dedt = lib::regbit8<16, 5>;
+    using usart_control1_deat = lib::regbit8<21, 5>;
     using usart_control1_rtoie = lib::regbit<26>;
     using usart_control1_eobie = lib::regbit<27>;
 

@@ -7,8 +7,8 @@
 namespace hal {
     using rcc_control_hsion = lib::regbit<0>;
     using rcc_control_hsirdy = lib::regbit<1>;
-    using rcc_control_hsitrim = lib::regbit<3, lib::u8, 5>;
-    using rcc_control_hsical = lib::regbit<8, lib::u8, 8>;
+    using rcc_control_hsitrim = lib::regbit8<3, 5>;
+    using rcc_control_hsical = lib::regbit8<8, 8>;
     using rcc_control_hseon = lib::regbit<16>;
     using rcc_control_hserdy = lib::regbit<17>;
     using rcc_control_hsebyp = lib::regbit<18>;
@@ -66,7 +66,7 @@ namespace hal {
             rcc_config_apb_pre_t::not_div>;
     using rcc_config_pllsrc = lib::regbit<16>;
     using rcc_config_pllxtpre = lib::regbit<17>;
-    using rcc_config_pllmul = lib::regbit<18, lib::u8, 4, 0>;
+    using rcc_config_pllmul = lib::regbit8<18, 4, 0>;
     using rcc_config_usbpre = lib::regbit<22>;
     using rcc_config_i2s_ext_src = lib::regbit<23>;
     enum struct rcc_config_mco_t : lib::u8 {
@@ -185,7 +185,7 @@ namespace hal {
     using rcc_control_status_wwdgrstf = lib::regbit<30>;
     using rcc_control_status_lpwrrstf = lib::regbit<31>;
 
-    using rcc_config2_prediv = lib::regbit<0, lib::u8, 4, 0>;
+    using rcc_config2_prediv = lib::regbit8<0, 4>;
     enum struct rcc_config2_adcpres_t : lib::u8 {
         disable = 0b00000,
         by1 = 0b10000,

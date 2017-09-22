@@ -6,7 +6,7 @@
 
 namespace hal {
     using flash_access_control_latency =
-        lib::regbit<0, lib::u8, 3, 0>;
+        lib::regbit8<0, 3>;
     using flash_access_control_prften = lib::regbit<8>;
     using flash_access_control_icen = lib::regbit<9>;
     using flash_access_control_dcen = lib::regbit<10>;
@@ -25,7 +25,7 @@ namespace hal {
     using flash_control_ser = lib::regbit<1>;
     using flash_control_mer = lib::regbit<2>;
     using flash_control_snb =
-        lib::regbit<3, lib::u8, 4, 0>;
+        lib::regbit8<3, 4>;
     enum struct flash_control_psize_t : lib::u8 {
         x8 = 0,
         x16,
@@ -45,14 +45,14 @@ namespace hal {
     using flash_opt_control_optlock = lib::regbit<0>;
     using flash_opt_control_optstrt = lib::regbit<1>;
     using flash_opt_control_bor_lev =
-        lib::regbit<2, lib::u8, 2, 0>;
+        lib::regbit8<2, 2>;
     using flash_opt_control_wdg_sw = lib::regbit<5>;
     using flash_opt_control_nrst_stop = lib::regbit<6>;
     using flash_opt_control_nrst_stdby = lib::regbit<7>;
     using flash_opt_control_rdp =
-        lib::regbit<8, lib::u8, 8, 0>;
+        lib::regbit8<8, 8>;
     using flash_opt_control_nwrp =
-        lib::regbit<16, lib::u16, 12, 0>;
+        lib::regbit16<16, 12>;
 
     template <lib::u32 addr>
     struct flash_d {

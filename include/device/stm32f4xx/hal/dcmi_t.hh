@@ -47,23 +47,23 @@ namespace hal {
     using dcmi_int_line = lib::regbit<4>;
 
     using dcmi_embedded_sync_fs =
-        lib::regbit<0, lib::u8, 8, 0>;
+        lib::regbit8<0, 8>;
     using dcmi_embedded_sync_ls =
-        lib::regbit<8, lib::u8, 8, 0>;
+        lib::regbit8<8, 8>;
     using dcmi_embedded_sync_le =
-        lib::regbit<16, lib::u8, 8, 0>;
+        lib::regbit8<16, 8>;
     using dcmi_embedded_sync_fe =
-        lib::regbit<24, lib::u8, 8, 0>;
+        lib::regbit8<24, 8>;
 
     using dcmi_crop_window_start_hoffcnt =
-        lib::regbit<0, lib::u16, 14, 0>;
+        lib::regbit16<0, 14>;
     using dcmi_crop_window_start_vst =
-        lib::regbit<16, lib::u16, 13, 0>;
+        lib::regbit16<16, 13>;
 
     using dcmi_crop_window_size_capcnt =
-        lib::regbit<0, lib::u16, 14, 0>;
+        lib::regbit16<0, 14>;
     using dcmi_crop_window_size_vline =
-        lib::regbit<16, lib::u16, 14, 0>;
+        lib::regbit16<16, 14>;
 
     template <lib::u32 addr>
     struct dcmi_d {

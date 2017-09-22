@@ -7,8 +7,8 @@
 namespace hal {
     using rcc_control_hsion = lib::regbit<0>;
     using rcc_control_hsirdy = lib::regbit<1>;
-    using rcc_control_hsitrim = lib::regbit<3, lib::u8, 5>;
-    using rcc_control_hsical = lib::regbit<8, lib::u8, 8>;
+    using rcc_control_hsitrim = lib::regbit8<3, 5>;
+    using rcc_control_hsical = lib::regbit8<8, 8>;
     using rcc_control_hseon = lib::regbit<16>;
     using rcc_control_hserdy = lib::regbit<17>;
     using rcc_control_hsebyp = lib::regbit<18>;
@@ -18,8 +18,8 @@ namespace hal {
     using rcc_control_plli2son = lib::regbit<26>;
     using rcc_control_plli2srdy = lib::regbit<27>;
 
-    using rcc_pll_config_div = lib::regbit<0, lib::u8, 6, 1>;
-    using rcc_pll_config_main_mul = lib::regbit<6, lib::u16, 9, 63>;
+    using rcc_pll_config_div = lib::regbit8<0, 6, 1>;
+    using rcc_pll_config_main_mul = lib::regbit16<6, 9, 63>;
     enum struct rcc_pll_config_main_div_t : lib::u8 {
         by2 = 0b00,
         by4 = 0b01,
@@ -40,7 +40,7 @@ namespace hal {
             rcc_pll_config_clk_src_t,
             1,
             rcc_pll_config_clk_src_t::hsi>;
-    using rcc_pll_config_otgfs_sdio_div = lib::regbit<24, lib::u8, 4, 2>;
+    using rcc_pll_config_otgfs_sdio_div = lib::regbit8<24, 4, 2>;
 
     enum struct rcc_config_clk_sw_t : lib::u8 {
         hsi = 0b00,
@@ -90,7 +90,7 @@ namespace hal {
             rcc_config_apb_pre_t,
             3,
             rcc_config_apb_pre_t::not_div>;
-    using rcc_config_rtc_pre = lib::regbit<16, lib::u8, 5, 2>;
+    using rcc_config_rtc_pre = lib::regbit8<16, 5, 2>;
     enum struct rcc_config_mco_t : lib::u8 {
         hsi = 0b00,
         lse = 0b01,
@@ -231,13 +231,13 @@ namespace hal {
     using rcc_control_status_wwdgrstf = lib::regbit<30>;
     using rcc_control_status_lpwrrstf = lib::regbit<31>;
 
-    using rcc_spread_spectrum_modper = lib::regbit<0, lib::u16, 13, 0>;
-    using rcc_spread_spectrum_incstep = lib::regbit<13, lib::u16, 15, 0>;
+    using rcc_spread_spectrum_modper = lib::regbit16<0, 13>;
+    using rcc_spread_spectrum_incstep = lib::regbit16<13, 15>;
     using rcc_spread_spectrum_down_sel = lib::regbit<30>;
     using rcc_spread_spectrum_mod_en = lib::regbit<31>;
 
-    using rcc_plli2s_config_mul = lib::regbit<6, lib::u16, 9, 192>;
-    using rcc_plli2s_config_div = lib::regbit<28, lib::u8, 3, 2>;
+    using rcc_plli2s_config_mul = lib::regbit16<6, 9, 192>;
+    using rcc_plli2s_config_div = lib::regbit8<28, 3, 2>;
 
     template <lib::u32 addr>
     struct rcc_d {

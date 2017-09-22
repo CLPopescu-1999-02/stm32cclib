@@ -9,7 +9,7 @@ namespace hal {
     using dbg_config_standby = lib::regbit<2>;
     using dbg_config_trace_ioen = lib::regbit<5>;
     using dbg_config_trace_mode =
-        lib::regbit<6, lib::u8, 2, 0>;
+        lib::regbit8<6, 2>;
 
     using dbg_apb1_fz_tim2_stop = lib::regbit<0>;
     using dbg_apb1_fz_tim3_stop = lib::regbit<1>;

@@ -5,18 +5,18 @@
 #include "lib/regbit.hh"
 
 namespace hal {
-    using rtc_time_su = lib::regbit<0, lib::u8, 4, 0>;
-    using rtc_time_st = lib::regbit<4, lib::u8, 3, 0>;
-    using rtc_time_mnu = lib::regbit<8, lib::u8, 4, 0>;
-    using rtc_time_mnt = lib::regbit<12, lib::u8, 3, 0>;
-    using rtc_time_hu = lib::regbit<16, lib::u8, 4, 0>;
-    using rtc_time_ht = lib::regbit<20, lib::u8, 2, 0>;
+    using rtc_time_su = lib::regbit8<0, 4>;
+    using rtc_time_st = lib::regbit8<4, 3>;
+    using rtc_time_mnu = lib::regbit8<8, 4>;
+    using rtc_time_mnt = lib::regbit8<12, 3>;
+    using rtc_time_hu = lib::regbit8<16, 4>;
+    using rtc_time_ht = lib::regbit8<20, 2>;
     using rtc_time_pm = lib::regbit<22>;
 
-    using rtc_date_du = lib::regbit<0, lib::u8, 4, 0>;
-    using rtc_date_dt = lib::regbit<4, lib::u8, 2, 0>;
-    using rtc_date_mu = lib::regbit<8, lib::u8, 4, 0>;
-    using rtc_date_mt = lib::regbit<12, lib::u8, 1, 0>;
+    using rtc_date_du = lib::regbit8<0, 4>;
+    using rtc_date_dt = lib::regbit8<4, 2>;
+    using rtc_date_mu = lib::regbit8<8, 4>;
+    using rtc_date_mt = lib::regbit8<12, 1>;
     enum struct rtc_date_wdu_t : lib::u8 {
         monday = 0b001,
         tuesday = 0b010,
@@ -31,8 +31,8 @@ namespace hal {
         rtc_date_wdu_t,
         3,
         rtc_date_wdu_t::monday>;
-    using rtc_date_yu = lib::regbit<16, lib::u8, 4, 0>;
-    using rtc_date_yt = lib::regbit<20, lib::u8, 4, 0>;
+    using rtc_date_yu = lib::regbit8<16, 4>;
+    using rtc_date_yt = lib::regbit8<20, 4>;
 
     enum struct rtc_control_wucksel_t : lib::u8 {
         rtc_by16 = 0b000,
@@ -96,34 +96,34 @@ namespace hal {
     using rtc_init_status_tamp3f = lib::regbit<15>;
     using rtc_init_status_recalpf = lib::regbit<16>;
 
-    using rtc_prescaler_prediv_s = lib::regbit<0, lib::u16, 15, 0>;
-    using rtc_prescaler_prediv_a = lib::regbit<16, lib::u8, 7, 1>;
+    using rtc_prescaler_prediv_s = lib::regbit16<0, 15>;
+    using rtc_prescaler_prediv_a = lib::regbit8<16, 7, 1>;
 
     struct rtc_wakeup_timer_t {
         lib::u16 wut;
         lib::u16 _unused0;
     };
 
-    using rtc_calib_dc = lib::regbit<0, lib::u8, 5, 0>;
+    using rtc_calib_dc = lib::regbit8<0, 5>;
     using rtc_calib_dcs = lib::regbit<7>;
 
-    using rtc_alarm_su = lib::regbit<0, lib::u8, 4, 0>;
-    using rtc_alarm_st = lib::regbit<4, lib::u8, 3, 0>;
+    using rtc_alarm_su = lib::regbit8<0, 4>;
+    using rtc_alarm_st = lib::regbit8<4, 3>;
     using rtc_alarm_msk1 = lib::regbit<7>;
-    using rtc_alarm_mnu = lib::regbit<8, lib::u8, 4, 0>;
-    using rtc_alarm_mnt = lib::regbit<12, lib::u8, 3, 0>;
+    using rtc_alarm_mnu = lib::regbit8<8, 4>;
+    using rtc_alarm_mnt = lib::regbit8<12, 3>;
     using rtc_alarm_msk2 = lib::regbit<15>;
-    using rtc_alarm_hu = lib::regbit<16, lib::u8, 4, 0>;
-    using rtc_alarm_ht = lib::regbit<20, lib::u8, 2, 0>;
+    using rtc_alarm_hu = lib::regbit8<16, 4>;
+    using rtc_alarm_ht = lib::regbit8<20, 2>;
     using rtc_alarm_pm = lib::regbit<22>;
     using rtc_alarm_msk3 = lib::regbit<23>;
-    using rtc_alarm_du = lib::regbit<24, lib::u8, 4, 0>;
+    using rtc_alarm_du = lib::regbit8<24, 4>;
     using rtc_alarm_wdu =
         lib::regbit<24,
         rtc_date_wdu_t,
         3,
         rtc_date_wdu_t::monday>;
-    using rtc_alarm_dt = lib::regbit<28, lib::u8, 2, 0>;
+    using rtc_alarm_dt = lib::regbit8<28, 2>;
     using rtc_alarm_wdsel = lib::regbit<30>;
     using rtc_alarm_msk4 = lib::regbit<31>;
 
@@ -132,7 +132,7 @@ namespace hal {
         lib::u16 _unused0;
     };
 
-    using rtc_shift_subfs = lib::regbit<0, lib::u16, 15, 0>;
+    using rtc_shift_subfs = lib::regbit16<0, 15>;
     using rtc_shift_add1s = lib::regbit<31>;
 
     struct rtc_write_protect_t {
@@ -140,7 +140,7 @@ namespace hal {
         lib::u8 _unused0[3];
     };
 
-    using rtc_calib2_calm = lib::regbit<0, lib::u16, 9, 0>;
+    using rtc_calib2_calm = lib::regbit16<0, 9>;
     using rtc_calib2_calw16 = lib::regbit<13>;
     using rtc_calib2_calw8 = lib::regbit<14>;
     using rtc_calib2_calp = lib::regbit<15>;
@@ -193,8 +193,8 @@ namespace hal {
     using rtc_tamper_alt_func_tamppudis = lib::regbit<15>;
     using rtc_tamper_alt_func_alarmouttype = lib::regbit<18>;
 
-    using rtc_alarm_sub_second_ss = lib::regbit<0, lib::u16, 15, 0>;
-    using rtc_alarm_sub_second_maskss = lib::regbit<24, lib::u8, 4, 0>;
+    using rtc_alarm_sub_second_ss = lib::regbit16<0, 15>;
+    using rtc_alarm_sub_second_maskss = lib::regbit8<24, 4>;
 
     template <lib::u32 addr, lib::u8 backup_size>
     struct rtc_d {

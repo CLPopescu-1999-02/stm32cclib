@@ -26,8 +26,8 @@ namespace hal {
         2,
         rcc_control_rtc_pre_t::by2>;
 
-    using rcc_calibration_hsical = lib::regbit<0, lib::u8, 8, 0>;
-    using rcc_calibration_hsitrim = lib::regbit<8, lib::u8, 5, 0>;
+    using rcc_calibration_hsical = lib::regbit8<0, 8>;
+    using rcc_calibration_hsitrim = lib::regbit8<8, 5>;
     enum struct rcc_calibration_msirange_t : lib::u8 {
         around65_536kHz = 0b000,
         around131_072kHz = 0b001,
@@ -41,8 +41,8 @@ namespace hal {
         rcc_calibration_msirange_t,
         3,
         rcc_calibration_msirange_t::around2_097MHz>;
-    using rcc_calibration_msical = lib::regbit<16, lib::u8, 8, 0>;
-    using rcc_calibration_msitrim = lib::regbit<24, lib::u8, 8, 0>;
+    using rcc_calibration_msical = lib::regbit8<16, 8>;
+    using rcc_calibration_msitrim = lib::regbit8<24, 8>;
 
     enum struct rcc_config_clk_sw_t : lib::u8 {
         hsi = 0b00,

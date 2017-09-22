@@ -6,11 +6,11 @@
 
 namespace hal {
     using wwdg_control_t =
-        lib::regbit<0, lib::u8, 7, 0>;
+        lib::regbit8<0, 7>;
     using wwdg_control_wdga = lib::regbit<7>;
 
     using wwdg_config_w =
-        lib::regbit<0, lib::u8, 7, 0>;
+        lib::regbit8<0, 7>;
     enum struct wwdg_config_wdgtb_t : lib::u8 {
         by1 = 0b00,
         by2 = 0b01,

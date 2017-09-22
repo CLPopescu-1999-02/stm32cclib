@@ -80,8 +80,8 @@ namespace hal {
         3,
         tim_slave_mode_ts_t::itr1>;
     using tim_slave_mode_msm = lib::regbit<7>;
-    using tim_slave_mode_etf = lib::regbit<8, lib::u8, 4, 0>;
-    using tim_slave_mode_etps = lib::regbit<12, lib::u8, 2, 0>;
+    using tim_slave_mode_etf = lib::regbit8<8, 4>;
+    using tim_slave_mode_etps = lib::regbit8<12, 2>;
     using tim_slave_mode_ece = lib::regbit<14>;
     using tim_slave_mode_etp = lib::regbit<15>;
 
@@ -127,15 +127,15 @@ namespace hal {
             tim_capt_comp_mode_ccs_t,
             2,
             tim_capt_comp_mode_ccs_t::output>;
-    using tim_capt_comp_mode_ic1psc = lib::regbit<2, lib::u8, 2, 0>;
-    using tim_capt_comp_mode_ic1f = lib::regbit<4, lib::u8, 4, 0>;
+    using tim_capt_comp_mode_ic1psc = lib::regbit8<2, 2>;
+    using tim_capt_comp_mode_ic1f = lib::regbit8<4, 4>;
     using tim_capt_comp_mode_cc2s =
         lib::regbit<8,
             tim_capt_comp_mode_ccs_t,
             2,
             tim_capt_comp_mode_ccs_t::output>;
-    using tim_capt_comp_mode_ic2psc = lib::regbit<10, lib::u8, 2, 0>;
-    using tim_capt_comp_mode_ic2f = lib::regbit<12, lib::u8, 4, 0>;
+    using tim_capt_comp_mode_ic2psc = lib::regbit8<10, 2>;
+    using tim_capt_comp_mode_ic2f = lib::regbit8<12, 4>;
 
     using tim_capt_comp_mode_oc1fe = lib::regbit<2>;
     using tim_capt_comp_mode_oc1pe = lib::regbit<3>;
@@ -177,8 +177,8 @@ namespace hal {
     using tim_capt_comp_enable_cc4p = lib::regbit<13>;
     using tim_capt_comp_enable_cc4np = lib::regbit<15>;
 
-    using tim_dma_control_dba = lib::regbit<0, lib::u8, 5, 0>;
-    using tim_dma_control_dbl = lib::regbit<8, lib::u8, 5, 0>;
+    using tim_dma_control_dba = lib::regbit8<0, 5>;
+    using tim_dma_control_dbl = lib::regbit8<8, 5>;
 
     struct tim_t {
         lib::u16 control1;

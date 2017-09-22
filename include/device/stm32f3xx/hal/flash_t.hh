@@ -6,7 +6,7 @@
 
 namespace hal {
     using flash_access_control_latency =
-        lib::regbit<0, lib::u8, 3, 0>;
+        lib::regbit8<0, 3>;
     using flash_access_control_hlfcya = lib::regbit<3>;
     using flash_access_control_prftbe = lib::regbit<4>;
     using flash_access_control_prftbs = lib::regbit<5>;
@@ -30,7 +30,7 @@ namespace hal {
 
     using flash_opt_control_opterr = lib::regbit<0>;
     using flash_opt_control_rdprt =
-        lib::regbit<1, lib::u8, 2, 0>;
+        lib::regbit8<1, 2>;
     using flash_opt_control_wdg_sw = lib::regbit<8>;
     using flash_opt_control_nrst_stop = lib::regbit<9>;
     using flash_opt_control_nrst_stdby = lib::regbit<10>;

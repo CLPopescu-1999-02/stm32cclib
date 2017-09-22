@@ -15,7 +15,7 @@ namespace hal {
     using adc_status_rcnr = lib::regbit<8>;
     using adc_status_jcnr = lib::regbit<9>;
 
-    using adc_control1_awdch = lib::regbit<0, lib::u8, 5, 0>;
+    using adc_control1_awdch = lib::regbit8<0, 5>;
     using adc_control1_eocie = lib::regbit<5>;
     using adc_control1_awdie = lib::regbit<6>;
     using adc_control1_jeocie = lib::regbit<7>;
@@ -24,7 +24,7 @@ namespace hal {
     using adc_control1_jauto = lib::regbit<10>;
     using adc_control1_discen = lib::regbit<11>;
     using adc_control1_jdiscen = lib::regbit<12>;
-    using adc_control1_discnum = lib::regbit<13, lib::u8, 3, 0>;
+    using adc_control1_discnum = lib::regbit8<13, 3>;
     using adc_control1_pdd = lib::regbit<16>;
     using adc_control1_pdi = lib::regbit<17>;
     using adc_control1_jawden = lib::regbit<22>;
@@ -121,17 +121,17 @@ namespace hal {
             adc_control2_exten_t::disable>;
     using adc_control2_swstart = lib::regbit<30>;
 
-    using adc_inject_ch_data_off = lib::regbit<0, lib::u16, 12, 0>;
+    using adc_inject_ch_data_off = lib::regbit16<0, 12>;;
 
-    using adc_higher_threshold = lib::regbit<0, lib::u16, 12, 0>;
+    using adc_higher_threshold = lib::regbit16<0, 12>;;
 
-    using adc_lower_threshold = lib::regbit<0, lib::u16, 12, 0>;
+    using adc_lower_threshold = lib::regbit16<0, 12>;;
 
-    using inject_sequence_jsq1 = lib::regbit<0, lib::u8, 5, 0>;
-    using inject_sequence_jsq2 = lib::regbit<5, lib::u8, 5, 0>;
-    using inject_sequence_jsq3 = lib::regbit<10, lib::u8, 5, 0>;
-    using inject_sequence_jsq4 = lib::regbit<15, lib::u8, 5, 0>;
-    using inject_sequence_jl = lib::regbit<20, lib::u8, 2, 0>;
+    using inject_sequence_jsq1 = lib::regbit8<0, 5>;
+    using inject_sequence_jsq2 = lib::regbit8<5, 5>;
+    using inject_sequence_jsq3 = lib::regbit8<10, 5>;
+    using inject_sequence_jsq4 = lib::regbit8<15, 5>;
+    using inject_sequence_jl = lib::regbit8<20, 2>;
 
     enum struct adc_sample_time_t : lib::u8 {
         by4cycles = 0b000,
@@ -308,39 +308,39 @@ namespace hal {
             adc_sample_time_t::by4cycles>;
 
 
-    using adc_regular_sequence5_sq1 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence5_sq2 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence5_sq3 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence5_sq4 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence5_sq5 = lib::regbit<20, lib::u8, 5, 0>;
-    using adc_regular_sequence5_sq6 = lib::regbit<25, lib::u8, 5, 0>;
+    using adc_regular_sequence5_sq1 = lib::regbit8<0, 5>;
+    using adc_regular_sequence5_sq2 = lib::regbit8<5, 5>;
+    using adc_regular_sequence5_sq3 = lib::regbit8<10, 5>;
+    using adc_regular_sequence5_sq4 = lib::regbit8<15, 5>;
+    using adc_regular_sequence5_sq5 = lib::regbit8<20, 5>;
+    using adc_regular_sequence5_sq6 = lib::regbit8<25, 5>;
 
-    using adc_regular_sequence4_sq7 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence4_sq8 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence4_sq9 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence4_sq10 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence4_sq11 = lib::regbit<20, lib::u8, 5, 0>;
-    using adc_regular_sequence4_sq12 = lib::regbit<25, lib::u8, 5, 0>;
+    using adc_regular_sequence4_sq7 = lib::regbit8<0, 5>;
+    using adc_regular_sequence4_sq8 = lib::regbit8<5, 5>;
+    using adc_regular_sequence4_sq9 = lib::regbit8<10, 5>;
+    using adc_regular_sequence4_sq10 = lib::regbit8<15, 5>;
+    using adc_regular_sequence4_sq11 = lib::regbit8<20, 5>;
+    using adc_regular_sequence4_sq12 = lib::regbit8<25, 5>;
 
-    using adc_regular_sequence3_sq13 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq14 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq15 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq16 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq17 = lib::regbit<20, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq18 = lib::regbit<25, lib::u8, 5, 0>;
+    using adc_regular_sequence3_sq13 = lib::regbit8<0, 5>;
+    using adc_regular_sequence3_sq14 = lib::regbit8<5, 5>;
+    using adc_regular_sequence3_sq15 = lib::regbit8<10, 5>;
+    using adc_regular_sequence3_sq16 = lib::regbit8<15, 5>;
+    using adc_regular_sequence3_sq17 = lib::regbit8<20, 5>;
+    using adc_regular_sequence3_sq18 = lib::regbit8<25, 5>;
 
-    using adc_regular_sequence2_sq19 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq20 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq21 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq22 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq23 = lib::regbit<20, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq24 = lib::regbit<25, lib::u8, 5, 0>;
+    using adc_regular_sequence2_sq19 = lib::regbit8<0, 5>;
+    using adc_regular_sequence2_sq20 = lib::regbit8<5, 5>;
+    using adc_regular_sequence2_sq21 = lib::regbit8<10, 5>;
+    using adc_regular_sequence2_sq22 = lib::regbit8<15, 5>;
+    using adc_regular_sequence2_sq23 = lib::regbit8<20, 5>;
+    using adc_regular_sequence2_sq24 = lib::regbit8<25, 5>;
 
-    using adc_regular_sequence1_sq25 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence1_sq26 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence1_sq27 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence1_sq28 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence1_l = lib::regbit<20, lib::u8, 5, 0>;
+    using adc_regular_sequence1_sq25 = lib::regbit8<0, 5>;
+    using adc_regular_sequence1_sq26 = lib::regbit8<5, 5>;
+    using adc_regular_sequence1_sq27 = lib::regbit8<10, 5>;
+    using adc_regular_sequence1_sq28 = lib::regbit8<15, 5>;
+    using adc_regular_sequence1_l = lib::regbit8<20, 5>;
 
     template <lib::u32 addr>
     struct adc_d {

@@ -14,7 +14,7 @@ namespace hal {
     using i2c_control1_tcie = lib::regbit<6>;
     using i2c_control1_errie = lib::regbit<7>;
     using i2c_control1_dnf =
-        lib::regbit<8, lib::u8, 4, 0>;
+        lib::regbit8<8, 4>;
     using i2c_control1_anfoff = lib::regbit<12>;
     using i2c_control1_txdmaen = lib::regbit<14>;
     using i2c_control1_rxdmaen = lib::regbit<15>;
@@ -28,7 +28,7 @@ namespace hal {
     using i2c_control1_pecen = lib::regbit<23>;
 
     using i2c_control2_sadd =
-        lib::regbit<0, lib::u16, 10, 0>;
+        lib::regbit16<0, 10>;
     using i2c_control2_rd_wrn = lib::regbit<10>;
     using i2c_control2_add10 = lib::regbit<11>;
     using i2c_control2_head10r = lib::regbit<12>;
@@ -36,41 +36,41 @@ namespace hal {
     using i2c_control2_stop = lib::regbit<14>;
     using i2c_control2_nack = lib::regbit<15>;
     using i2c_control2_nbytes =
-        lib::regbit<16, lib::u8, 8, 0>;
+        lib::regbit8<16, 8>;
     using i2c_control2_reload = lib::regbit<24>;
     using i2c_control2_autoend = lib::regbit<25>;
     using i2c_control2_pecbyte = lib::regbit<26>;
 
     using i2c_own_address1_add7 =
-        lib::regbit<1, lib::u8, 7, 0>;
+        lib::regbit8<1, 7>;
     using i2c_own_address1_add10 =
-        lib::regbit<0, lib::u16, 10, 0>;
+        lib::regbit16<0, 10>;
     using i2c_own_address1_addmode = lib::regbit<10>;
     using i2c_own_address1_add1en = lib::regbit<15>;
 
     using i2c_own_address2_endual = lib::regbit<15>;
     using i2c_own_address2_add2 =
-        lib::regbit<1, lib::u8, 7, 0>;
+        lib::regbit8<1, 7>;
     using i2c_own_address2_msk =
-        lib::regbit<8, lib::u8, 3, 0>;
+        lib::regbit8<8, 3>;
 
     using i2c_timing_scll =
-        lib::regbit<0, lib::u8, 8, 0>;
+        lib::regbit8<0, 8>;
     using i2c_timing_sclh =
-        lib::regbit<8, lib::u8, 8, 0>;
+        lib::regbit8<8, 8>;
     using i2c_timing_sdadel =
-        lib::regbit<16, lib::u8, 4, 0>;
+        lib::regbit8<16, 4>;
     using i2c_timing_scldel =
-        lib::regbit<20, lib::u8, 4, 0>;
+        lib::regbit8<20, 4>;
     using i2c_timing_presc =
-        lib::regbit<28, lib::u8, 4, 0>;
+        lib::regbit8<28, 4>;
 
     using i2c_timeout_timeouta =
-        lib::regbit<0, lib::u16, 12, 0>;
+        lib::regbit16<0, 12>;
     using i2c_timeout_tidle = lib::regbit<12>;
     using i2c_timeout_timeouten = lib::regbit<15>;
     using i2c_timeout_timeoutb =
-        lib::regbit<16, lib::u16, 12, 0>;
+        lib::regbit16<16, 12>;
     using i2c_timeout_texten = lib::regbit<31>;
 
     using i2c_status_txe = lib::regbit<0>;
@@ -90,7 +90,7 @@ namespace hal {
     using i2c_status_busy = lib::regbit<15>;
     using i2c_status_dir = lib::regbit<16>;
     using i2c_status_addcode =
-        lib::regbit<17, lib::u8, 7, 0>;
+        lib::regbit8<17, 7>;
 
     template <lib::u32 addr>
     struct i2c_d {

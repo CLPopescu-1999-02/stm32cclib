@@ -12,7 +12,7 @@ namespace hal {
 
     using syscfg_periph_mode_usb_pu = lib::regbit<0>;
     using syscfg_periph_mode_lcd_capa =
-        lib::regbit<1, lib::u8, 5, 0>;
+        lib::regbit8<1, 5>;
 }
 
 #endif // SYSCFG_T_HH 

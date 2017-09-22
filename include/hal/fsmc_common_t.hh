@@ -50,19 +50,19 @@ namespace hal {
     using fsmc_cs_control_cburstrw = lib::regbit<19>;
 
     using fsmc_cs_timing_addset =
-        lib::regbit<0, lib::u8, 4, 0>;
+        lib::regbit8<0, 4>;
     using fsmc_cs_timing_addhld =
-        lib::regbit<4, lib::u8, 4, 0>;
+        lib::regbit8<4, 4>;
     using fsmc_cs_timing_datast =
-        lib::regbit<8, lib::u8, 8, 0>;
+        lib::regbit8<8, 8>;
     using fsmc_cs_timing_busturn =
-        lib::regbit<16, lib::u8, 4, 0>;
+        lib::regbit8<16, 4>;
     using fsmc_cs_timing_clkdiv =
-        lib::regbit<20, lib::u8, 4, 0>;
+        lib::regbit8<20, 4>;
     using fsmc_cs_timing_datlat =
-        lib::regbit<24, lib::u8, 4, 0>;
+        lib::regbit8<24, 4>;
     using fsmc_cs_timing_accmod =
-        lib::regbit<28, lib::u8, 4, 0>;
+        lib::regbit8<28, 4>;
 
     struct fsmc_bank1_t {
         lib::u32 cs_control1;
@@ -76,15 +76,15 @@ namespace hal {
     };
 
     using fsmc_write_timing_addset =
-        lib::regbit<0, lib::u8, 4, 0>;
+        lib::regbit8<0, 4>;
     using fsmc_write_timing_addhld =
-        lib::regbit<4, lib::u8, 4, 0>;
+        lib::regbit8<4, 4>;
     using fsmc_write_timing_datast =
-        lib::regbit<8, lib::u8, 8, 0>;
+        lib::regbit8<8, 8>;
     using fsmc_write_timing_busturn =
-        lib::regbit<16, lib::u8, 4, 0>;
+        lib::regbit8<16, 4>;
     using fsmc_write_timing_accmod =
-        lib::regbit<28, lib::u8, 4, 0>;
+        lib::regbit8<28, 4>;
 
     struct fsmc_bank1e_t {
         lib::u32 write_timing1;
@@ -110,9 +110,9 @@ namespace hal {
             fsmc_control_pwid_t::on8bits>;
     using fsmc_control_eccen = lib::regbit<6>;
     using fsmc_control_tclr =
-        lib::regbit<9, lib::u8, 4, 0>;
+        lib::regbit8<9, 4>;
     using fsmc_control_tar =
-        lib::regbit<13, lib::u8, 4, 0>;
+        lib::regbit8<13, 4>;
     enum struct fsmc_control_eccps_t : lib::u8 {
         on256bytes = 0b000,
         on512bytes,
@@ -136,13 +136,13 @@ namespace hal {
     using fsmc_status_fempt = lib::regbit<6>;
 
     using fsmc_space_timing_set =
-        lib::regbit<0, lib::u8, 8, 0>;
+        lib::regbit8<0, 8>;
     using fsmc_space_timing_wait =
-        lib::regbit<8, lib::u8, 8, 0>;
+        lib::regbit8<8, 8>;
     using fsmc_space_timing_hold =
-        lib::regbit<16, lib::u8, 8, 0>;
+        lib::regbit8<16, 8>;
     using fsmc_space_timing_hiz =
-        lib::regbit<24, lib::u8, 8, 0>;
+        lib::regbit8<24, 8>;
 
     struct fsmc_bank23_t {
         lib::u32 control;

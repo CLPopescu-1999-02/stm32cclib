@@ -57,6 +57,15 @@ namespace lib {
 
     template <typename ...Bits>
     using regbits32 = regbits<u32, Bits...>;
+
+    template <u8 bit_n, u8 bit_size, u8 default_value = 0>
+    using regbit8 = regbit<bit_n, u8, bit_size, default_value>;
+
+    template <u8 bit_n, u8 bit_size, u16 default_value = 0>
+    using regbit16 = regbit<bit_n, u16, bit_size, default_value>;
+
+    template <u8 bit_n, u8 bit_size, u32 default_value = 0>
+    using regbit32 = regbit<bit_n, u32, bit_size, default_value>;
 }
 
 #endif // REGBIT_HH

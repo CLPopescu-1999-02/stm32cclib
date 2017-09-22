@@ -16,8 +16,8 @@ namespace hal {
     using usart_status_lbd = lib::regbit<8>;
     using usart_status_cts = lib::regbit<9>;
 
-    using usart_baudrate_fraction = lib::regbit<0, lib::u8, 4, 0>;
-    using usart_baudrate_mantissa = lib::regbit<4, lib::u16, 12, 0>;
+    using usart_baudrate_fraction = lib::regbit8<0, 4>;
+    using usart_baudrate_mantissa = lib::regbit16<4, 12>;
 
     using usart_control1_sbk = lib::regbit<0>;
     using usart_control1_rwu = lib::regbit<1>;
@@ -35,7 +35,7 @@ namespace hal {
     using usart_control1_ue = lib::regbit<13>;
     using usart_control1_over8 = lib::regbit<15>;
 
-    using usart_control2_add = lib::regbit<0, lib::u8, 4, 0>;
+    using usart_control2_add = lib::regbit8<0, 4>;
     using usart_control2_lbdl = lib::regbit<5>;
     using usart_control2_lbdie = lib::regbit<6>;
     using usart_control2_lbcl = lib::regbit<8>;
@@ -68,8 +68,8 @@ namespace hal {
     using usart_control3_ctsie = lib::regbit<10>;
     using usart_control3_onebit = lib::regbit<11>;
 
-    using usart_guard_prescaler_psc = lib::regbit<0, lib::u8, 8, 0>;
-    using usart_guard_prescaler_gt = lib::regbit<8, lib::u8, 8, 0>;
+    using usart_guard_prescaler_psc = lib::regbit8<0, 8>;
+    using usart_guard_prescaler_gt = lib::regbit8<8, 8>;
 
     template <lib::u32 addr>
     struct usart_d {

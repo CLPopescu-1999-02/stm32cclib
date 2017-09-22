@@ -31,9 +31,9 @@ namespace hal {
     using syscfg_config1_i2c1_fmp_rmp = lib::regbit<20>;
     using syscfg_config1_i2c2_fmp_rmp = lib::regbit<21>;
     using syscfg_config1_encoder_mode =
-        lib::regbit<22, lib::u8, 2, 0>;
+        lib::regbit8<22, 2, 0>;
     using syscfg_config1_fpu_ie =
-        lib::regbit<26, lib::u8, 6, 0>;
+        lib::regbit8<26, 6, 0>;
 
     using syscfg_ccm_sram_protect_page0 = lib::regbit<0>;
     using syscfg_ccm_sram_protect_page1 = lib::regbit<1>;

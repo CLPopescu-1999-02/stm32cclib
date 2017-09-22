@@ -12,7 +12,7 @@ namespace hal {
     using adc_status_strt = lib::regbit<4>;
     using adc_status_ovr = lib::regbit<5>;
 
-    using adc_control1_awdch = lib::regbit<0, lib::u8, 5, 0>;
+    using adc_control1_awdch = lib::regbit8<0, 5>;
     using adc_control1_eocie = lib::regbit<5>;
     using adc_control1_awdie = lib::regbit<6>;
     using adc_control1_jeocie = lib::regbit<7>;
@@ -21,7 +21,7 @@ namespace hal {
     using adc_control1_jauto = lib::regbit<10>;
     using adc_control1_discen = lib::regbit<11>;
     using adc_control1_jdiscen = lib::regbit<12>;
-    using adc_control1_discnum = lib::regbit<13, lib::u8, 3, 0>;
+    using adc_control1_discnum = lib::regbit8<13, 3>;
     using adc_control1_jawden = lib::regbit<22>;
     using adc_control1_awden = lib::regbit<23>;
     enum struct adc_control1_res_t : lib::u8 {
@@ -214,37 +214,37 @@ namespace hal {
             3,
             adc_sample_time_t::by3cycles>;
 
-    using adc_inject_ch_data_off = lib::regbit<0, lib::u16, 12, 0>;
+    using adc_inject_ch_data_off = lib::regbit16<0, 12>;
 
-    using adc_higher_threshold = lib::regbit<0, lib::u16, 12, 0>;
+    using adc_higher_threshold = lib::regbit16<0, 12>;
 
-    using adc_lower_threshold = lib::regbit<0, lib::u16, 12, 0>;
+    using adc_lower_threshold = lib::regbit16<0, 12>;
 
-    using adc_regular_sequence3_sq1 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq2 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq3 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq4 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq5 = lib::regbit<20, lib::u8, 5, 0>;
-    using adc_regular_sequence3_sq6 = lib::regbit<25, lib::u8, 5, 0>;
+    using adc_regular_sequence3_sq1 = lib::regbit8<0, 5>;
+    using adc_regular_sequence3_sq2 = lib::regbit8<5, 5>;
+    using adc_regular_sequence3_sq3 = lib::regbit8<10,5>;
+    using adc_regular_sequence3_sq4 = lib::regbit8<15, 5>;
+    using adc_regular_sequence3_sq5 = lib::regbit8<20, 5>;
+    using adc_regular_sequence3_sq6 = lib::regbit8<25, 5>;
 
-    using adc_regular_sequence2_sq7 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq8 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq9 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq10 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq11 = lib::regbit<20, lib::u8, 5, 0>;
-    using adc_regular_sequence2_sq12 = lib::regbit<25, lib::u8, 5, 0>;
+    using adc_regular_sequence2_sq7 = lib::regbit8<0, 5>;
+    using adc_regular_sequence2_sq8 = lib::regbit8<5, 5>;
+    using adc_regular_sequence2_sq9 = lib::regbit8<10,5>;
+    using adc_regular_sequence2_sq10 = lib::regbit8<15, 5>;
+    using adc_regular_sequence2_sq11 = lib::regbit8<20, 5>;
+    using adc_regular_sequence2_sq12 = lib::regbit8<25, 5>;
 
-    using adc_regular_sequence1_sq13 = lib::regbit<0, lib::u8, 5, 0>;
-    using adc_regular_sequence1_sq14 = lib::regbit<5, lib::u8, 5, 0>;
-    using adc_regular_sequence1_sq15 = lib::regbit<10, lib::u8, 5, 0>;
-    using adc_regular_sequence1_sq16 = lib::regbit<15, lib::u8, 5, 0>;
-    using adc_regular_sequence1_l = lib::regbit<20, lib::u8, 5, 0>;
+    using adc_regular_sequence1_sq13 = lib::regbit8<0, 5>;
+    using adc_regular_sequence1_sq14 = lib::regbit8<5, 5>;
+    using adc_regular_sequence1_sq15 = lib::regbit8<10,5>;
+    using adc_regular_sequence1_sq16 = lib::regbit8<15, 5>;
+    using adc_regular_sequence1_l = lib::regbit8<20, 5>;
 
-    using inject_sequence_jsq1 = lib::regbit<0, lib::u8, 5, 0>;
-    using inject_sequence_jsq2 = lib::regbit<5, lib::u8, 5, 0>;
-    using inject_sequence_jsq3 = lib::regbit<10, lib::u8, 5, 0>;
-    using inject_sequence_jsq4 = lib::regbit<15, lib::u8, 5, 0>;
-    using inject_sequence_jl = lib::regbit<20, lib::u8, 2, 0>;
+    using inject_sequence_jsq1 = lib::regbit8<0, 5>;
+    using inject_sequence_jsq2 = lib::regbit8<5, 5>;
+    using inject_sequence_jsq3 = lib::regbit8<10,5>;
+    using inject_sequence_jsq4 = lib::regbit8<15, 5>;
+    using inject_sequence_jl = lib::regbit8<20, 2>;
 
     template <lib::u32 addr>
     struct adc_d {

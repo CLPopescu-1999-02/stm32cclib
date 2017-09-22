@@ -21,7 +21,7 @@ namespace hal {
     using i2c_control1_swrst = lib::regbit<15>;
 
     using i2c_control2_freq =
-        lib::regbit<0, lib::u8, 6, 2>;
+        lib::regbit8<0, 6, 2>;
     using i2c_control2_iterren = lib::regbit<8>;
     using i2c_control2_itevten = lib::regbit<9>;
     using i2c_control2_itbufen = lib::regbit<10>;
@@ -29,14 +29,14 @@ namespace hal {
     using i2c_control2_last = lib::regbit<12>;
 
     using i2c_own_address1_add7 =
-        lib::regbit<1, lib::u8, 7, 0>;
+        lib::regbit8<1, 7>;
     using i2c_own_address1_add10 =
-        lib::regbit<0, lib::u16, 10, 0>;
+        lib::regbit16<0, 10>;
     using i2c_own_address1_addmode = lib::regbit<15>;
 
     using i2c_own_address2_endual = lib::regbit<0>;
     using i2c_own_address2_add2 =
-        lib::regbit<1, lib::u8, 7, 0>;
+        lib::regbit8<1, 7>;
 
     using i2c_status1_sb = lib::regbit<0>;
     using i2c_status1_addr = lib::regbit<1>;
@@ -62,12 +62,12 @@ namespace hal {
     using i2c_status2_dualf = lib::regbit<7>;
 
     using i2c_clock_control_ccr =
-        lib::regbit<0, lib::u16, 12, 1>;
+        lib::regbit16<0, 12, 1>;
     using i2c_clock_control_duty = lib::regbit<14>;
     using i2c_clock_control_f_s = lib::regbit<15>;
 
     using i2c_trise_trise =
-        lib::regbit<0, lib::u8, 6, 0>;
+        lib::regbit8<0, 6>;
 
     template <lib::u32 addr>
     struct i2c_d {

@@ -36,11 +36,11 @@ namespace hal {
     using flash_status_rderr = lib::regbit<13>;
 
     using flash_opt_control_rdprt =
-        lib::regbit<0, lib::u8, 8, 0>;
+        lib::regbit8<0, 8>;
     using flash_opt_control_sprmod = lib::regbit<8>;
     using flash_opt_control_optstrt = lib::regbit<1>;
     using flash_opt_control_bor_lev =
-        lib::regbit<16, lib::u8, 4, 0>;
+        lib::regbit8<16, 4>;
     using flash_opt_control_wdg_sw = lib::regbit<20>;
     using flash_opt_control_nrst_stop = lib::regbit<21>;
     using flash_opt_control_nrst_stdby = lib::regbit<22>;

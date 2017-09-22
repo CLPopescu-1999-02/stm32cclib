@@ -1,7 +1,7 @@
 #ifndef SYSCFG_T_HH
 #define SYSCFG_T_HH
 
-#include "hal/syscfg_common_t.hh"
+#include "hal/common/syscfg_common_t.hh"
 
 namespace hal {
     using syscfg_mem_remap_boot_mode =

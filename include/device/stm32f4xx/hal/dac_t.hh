@@ -1,7 +1,7 @@
 #ifndef DAC_T_HH
 #define DAC_T_HH
 
-#include "hal/dac_common_t.hh"
+#include "hal/common/dac_common_t.hh"
 
 namespace hal {
     enum struct dac_control_tsel_t : lib::u8 {

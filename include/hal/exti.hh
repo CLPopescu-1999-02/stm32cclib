@@ -3,7 +3,7 @@
 
 #include "lib/types.hh"
 #include "lib/bit.hh"
-#include "hal/bit_operations.hh"
+#include "hal/common/bit_operations.hh"
 
 namespace hal {
     using p16 = lib::bit<16>;

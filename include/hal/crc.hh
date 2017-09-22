@@ -2,7 +2,7 @@
 #define CRC_HH
 
 #if (defined(STM32F4XX) || defined(STM32L1XX))
-#include "hal/crc_common_t.hh"
+#include "hal/common/crc_common_t.hh"
 #else
 #include "hal/crc_t.hh"
 #endif

@@ -1,7 +1,7 @@
 #ifndef DBG_T_HH
 #define DBG_T_HH
 
-#include "hal/dbg_common_t.hh"
+#include "hal/common/dbg_common_t.hh"
 
 namespace hal {
     using dbg_config_sleep = lib::regbit<0>;

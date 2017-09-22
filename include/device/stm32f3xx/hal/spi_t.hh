@@ -1,7 +1,7 @@
 #ifndef SPI_T_HH
 #define SPI_T_HH
 
-#include "hal/spi_common_t.hh"
+#include "hal/common/spi_common_t.hh"
 
 namespace hal {
     using spi_control1_crcl = lib::regbit<11>;

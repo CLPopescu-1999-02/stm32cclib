@@ -2,7 +2,7 @@
 #define FSMC_HH
 
 #if (defined(STM32F4XX) || defined(STM32L1XX))
-#include "hal/fsmc_common_t.hh"
+#include "hal/common/fsmc_common_t.hh"
 #else
 #include "hal/fsmc_t.hh"
 #endif

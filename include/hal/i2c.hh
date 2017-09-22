@@ -2,7 +2,7 @@
 #define I2C_HH
 
 #if (defined(STM32F4XX) || defined(STM32L1XX))
-#include "hal/i2c_common_t.hh"
+#include "hal/common/i2c_common_t.hh"
 #else
 #include "hal/i2c_t.hh"
 #endif

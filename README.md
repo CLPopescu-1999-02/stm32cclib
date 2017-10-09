@@ -11,7 +11,7 @@ It include:
 7. Prototype of startup and run code for stm32 mcus.
 8. Low level template style defines and helpers to commonize work with hardware.
     1. stm32f4xx family
-        1. stm32f405,407,415,417 full support (exclude usb hs)
+        1. stm32f405,407,415,417 
 9. Middle lelev template style and helpers to simplified operations with hardware.
     1. Interrupts
     2. Systick

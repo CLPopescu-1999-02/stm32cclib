@@ -27,7 +27,8 @@ namespace bsp {
         static void write(const lib::u32 pos, const lib::u16 mask);
 
         using lcd = hal::lcd;
-        static constexpr volatile lib::u32 * const _ram{lcd::regs->ram};
+
+        static volatile lib::u32 * _ram();
     };
 }
 

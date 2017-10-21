@@ -19,12 +19,12 @@ set(CMAKE_CXX_COMPILER ${TOOLCHAIN_BIN_DIR}/${TARGET_TRIPLET}-g++)
 set(CROSS_PREFIX ${TARGET_TRIPLET}-)
 
 set(LINKER_SCRIPT ${PROJECT_SOURCE_DIR}/stm32_flash.ld)
-set(COMMON_FLAGS "-g -mlittle-endian -mthumb -nostdlib -nostdinc -DTHUMB -fno-common")
+set(COMMON_FLAGS "-g -mlittle-endian -mthumb -nostdlib -nostdinc -DTHUMB -fno-common -no-pie -fno-pic")
 set(WARN_FLAGS "-Wall -Wextra")
 set(OPTIMIZE_FLAGS "-ffreestanding -fomit-frame-pointer")
 
-set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} ${WARN_FLAGS} ${OPTIMIZE_FLAGS} ${CPU_FLAGS} -std=c++11 -fno-rtti -fno-exceptions" CACHE INTERNAL "cxx compiler flags")
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,-T ${LINKER_SCRIPT} -nostartfiles")
+set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} ${WARN_FLAGS} ${OPTIMIZE_FLAGS} ${CPU_FLAGS} -std=c++14 -fno-rtti -fno-exceptions" CACHE INTERNAL "cxx compiler flags")
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,-T ${LINKER_SCRIPT} -Wl,-Map,build.map -nostartfiles")
 
 # utilities
 set(OBJCOPY ${CROSS_PREFIX}objcopy)

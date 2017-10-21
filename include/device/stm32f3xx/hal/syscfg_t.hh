@@ -157,8 +157,9 @@ namespace hal {
             lib::u32 config2;
         };
 
-        static constexpr volatile syscfg_t * const regs =
-            reinterpret_cast<syscfg_t *>(addr);
+        static constexpr volatile syscfg_t & regs() {
+            return *reinterpret_cast<syscfg_t *>(addr);
+        }
     };
 }
 

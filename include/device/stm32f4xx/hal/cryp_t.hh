@@ -88,8 +88,9 @@ namespace hal {
             lib::u32 iv1rr;
         };
 
-        static constexpr volatile cryp_t * const regs =
-            reinterpret_cast<cryp_t *>(addr);
+        static constexpr volatile cryp_t & regs() {
+            return *reinterpret_cast<cryp_t *>(addr);
+        }
     };
 }
 

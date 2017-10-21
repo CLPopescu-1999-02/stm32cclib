@@ -17,44 +17,48 @@ namespace bsp {
         0x700d,0x4008,0xd007,0x500e,0xe00a,0xb00e,0xb00f,0x5008,0xf00f,0xf00e
     };
 
+    volatile lib::u32 * st_hex_lcd::_ram() {
+            return lcd::regs().ram;
+    }
+
     void st_hex_lcd::write(const lib::u32 pos, const lib::u16 mask) {
         switch (pos) {
             case 0:
-                _ram[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
-                _ram[2] |= (mask & 0x3000) << 16 | (mask & 0x000c) >> 2;
-                _ram[4] |= (mask & 0x0c00) << 18 | (mask & 0x0030) >> 4;
-                _ram[6] |= (mask & 0x0300) << 20 | (mask & 0x00c0) >> 6;
+                _ram()[0] |= (mask & 0xc000) << 14 | (mask & 0x0003);
+                _ram()[2] |= (mask & 0x3000) << 16 | (mask & 0x000c) >> 2;
+                _ram()[4] |= (mask & 0x0c00) << 18 | (mask & 0x0030) >> 4;
+                _ram()[6] |= (mask & 0x0300) << 20 | (mask & 0x00c0) >> 6;
                 break;
             case 1:
-                _ram[0] |= (mask & 0xc000) << 12 | ((mask & 0x0002) >> 1) << 7 | (mask & 0x0001) << 2;
-                _ram[2] |= (mask & 0x3000) << 14 | ((mask & 0x0008) >> 3) << 7 | ((mask & 0x0004) >> 2) << 2;
-                _ram[4] |= (mask & 0x0c00) << 16 | ((mask & 0x0020) >> 5) << 7 | ((mask & 0x0010) >> 4) << 2;
-                _ram[6] |= (mask & 0x0300) << 18 | ((mask & 0x0080) >> 7) << 7 | ((mask & 0x0040) >> 6) << 2;
+                _ram()[0] |= (mask & 0xc000) << 12 | ((mask & 0x0002) >> 1) << 7 | (mask & 0x0001) << 2;
+                _ram()[2] |= (mask & 0x3000) << 14 | ((mask & 0x0008) >> 3) << 7 | ((mask & 0x0004) >> 2) << 2;
+                _ram()[4] |= (mask & 0x0c00) << 16 | ((mask & 0x0020) >> 5) << 7 | ((mask & 0x0010) >> 4) << 2;
+                _ram()[6] |= (mask & 0x0300) << 18 | ((mask & 0x0080) >> 7) << 7 | ((mask & 0x0040) >> 6) << 2;
                 break;
             case 2:
-                _ram[0] |= (mask & 0xc000) << 10 | (mask & 0x0003) << 8;
-                _ram[2] |= (mask & 0x3000) << 12 | ((mask & 0x000c) >> 2) << 8;
-                _ram[4] |= (mask & 0x0c00) << 14 | ((mask & 0x0030) >> 4) << 8;
-                _ram[6] |= (mask & 0x0300) << 16 | ((mask & 0x00c0) >> 6) << 8;
+                _ram()[0] |= (mask & 0xc000) << 10 | (mask & 0x0003) << 8;
+                _ram()[2] |= (mask & 0x3000) << 12 | ((mask & 0x000c) >> 2) << 8;
+                _ram()[4] |= (mask & 0x0c00) << 14 | ((mask & 0x0030) >> 4) << 8;
+                _ram()[6] |= (mask & 0x0300) << 16 | ((mask & 0x00c0) >> 6) << 8;
                 break;
             case 3:
-                _ram[0] |= (mask & 0xc000) << 6 | (mask & 0x0003) << (10);
-                _ram[2] |= (mask & 0x3000) << 8 | ((mask & 0x000c) >> 2) << (10);
-                _ram[4] |= (mask & 0x0c00) << 10 | ((mask & 0x0030) >> 4) << (10);
-                _ram[6] |= (mask & 0x0300) << 12 | ((mask & 0x00c0) >> 6) << (10);
+                _ram()[0] |= (mask & 0xc000) << 6 | (mask & 0x0003) << (10);
+                _ram()[2] |= (mask & 0x3000) << 8 | ((mask & 0x000c) >> 2) << (10);
+                _ram()[4] |= (mask & 0x0c00) << 10 | ((mask & 0x0030) >> 4) << (10);
+                _ram()[6] |= (mask & 0x0300) << 12 | ((mask & 0x00c0) >> 6) << (10);
                 break;
             case 4:
-                _ram[0] |= (mask & 0xc000) << 4 | (mask & 0x0003) << (12);
-                _ram[2] |= (mask & 0x3000) << 6 | ((mask & 0x000c) >> 2) << (12);
-                _ram[4] |= (mask & 0x0c00) << 8 | ((mask & 0x0030) >> 4) << (12);
-                _ram[6] |= (mask & 0x0300) << 10 | ((mask & 0x00c0) >> 6) << (12);
+                _ram()[0] |= (mask & 0xc000) << 4 | (mask & 0x0003) << (12);
+                _ram()[2] |= (mask & 0x3000) << 6 | ((mask & 0x000c) >> 2) << (12);
+                _ram()[4] |= (mask & 0x0c00) << 8 | ((mask & 0x0030) >> 4) << (12);
+                _ram()[6] |= (mask & 0x0300) << 10 | ((mask & 0x00c0) >> 6) << (12);
                 break;
             case 5:
             default:
-                _ram[0] |= (mask & 0x8000) << 1 | (mask & 0x4000) << 3 | (mask & 0x0003) << (14);
-                _ram[2] |= (mask & 0x2000) << 3 | (mask & 0x1000) << 5 | ((mask & 0x000c) >> 2) << (14);
-                _ram[4] |= (mask & 0x0800) << 5 | (mask & 0x0400) << 7 | ((mask & 0x0030) >> 4) << (14);
-                _ram[6] |= (mask & 0x0200) << 7 | (mask & 0x0100) << 9 | ((mask & 0x00c0) >> 6) << (14);
+                _ram()[0] |= (mask & 0x8000) << 1 | (mask & 0x4000) << 3 | (mask & 0x0003) << (14);
+                _ram()[2] |= (mask & 0x2000) << 3 | (mask & 0x1000) << 5 | ((mask & 0x000c) >> 2) << (14);
+                _ram()[4] |= (mask & 0x0800) << 5 | (mask & 0x0400) << 7 | ((mask & 0x0030) >> 4) << (14);
+                _ram()[6] |= (mask & 0x0200) << 7 | (mask & 0x0100) << 9 | ((mask & 0x00c0) >> 6) << (14);
                 break;
         }
     }
@@ -62,41 +66,41 @@ namespace bsp {
     void st_hex_lcd::clear(const lib::u32 pos) {
         switch (pos) {
             case 0:
-                _ram[0] &= 0xcffffffc;
-                _ram[2] &= 0xcffffffc;
-                _ram[4] &= 0xcffffffc;
-                _ram[6] &= 0xcffffffc;
+                _ram()[0] &= 0xcffffffc;
+                _ram()[2] &= 0xcffffffc;
+                _ram()[4] &= 0xcffffffc;
+                _ram()[6] &= 0xcffffffc;
                 break;
             case 1:
-                _ram[0] &= 0xf3ffff03;
-                _ram[2] &= 0xf3ffff03;
-                _ram[4] &= 0xf3ffff03;
-                _ram[6] &= 0xf3ffff03;
+                _ram()[0] &= 0xf3ffff03;
+                _ram()[2] &= 0xf3ffff03;
+                _ram()[4] &= 0xf3ffff03;
+                _ram()[6] &= 0xf3ffff03;
                 break;
             case 2:
-                _ram[0] &= 0xfcfffcff;
-                _ram[2] &= 0xfcfffcff;
-                _ram[4] &= 0xfcfffcff;
-                _ram[6] &= 0xfcfffcff;
+                _ram()[0] &= 0xfcfffcff;
+                _ram()[2] &= 0xfcfffcff;
+                _ram()[4] &= 0xfcfffcff;
+                _ram()[6] &= 0xfcfffcff;
                 break;
             case 3:
-                _ram[0] &= 0xffcff3ff;
-                _ram[2] &= 0xffcff3ff;
-                _ram[4] &= 0xffcff3ff;
-                _ram[6] &= 0xffcff3ff;
+                _ram()[0] &= 0xffcff3ff;
+                _ram()[2] &= 0xffcff3ff;
+                _ram()[4] &= 0xffcff3ff;
+                _ram()[6] &= 0xffcff3ff;
                 break;
             case 4:
-                _ram[0] &= 0xfff3cfff;
-                _ram[2] &= 0xfff3cfff;
-                _ram[4] &= 0xfff3cfff;
-                _ram[6] &= 0xfff3cfff;
+                _ram()[0] &= 0xfff3cfff;
+                _ram()[2] &= 0xfff3cfff;
+                _ram()[4] &= 0xfff3cfff;
+                _ram()[6] &= 0xfff3cfff;
                 break;
             case 5:
             default:
-                _ram[0] &= 0xfffc3fff;
-                _ram[2] &= 0xfffc3fff;
-                _ram[4] &= 0xfffc3fff;
-                _ram[6] &= 0xfffc3fff;
+                _ram()[0] &= 0xfffc3fff;
+                _ram()[2] &= 0xfffc3fff;
+                _ram()[4] &= 0xfffc3fff;
+                _ram()[6] &= 0xfffc3fff;
                 break;
         }
     }
@@ -105,7 +109,7 @@ namespace bsp {
         // set BIAS to 1/3
         // set DUTY to 1/4
         // enable lcd remaping
-        lcd::regs->control =
+        lcd::regs().control =
             lib::regbits32<
                 hal::lcd_control_bias::val<
                     hal::lcd_control_bias_t::by1div3>,
@@ -116,7 +120,7 @@ namespace bsp {
 
         // setup lcd clock
         // setup lcd contrast
-        lcd::regs->frame_control =
+        lcd::regs().frame_control =
             lib::regbits32<
                 hal::lcd_frame_control_ps::val<
                     hal::lcd_frame_control_ps_t::by16>,
@@ -125,22 +129,22 @@ namespace bsp {
                 hal::lcd_frame_control_cc::val<0b010>
             >::mask;
         // wait for synchro lcd frame control
-        while ((lcd::regs->status &
+        while ((lcd::regs().status &
             hal::lcd_status_fcrsf::clean<lib::u32>::mask) == 0);
 
         // internal step-up converter
         // enable lcd controller
-        lcd::regs->control |=
+        lcd::regs().control |=
             lib::regbits32<
                 hal::lcd_control_vsel::val<false>,
                 hal::lcd_control_lcden
             >::mask;
 
         // wait for ready step-up converter
-        while ((lcd::regs->status &
+        while ((lcd::regs().status &
             hal::lcd_status_rdy::clean<lib::u32>::mask) == 0);
         // wait for ready lcd controller
-        while ((lcd::regs->status &
+        while ((lcd::regs().status &
             hal::lcd_status_ens::clean<lib::u32>::mask) == 0);
     }
 
@@ -171,12 +175,12 @@ namespace bsp {
     }
 
     void st_hex_lcd::wait_update() {
-        while ((lcd::regs->status &
+        while ((lcd::regs().status &
             hal::lcd_status_udr::clean<lib::u32>::mask));
     }
 
     void st_hex_lcd::update() {
-        lcd::regs->status |=
+        lcd::regs().status |=
             hal::lcd_status_udr::clean<lib::u32>::mask;
     }
 }

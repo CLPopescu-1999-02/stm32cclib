@@ -221,8 +221,9 @@ namespace hal {
             lib::u32 bkpr[backup_size];
         };
 
-        static constexpr volatile rtc_t * const regs =
-            reinterpret_cast<rtc_t *>(addr);
+        static constexpr volatile rtc_t & regs() {
+            return *reinterpret_cast<rtc_t *>(addr);
+        }
     };
 }
 

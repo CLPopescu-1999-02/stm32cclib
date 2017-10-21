@@ -201,8 +201,9 @@ namespace hal {
             can_filter_register_t filter_register[28];
         };
 
-        static constexpr volatile can_t * const regs =
-            reinterpret_cast<can_t *>(addr);
+        static constexpr volatile can_t & regs() {
+            return *reinterpret_cast<can_t *>(addr);
+        }
     };
 }
 

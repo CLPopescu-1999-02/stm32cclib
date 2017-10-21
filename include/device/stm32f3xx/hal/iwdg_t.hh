@@ -34,8 +34,9 @@ namespace hal {
             lib::u32 window;
         };
 
-        static constexpr volatile iwdg_t * const regs =
-            reinterpret_cast<iwdg_t *>(addr);
+        static constexpr volatile iwdg_t & regs() {
+            return *reinterpret_cast<iwdg_t *>(addr);
+        }
     };
 }
 

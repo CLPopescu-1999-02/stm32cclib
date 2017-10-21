@@ -278,8 +278,9 @@ namespace hal {
             lib::u32 plli2s_config;
         };
 
-        static constexpr volatile rcc_t * const regs =
-            reinterpret_cast<rcc_t *>(addr);
+        static constexpr volatile rcc_t & regs() {
+            return *reinterpret_cast<rcc_t *>(addr);
+        }
     };
 } // namespace Hal
 

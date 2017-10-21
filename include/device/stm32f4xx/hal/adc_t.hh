@@ -377,8 +377,9 @@ namespace hal {
             lib::u16 data2;
         };
 
-    static constexpr volatile adc_common_t * const regs =
-            reinterpret_cast<adc_common_t *>(addr);
+        static constexpr volatile adc_common_t & regs() {
+            return *reinterpret_cast<adc_common_t *>(addr);
+        }
     };
 }
 

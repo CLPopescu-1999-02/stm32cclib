@@ -80,8 +80,9 @@ namespace hal {
             lib::u32 status;
         };
 
-        static constexpr volatile dac_t * const regs =
-            reinterpret_cast<dac_t *>(addr);
+        static constexpr volatile dac_t & regs() {
+            return *reinterpret_cast<dac_t *>(addr);
+        }
     };
 }
 

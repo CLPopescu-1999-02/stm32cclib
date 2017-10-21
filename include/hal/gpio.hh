@@ -80,72 +80,73 @@ namespace hal {
 
         template <pin_mode mode, typename ...Pins>
         static void set_mode() {
-            regs->moder |=
+            regs().moder |=
                 lib::bits32<pin_mode, mode, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void set_open_drain() {
-            regs->otyper |=
+            regs().otyper |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void set_push_pull() {
-            regs->otyper &=
+            regs().otyper &=
                 ~bits32val<Pins...>::mask;
         }
 
         template <pin_speed speed, typename ...Pins>
         static void set_speed() {
-            regs->ospeedr |=
+            regs().ospeedr |=
                 lib::bits32<pin_speed, speed, 1, Pins...>::mask;
         }
 
         template <pin_pull pull, typename ...Pins>
         static void set_pull() {
-            regs->pupdr |=
+            regs().pupdr |=
                 lib::bits32<pin_pull, pull, 1, Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void set_value() {
-            regs->bsrr =
+            regs().bsrr =
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void reset_value() {
-            regs->bsrr =
+            regs().bsrr =
                 bits32val<Pins...>::mask << 16;
         }
 
         template <typename ...Pins>
         static void lock() {
-            regs->lckr |=
+            regs().lckr |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void unlock() {
-            regs->lckr &=
+            regs().lckr &=
                 ~bits32val<Pins...>::mask;
         }
 
         template <pin_alt alt_func, typename ...Pins>
         static void set_alt_func() {
-            regs->afr |=
+            regs().afr |=
                 lib::bits<lib::u64, pin_alt, alt_func, 2, Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void reset(Pins ...pins) {
-            regs->brr |=
+            regs().brr |=
                 bits32val<Pins...>::mask;
         }
 
-        static constexpr volatile gpio_t * const regs =
-            reinterpret_cast<gpio_t *>(addr);
+        static constexpr volatile gpio_t & regs() {
+            return *reinterpret_cast<gpio_t *>(addr);
+        }
     };
 
     template <typename Port, typename Pin>

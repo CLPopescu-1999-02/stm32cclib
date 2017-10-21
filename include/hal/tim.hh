@@ -262,8 +262,9 @@ namespace hal {
 
     template <lib::u32 addr, typename Timer>
     struct tim_d {
-        static constexpr volatile Timer * const regs =
-            reinterpret_cast<Timer *>(addr);
+        static constexpr volatile Timer & regs() {
+            return *reinterpret_cast<Timer *>(addr);
+        }
     };
 }
 

@@ -86,8 +86,9 @@ namespace hal {
             lib::u32 trise;
         };
 
-        static constexpr volatile i2c_t * const regs =
-            reinterpret_cast<i2c_t *>(addr);
+        static constexpr volatile i2c_t & regs() {
+            return *reinterpret_cast<i2c_t *>(addr);
+        }
     };
 }
 

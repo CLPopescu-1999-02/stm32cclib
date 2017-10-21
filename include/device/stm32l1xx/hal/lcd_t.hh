@@ -131,8 +131,9 @@ namespace hal {
             lib::u32 ram[16];
         };
 
-        static constexpr volatile lcd_t * const regs =
-            reinterpret_cast<lcd_t *>(addr);
+        static constexpr volatile lcd_t & regs() {
+            return *reinterpret_cast<lcd_t *>(addr);
+        }
     };
 }
 

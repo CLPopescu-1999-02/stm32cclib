@@ -632,161 +632,200 @@ namespace hal {
             lib::u32 _unused0[2];
         };
 
-        static constexpr volatile core_global_t * const 
-            core_global_regs =
-            reinterpret_cast<core_global_t *>(addr);
+        static constexpr volatile core_global_t & 
+        core_global_regs() {
+            return *reinterpret_cast<core_global_t *>(addr);
+        }
 
-        static constexpr volatile host_mode_t * const 
-            host_mode_regs =
-            reinterpret_cast<host_mode_t *>(addr + 0x400);
+        static constexpr volatile host_mode_t & 
+        host_mode_regs() {
+            return *reinterpret_cast<host_mode_t *>(addr + 0x400);
+        }
 
-        static constexpr volatile device_mode_t * const 
-            device_mode_regs =
-            reinterpret_cast<device_mode_t *>(addr + 0x800);
+        static constexpr volatile device_mode_t & 
+        device_mode_regs() {
+            return *reinterpret_cast<device_mode_t *>(addr + 0x800);
+        }
 
-        static constexpr volatile power_clock_gating_t * const 
-            power_clock_gating_regs =
-            reinterpret_cast<power_clock_gating_t *>(addr + 0xe00);
+        static constexpr volatile power_clock_gating_t & 
+        power_clock_gating_regs() {
+            return *reinterpret_cast<power_clock_gating_t *>(addr + 0xe00);
+        }
 
-        static constexpr volatile iep_t * const 
-            iep0_regs =
-            reinterpret_cast<iep_t *>(addr + 0x900);
+        static constexpr volatile iep_t & 
+        iep0_regs() {
+            return *reinterpret_cast<iep_t *>(addr + 0x900);
+        }
 
-        static constexpr volatile iep_t * const 
-            iep1_regs =
-            reinterpret_cast<iep_t *>(addr + 0x900 + 0x20);
+        static constexpr volatile iep_t & 
+        iep1_regs() {
+            return *reinterpret_cast<iep_t *>(addr + 0x900 + 0x20);
+        }
 
-        static constexpr volatile iep_t * const 
-            iep2_regs =
-            reinterpret_cast<iep_t *>(addr + 0x900 + 0x20 * 2);
+        static constexpr volatile iep_t & 
+        iep2_regs() {
+            return *reinterpret_cast<iep_t *>(addr + 0x900 + 0x20 * 2);
+        }
 
-        static constexpr volatile iep_t * const 
-            iep3_regs =
-            reinterpret_cast<iep_t *>(addr + 0x900 + 0x20 * 3);
+        static constexpr volatile iep_t & 
+        iep3_regs() {
+            return *reinterpret_cast<iep_t *>(addr + 0x900 + 0x20 * 3);
+        }
 
-        static constexpr volatile iep_t * const 
-            iep4_regs =
-            reinterpret_cast<iep_t *>(addr + 0x900 + 0x20 * 4);
+        static constexpr volatile iep_t & 
+        iep4_regs() {
+            return *reinterpret_cast<iep_t *>(addr + 0x900 + 0x20 * 4);
+        }
 
-        static constexpr volatile oep_t * const 
-            oep0_regs =
-            reinterpret_cast<oep_t *>(addr + 0xb00);
+        static constexpr volatile oep_t & 
+        oep0_regs() {
+            return *reinterpret_cast<oep_t *>(addr + 0xb00);
+        }
 
-        static constexpr volatile oep_t * const 
-            oep1_regs =
-            reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20);
+        static constexpr volatile oep_t & 
+        oep1_regs() {
+            return *reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20);
+        }
 
-        static constexpr volatile oep_t * const 
-            oep2_regs =
-            reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20 * 2);
+        static constexpr volatile oep_t & 
+        oep2_regs() {
+            return *reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20 * 2);
+        }
 
-        static constexpr volatile oep_t * const 
-            oep3_regs =
-            reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20 * 3);
+        static constexpr volatile oep_t & 
+        oep3_regs() {
+            return *reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20 * 3);
+        }
 
-        static constexpr volatile oep_t * const 
-            oep4_regs =
-            reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20 * 4);
+        static constexpr volatile oep_t & 
+        oep4_regs() {
+            return *reinterpret_cast<oep_t *>(addr + 0xb00 + 0x20 * 4);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc0_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500);
+        static constexpr volatile hc_t & 
+        hc0_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc1_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20);
+        static constexpr volatile hc_t & 
+        hc1_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc2_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 2);
+        static constexpr volatile hc_t & 
+        hc2_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 2);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc3_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 3);
+        static constexpr volatile hc_t & 
+        hc3_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 3);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc4_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 4);
+        static constexpr volatile hc_t & 
+        hc4_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 4);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc5_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 5);
+        static constexpr volatile hc_t & 
+        hc5_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 5);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc6_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 6);
+        static constexpr volatile hc_t & 
+        hc6_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 6);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc7_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 7);
+        static constexpr volatile hc_t & 
+        hc7_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 7);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc8_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 8);
+        static constexpr volatile hc_t & 
+        hc8_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 8);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc9_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 9);
+        static constexpr volatile hc_t & 
+        hc9_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 9);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc10_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 10);
+        static constexpr volatile hc_t & 
+        hc10_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 10);
+        }
 
-        static constexpr volatile hc_t * const 
-            hc11_regs =
-            reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 11);
+        static constexpr volatile hc_t & 
+        hc11_regs() {
+            return *reinterpret_cast<hc_t *>(addr + 0x500 + 0x20 * 11);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo0 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000);
+        static constexpr volatile lib::u8 *
+        fifo0() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo1 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000);
+        static constexpr volatile lib::u8 *
+        fifo1() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo2 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 2);
+        static constexpr volatile lib::u8 *
+        fifo2() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 2);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo3 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 3);
+        static constexpr volatile lib::u8 *
+        fifo3() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 3);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo4 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 4);
+        static constexpr volatile lib::u8 *
+        fifo4() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 4);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo5 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 5);
+        static constexpr volatile lib::u8 *
+        fifo5() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 5);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo6 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 6);
+        static constexpr volatile lib::u8 *
+        fifo6() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 6);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo7 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 7);
+        static constexpr volatile lib::u8 *
+        fifo7() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 7);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo8 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 8);
+        static constexpr volatile lib::u8 *
+        fifo8() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 8);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo9 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 9);
+        static constexpr volatile lib::u8 *
+        fifo9() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 9);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo10 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 10);
+        static constexpr volatile lib::u8 *
+        fifo10() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 10);
+        }
 
-        static constexpr volatile lib::u8 * const
-            fifo11 =
-            reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 11);
+        static constexpr volatile lib::u8 *
+        fifo11() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x1000 + 0x1000 * 11);
+        }
 
-        static constexpr volatile lib::u8 * const
-            debug_fifo =
-            reinterpret_cast<lib::u8 *>(addr + 0x20000);
+        static constexpr volatile lib::u8 *
+        debug_fifo() {
+            return reinterpret_cast<lib::u8 *>(addr + 0x20000);
+        }
     };
 }
 

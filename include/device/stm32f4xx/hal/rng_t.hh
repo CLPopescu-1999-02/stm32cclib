@@ -22,8 +22,9 @@ namespace hal {
             lib::u32 rndata;
         };
 
-        static constexpr volatile rng_t * const regs =
-            reinterpret_cast<rng_t *>(addr);
+        static constexpr volatile rng_t & regs() {
+            return *reinterpret_cast<rng_t *>(addr);
+        }
     };
 }
 

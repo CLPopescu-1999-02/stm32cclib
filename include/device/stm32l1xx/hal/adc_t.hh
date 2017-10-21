@@ -376,8 +376,9 @@ namespace hal {
             lib::u32 sample_time0;
         };
 
-        static constexpr volatile adc_t * const regs =
-            reinterpret_cast<adc_t *>(addr);
+        static constexpr volatile adc_t & regs() {
+            return *reinterpret_cast<adc_t *>(addr);
+        }
     };
 
     using adc_common_status_awd = lib::regbit<0>;
@@ -407,8 +408,9 @@ namespace hal {
             lib::u32 control;
         };
 
-    static constexpr volatile adc_common_t * const regs =
-            reinterpret_cast<adc_common_t *>(addr);
+        static constexpr volatile adc_common_t & regs() {
+            return *reinterpret_cast<adc_common_t *>(addr);
+        }
     };
 }
 

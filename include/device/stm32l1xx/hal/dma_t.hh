@@ -41,8 +41,9 @@ namespace hal {
             lib::u32 interrupt_clear;
         };
 
-        static constexpr volatile dma_t * const regs =
-            reinterpret_cast<dma_t *>(addr);
+        static constexpr volatile dma_t & regs() {
+            return *reinterpret_cast<dma_t *>(addr);
+        }
     };
 
     using dma_channel_config_en = lib::regbit<0>;
@@ -90,8 +91,9 @@ namespace hal {
             lib::u32 memory_address;
         };
 
-        static constexpr volatile dma_channel_t * const regs =
-            reinterpret_cast<dma_channel_t *>(addr);
+        static constexpr volatile dma_channel_t & regs() {
+            return *reinterpret_cast<dma_channel_t *>(addr);
+        }
     };
 }
 

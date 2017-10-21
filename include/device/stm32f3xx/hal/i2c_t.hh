@@ -117,8 +117,9 @@ namespace hal {
             lib::u8 _unused8;
         };
 
-        static constexpr volatile i2c_t * const regs =
-            reinterpret_cast<i2c_t *>(addr);
+        static constexpr volatile i2c_t & regs() {
+            return *reinterpret_cast<i2c_t *>(addr);
+        }
     };
 }
 

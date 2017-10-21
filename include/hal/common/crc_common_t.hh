@@ -16,8 +16,9 @@ namespace hal {
             lib::u32 control;
         };
 
-        static constexpr volatile crc_t * const regs =
-            reinterpret_cast<crc_t *>(addr);
+        static constexpr volatile crc_t & regs() {
+            return *reinterpret_cast<crc_t *>(addr);
+        }
     };
 }
 

@@ -53,8 +53,9 @@ namespace hal {
             lib::u32 csr[50];
         };
 
-        static constexpr volatile hash_t * const regs =
-            reinterpret_cast<hash_t *>(addr);
+        static constexpr volatile hash_t & regs() {
+            return *reinterpret_cast<hash_t *>(addr);
+        }
     };
 }
 

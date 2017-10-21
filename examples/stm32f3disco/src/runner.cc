@@ -21,14 +21,14 @@ namespace {
 }
 
 extern "C" void isr::sys_tick_timer() {
-    hal::gpioe::regs->odr ^= all_leds;
+    hal::gpioe::regs().odr ^= all_leds;
 
     hal::usart1::send_w(byte);
 }
 
 static void setup_gpio() {
     // enable led port
-    hal::rcc::regs->ahb1_enable |=
+    hal::rcc::regs().ahb1_enable |=
         lib::regbits32<
             hal::rcc_ahb1_gpioe,
             hal::rcc_ahb1_gpioa
@@ -49,19 +49,19 @@ static void setup_gpio() {
 
 static void setup_usart() {
     // enable usart 3
-    hal::rcc::regs->apb2_enable |=
+    hal::rcc::regs().apb2_enable |=
         hal::rcc_apb2_usart1::clean<lib::u32>::mask;
 
     // usart1 setup baudrate 115200 bps
     // 8MHz/16/115200 = 4.34
-    hal::usart1::regs->baudrate =
+    hal::usart1::regs().baudrate =
         lib::regbits32<
             hal::usart_baudrate_fraction::val<3>,
             hal::usart_baudrate_mantissa::val<4>
         >::mask;
 
     // usart1 enable block and enable tx, rx lines
-    hal::usart1::regs->control1 |=
+    hal::usart1::regs().control1 |=
         lib::regbits32<
             hal::usart_control1_ue,
             hal::usart_control1_te,

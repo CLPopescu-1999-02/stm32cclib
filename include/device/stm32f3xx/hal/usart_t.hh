@@ -150,21 +150,22 @@ namespace hal {
         };
 
         static void send_w(lib::u32 word) {
-            while ((regs->status &
+            while ((regs().status &
                 usart_status_txe::clean<lib::u32>::mask) == 0);
 
-            regs->tdr = word;
+            regs().tdr = word;
         }
 
         static lib::u32 recv_w() {
-            while ((regs->status &
+            while ((regs().status &
                 usart_status_rxne::clean<lib::u32>::mask) == 0);
 
-            return regs->rdr;
+            return regs().rdr;
         }
 
-        static constexpr volatile usart_t * const regs =
-            reinterpret_cast<usart_t *>(addr);
+        static constexpr volatile usart_t & regs() {
+            return *reinterpret_cast<usart_t *>(addr);
+        }
     };
 }
 

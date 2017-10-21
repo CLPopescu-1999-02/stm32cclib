@@ -42,8 +42,9 @@ namespace hal {
             lib::u32 control_status;
         };
 
-        static constexpr volatile pwr_t * const regs =
-            reinterpret_cast<pwr_t *>(addr);
+        static constexpr volatile pwr_t & regs() {
+            return *reinterpret_cast<pwr_t *>(addr);
+        }
     };
 }
 

@@ -410,8 +410,9 @@ namespace hal {
             lib::u32 dma_curr_host_rx_buff_addr;
         };
 
-        static constexpr volatile eth_t * const regs =
-            reinterpret_cast<eth_t *>(addr);
+        static constexpr volatile eth_t & regs() {
+            return *reinterpret_cast<eth_t *>(addr);
+        }
     };
 }
 

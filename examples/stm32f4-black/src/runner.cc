@@ -33,7 +33,7 @@ namespace {
 }
 
 extern "C" void isr::sys_tick_timer() {
-    hal::gpioa::regs->odr ^= all_leds;
+    hal::gpioa::regs().odr ^= all_leds;
 
     if (enable_echo)
         sout::send(byte);
@@ -41,7 +41,7 @@ extern "C" void isr::sys_tick_timer() {
 
 static void setup_gpio() {
     // enable led, usart ports
-    hal::rcc::regs->ahb1_enable |=
+    hal::rcc::regs().ahb1_enable |=
         lib::regbits32<
             hal::rcc_ahb1_gpioa,
             hal::rcc_ahb1_gpiod,
@@ -70,11 +70,11 @@ static void setup_gpio() {
 
 static void setup_spi() {
     // enable spi1
-    hal::rcc::regs->apb2_enable |=
+    hal::rcc::regs().apb2_enable |=
         hal::rcc_apb2_spi1::clean<lib::u32>::mask;
 
     // spi1 setup
-    hal::spi1::regs->control1 |=
+    hal::spi1::regs().control1 |=
         lib::regbits16<
             hal::spi_control1_br::val<
                 hal::spi_control1_br_t::by2>,
@@ -87,19 +87,19 @@ static void setup_spi() {
 
 static void setup_usart() {
     // enable usart 3
-    hal::rcc::regs->apb1_enable |=
+    hal::rcc::regs().apb1_enable |=
         hal::rcc_apb1_usart3::clean<lib::u32>::mask;
 
     // usart3 setup baudrate 115200 bps
     // 16MHz/16/115200 = 8.68
-    hal::usart3::regs->baudrate =
+    hal::usart3::regs().baudrate =
         lib::regbits32<
             hal::usart_baudrate_fraction::val<5>,
             hal::usart_baudrate_mantissa::val<8>
         >::mask;
 
     // usart3 enable block and enable tx, rx lines
-    hal::usart3::regs->control1 |=
+    hal::usart3::regs().control1 |=
         lib::regbits32<
             hal::usart_control1_ue,
             hal::usart_control1_te,

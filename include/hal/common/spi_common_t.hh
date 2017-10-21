@@ -119,26 +119,27 @@ namespace hal {
         };
 
         static void send_w(lib::u16 word) {
-            while ((regs->status &
+            while ((regs().status &
                 spi_status_txe::clean<lib::u32>::mask) == 0);
 
-            regs->dr = word;
+            regs().dr = word;
         }
 
         static lib::u16 recv_w() {
-            while ((regs->status &
+            while ((regs().status &
                 spi_status_rxne::clean<lib::u32>::mask) == 0);
 
-            return regs->dr;
+            return regs().dr;
         }
 
         static bool is_busy() {
-            return ((regs->status &
+            return ((regs().status &
                 spi_status_bsy::clean<lib::u32>::mask) != 0);
         }
 
-        static constexpr volatile spi_t * const regs =
-            reinterpret_cast<spi_t *>(addr);
+        static constexpr volatile spi_t & regs() {
+            return *reinterpret_cast<spi_t *>(addr);
+        }
     };
 }
 

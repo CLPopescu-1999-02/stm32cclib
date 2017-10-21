@@ -51,8 +51,9 @@ namespace hal {
             lib::u32 write_portection;
         };
 
-        static constexpr volatile flash_t * const regs =
-            reinterpret_cast<flash_t *>(addr);
+        static constexpr volatile flash_t & regs() {
+            return *reinterpret_cast<flash_t *>(addr);
+        }
     };
 }
 

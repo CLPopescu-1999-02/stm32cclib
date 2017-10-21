@@ -19,8 +19,9 @@ namespace hal {
             lib::u32 apb2_fz;
         };
 
-        static constexpr volatile dbg_t * const regs =
-            reinterpret_cast<dbg_t *>(addr);
+        static constexpr volatile dbg_t & regs() {
+            return *reinterpret_cast<dbg_t *>(addr);
+        }
     };
 }
 

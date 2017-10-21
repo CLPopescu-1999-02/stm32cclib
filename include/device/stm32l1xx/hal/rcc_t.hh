@@ -263,8 +263,9 @@ namespace hal {
             lib::u32 control_status;
         };
 
-        static constexpr volatile rcc_t * const regs =
-            reinterpret_cast<rcc_t *>(addr);
+        static constexpr volatile rcc_t & regs() {
+            return *reinterpret_cast<rcc_t *>(addr);
+        }
     };
 } // namespace Hal
 

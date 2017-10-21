@@ -24,12 +24,13 @@ namespace hal {
 
         template <typename Irq_t, Irq_t irq_n>
         static void enable_irq() {
-            regs->iser[(lib::u32)((lib::s32)irq_n) >> 5] =
+            regs().iser[(lib::u32)((lib::s32)irq_n) >> 5] =
                 1 << ((lib::u32)irq_n & 0x1f);
         }
 
-        static constexpr volatile nvic_t * const regs =
-            reinterpret_cast<nvic_t *>(addr);
+        static constexpr volatile nvic_t & regs() {
+            return *reinterpret_cast<nvic_t *>(addr);
+        }
     };
 
     namespace sys_tick_int {
@@ -55,12 +56,12 @@ namespace hal {
             if (ticks > sys_tick_int::load_reload_msk)
                 return false;
 
-            regs->load =
+            regs().load =
                 (ticks & sys_tick_int::load_reload_msk) - 1;
 
-            regs->value = 0;
+            regs().value = 0;
 
-            regs->control |=
+            regs().control |=
                 lib::regbits<lib::u32,
                     sys_tick_control_clksource,
                     sys_tick_control_tickint,
@@ -70,8 +71,9 @@ namespace hal {
             return true;
         }
 
-        static constexpr volatile sys_tick_t * const regs =
-            reinterpret_cast<sys_tick_t *>(addr);
+        static constexpr volatile sys_tick_t & regs() {
+            return *reinterpret_cast<sys_tick_t *>(addr);
+        }
     };
 } // namespace Hal
 

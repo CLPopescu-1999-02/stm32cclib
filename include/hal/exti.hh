@@ -36,72 +36,73 @@ namespace hal {
 
         template <typename ...Pins>
         static void unmask_int() {
-            regs->imr |=
+            regs().imr |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void mask_int() {
-            regs->imr &=
+            regs().imr &=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void unmask_event() {
-            regs->emr |=
+            regs().emr |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void mask_event() {
-            regs->emr &=
+            regs().emr &=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void rising_edge_en() {
-            regs->rtsr |=
+            regs().rtsr |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void rising_edge_dis() {
-            regs->rtsr &=
+            regs().rtsr &=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void faling_edge_en() {
-            regs->ftsr |=
+            regs().ftsr |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void failng_edge_dis() {
-            regs->ftsr &=
+            regs().ftsr &=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void sw_event_en() {
-            regs->swier |=
+            regs().swier |=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void sw_event_dis() {
-            regs->swier &=
+            regs().swier &=
                 bits32val<Pins...>::mask;
         }
 
         template <typename ...Pins>
         static void pend_occurred() {
-            regs->pr |=
+            regs().pr |=
                 bits32val<Pins...>::mask;
         }
 
-        static constexpr volatile exti_t * const regs =
-            reinterpret_cast<exti_t *>(addr);
+        static constexpr volatile exti_t & regs() {
+            return *reinterpret_cast<exti_t *>(addr);
+        }
     };
 }
 

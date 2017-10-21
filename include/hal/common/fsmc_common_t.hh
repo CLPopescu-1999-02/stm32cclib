@@ -163,8 +163,9 @@ namespace hal {
 
     template <lib::u32 addr, typename Bank>
     struct fsmc_bank_d {
-        static constexpr volatile Bank * const regs =
-            reinterpret_cast<Bank *>(addr);
+        static constexpr volatile Bank & regs() {
+            return *reinterpret_cast<Bank *>(addr);
+        }
     };
 }
 

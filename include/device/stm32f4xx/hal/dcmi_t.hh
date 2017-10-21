@@ -81,8 +81,9 @@ namespace hal {
             lib::u32 dr;
         };
 
-        static constexpr volatile dcmi_t * const regs =
-            reinterpret_cast<dcmi_t *>(addr);
+        static constexpr volatile dcmi_t & regs() {
+            return *reinterpret_cast<dcmi_t *>(addr);
+        }
     };
 }
 
